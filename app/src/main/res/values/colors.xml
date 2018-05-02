@@ -6,30 +6,6 @@
     <color name="colorAccent">#607d8b</color>
 
     <color name="transparent">#00000000</color>
-    <color name="white">#ffffff</color>
+    <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-
-    <color name="red">#DA4F4A</color>
-    <color name="red_dark">#D14424</color>
-    <color name="grey_light">#E2E2E2</color>
-    <color name="grey">#D6D6D6</color>
-    <color name="grey_dark">#C1C1C1</color>
-    <color name="grey_dark_transparent">#66616161</color>
-    <color name="blue">#7DBFF3</color>
-    <color name="blue_dark">#65ade7</color>
-    <color name="green_light">#04BF01</color>
-    <color name="green_dark">#078614</color>
-
-    <color name="top_bar_bg">#393A3E</color>
-
-    <color name="btn_login_normal">#04BF01</color>
-    <color name="btn_login_pressed">#078614</color>
-    <color name="btn_login_unable">#A1DE8C</color>
-
-    <color name="line_color">#66616161</color>
-
-    <color name="text_color_1">#444444</color>
-    <color name="text_color_2">#607d8b</color>
-    <color name="text_color_3">#888888</color>
-
 </resources>

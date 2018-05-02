@@ -1,1 +1,1 @@
-include ':app', ':togglebuttonlib', ':repository'
+include ':app', ':repository'

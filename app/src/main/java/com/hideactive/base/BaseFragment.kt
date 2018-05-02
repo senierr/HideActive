@@ -11,7 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
  */
 abstract class BaseFragment : Fragment() {
 
-    protected val compositeDisposable = CompositeDisposable()
+    val compositeDisposable = CompositeDisposable()
 
     override fun onDestroyView() {
         compositeDisposable.clear()

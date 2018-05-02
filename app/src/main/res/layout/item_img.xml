@@ -1,9 +1,0 @@
-<com.facebook.drawee.view.SimpleDraweeView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/iv_image"
-    fresco:actualImageScaleType="focusCrop"
-    fresco:placeholderImage="@mipmap/ic_img_default"
-    fresco:placeholderImageScaleType="focusCrop"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />

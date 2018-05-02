@@ -2,7 +2,7 @@ package com.senierr.repository.db
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
-import com.senierr.repository.bean.Post
+import com.senierr.repository.bean.DBCache
 import com.senierr.repository.bean.User
 
 /**
@@ -11,7 +11,7 @@ import com.senierr.repository.bean.User
  * @author zhouchunjie
  * @date 2018/3/13
  */
-@Database(entities = [Post::class, User::class],
+@Database(entities = [DBCache::class, User::class],
         version = AppDatabase.DB_VERSION, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
@@ -19,6 +19,6 @@ abstract class AppDatabase : RoomDatabase() {
         const val DB_VERSION = 1    // 数据库版本
     }
 
-    abstract fun getPostDao(): PostDao
+    abstract fun getDBCacheDao(): DBCacheDao
     abstract fun getUserDao(): UserDao
 }

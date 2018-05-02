@@ -5,6 +5,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import com.senierr.repository.db.AppDatabase
+import com.senierr.repository.remote.APP_ID_KEY
+import com.senierr.repository.remote.APP_ID_VALUE
+import com.senierr.repository.remote.REST_API_KEY
+import com.senierr.repository.remote.REST_API_VALUE
 import com.senierr.repository.service.api.IUserService
 import com.senierr.repository.service.impl.UserService
 import com.senierr.repository.util.LogUtil
@@ -39,6 +43,8 @@ object Repository {
         // 网络
         SeHttp.getInstance()
                 .debug(DEBUG_TAG, LogLevel.BODY)
+                .addCommonHeader(APP_ID_KEY, APP_ID_VALUE)
+                .addCommonHeader(REST_API_KEY, REST_API_VALUE)
                 .connectTimeout(TIMEOUT)
                 .readTimeout(TIMEOUT)
                 .writeTimeout(TIMEOUT)

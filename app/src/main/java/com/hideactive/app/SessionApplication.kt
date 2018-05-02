@@ -1,6 +1,7 @@
 package com.hideactive.app
 
 import android.app.Application
+import com.senierr.repository.Repository
 
 /**
  * 应用入口
@@ -18,5 +19,7 @@ class SessionApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+
+        Repository.initialize(this)
     }
 }

@@ -1,11 +1,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- 标题栏颜色-->
         <item name="colorPrimary">@color/colorPrimaryDark</item>
-        <!-- 状态栏颜色-->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-
         <item name="colorAccent">@color/colorAccent</item>
         <!-- 标题颜色-->
         <item name="android:textColorPrimary">@color/white</item>
@@ -33,15 +30,8 @@
 		<item name="android:backgroundDimEnabled">true</item>
     </style>
 	
-    <style name="dialogWindowAnim" parent="android:Animation" mce_bogus="1">
-        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
-        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
-    </style>
-
-    <style name="AppTheme.MainTheme" />
-
     <style name="AppTheme.SplashTheme">
-        <item name="android:windowBackground">@drawable/splash_bg</item>
+        <item name="android:windowBackground">@drawable/bg_splash</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
