@@ -4,30 +4,81 @@
         <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <!-- 标题颜色-->
-        <item name="android:textColorPrimary">@color/white</item>
+        <!-- 默认白色背景 -->
+        <item name="android:windowBackground">@color/bg_content_white</item>
     </style>
 
     <!-- ToolBar菜单样式 -->
+    <style name="Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp_48</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:minHeight">@dimen/dp_48</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="theme">@style/ToolbarTheme</item>
+    </style>
+
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="actionMenuTextColor">@color/white</item>
-        <item name="android:textSize">16sp</item>
+        <!-- 菜单选项文字颜色 -->
+        <item name="actionMenuTextColor">@android:color/white</item>
+        <!-- 菜单选项文字尺寸 -->
+        <item name="android:textSize">@dimen/sp_14</item>
+        <!-- 标题颜色-->
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
     </style>
 
-    <!-- toolbar菜单文字尺寸 -->
-    <style name="ToolbarTitleTextAppearance">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">18sp</item>
+    <!-- ToolBar标题文字样式 -->
+    <style name="ToolbarTitleTextAppearance" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/sp_18</item>
+        <item name="android:ellipsize">middle</item>
+        <item name="android:singleLine">true</item>
     </style>
 
-    <style name="NormalDialog" parent="@android:style/Theme.Dialog">
-		<item name="android:windowFrame">@null</item>
-		<item name="android:windowIsFloating">true</item>
-		<item name="android:windowIsTranslucent">false</item>
-		<item name="android:windowNoTitle">true</item>
-		<item name="android:background">@color/transparent</item>
-		<item name="android:windowBackground">@color/transparent</item>
-		<item name="android:backgroundDimEnabled">true</item>
+    <!-- ToolBar标题文字样式 -->
+    <style name="ToolbarSubTitleTextAppearance" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/sp_12</item>
+    </style>
+
+    <!--基础Dialog样式-->
+    <style name="BaseDialog" parent="@android:style/Theme.Dialog">
+        <!-- 有无边框 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 是否透明 -->
+        <item name="android:windowIsTranslucent">false</item>
+        <!-- 无标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 背景 -->
+        <item name="android:background">@color/transparent</item>
+        <!-- 窗口背景 -->
+        <item name="android:windowBackground">@color/transparent</item>
+        <!-- 模糊 -->
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <!-- 灰色背景主题 -->
+    <style name="AppTheme.Grey">
+        <item name="android:windowBackground">@color/bg_content_grey</item>
+    </style>
+
+    <!-- 黑色背景主题 -->
+    <style name="AppTheme.Black">
+        <item name="android:windowBackground">@color/black</item>
+    </style>
+
+    <!-- 全屏主题 -->
+    <style name="AppTheme.FullScreenTheme">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <!-- 全屏黑色背景主题 -->
+    <style name="AppTheme.FullScreenTheme.Black">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@color/black</item>
     </style>
 	
     <style name="AppTheme.SplashTheme">

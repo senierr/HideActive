@@ -2,25 +2,30 @@
 <resources>
 
     <string name="app_name">Time</string>
+
+    <string name="account">账号</string>
+    <string name="password">密码</string>
+    <string name="re_password">确认密码</string>
+
+
+
+
     <string name="action_more">更多</string>
     <string name="action_add">添加</string>
 
-    <string name="cancle">取消</string>
+    <string name="cancel">取消</string>
     <string name="back">返回</string>
     <string name="done">确认</string>
     <string name="post">发表</string>
     <string name="edit">编辑</string>
     <string name="detail">详情</string>
 
-    <string name="account">账号</string>
-    <string name="password">密码</string>
-    <string name="repassword">确认密码</string>
     <string name="login">登录</string>
-    <string name="logining">登录中...</string>
+    <string name="logging">登录中&#8230;</string>
     <string name="register">注册</string>
     <string name="login_out">注销登录</string>
 
-    <string name="regist_tips">提示：由4~15位字母数字及下划线组成，区分大小写</string>
+    <string name="register_tips">提示：由4~15位字母数字及下划线组成，区分大小写</string>
 
     <string name="home">首页</string>
     <string name="message">消息</string>

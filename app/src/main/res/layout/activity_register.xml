@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_top"
+        style="@style/Toolbar"/>
+
+    <EditText
+        android:id="@+id/et_account"
+        android:hint="@string/account"
+        android:textSize="@dimen/sp_15"
+        android:textColor="@color/text_normal"
+        android:background="@color/bg_content_white"
+        android:layout_marginTop="@dimen/dp_56"
+        android:padding="@dimen/dp_16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:background="@color/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_1"/>
+
+    <EditText
+        android:id="@+id/et_password"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:textSize="@dimen/sp_15"
+        android:textColor="@color/text_normal"
+        android:background="@color/bg_content_white"
+        android:drawableEnd="@mipmap/ic_eye_hide"
+        android:padding="@dimen/dp_16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btn_register"
+        android:text="@string/register"
+        android:textColor="@color/text_white"
+        android:textSize="@dimen/sp_15"
+        android:background="@drawable/selector_primary_corner"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_32"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

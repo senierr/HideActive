@@ -19,13 +19,22 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+
+        <!-- 引导页 -->
         <activity
+            android:name=".entrance.SplashActivity"
             android:theme="@style/AppTheme.SplashTheme"
-            android:name=".entrance.SplashActivity" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <!-- 注册 -->
+        <activity
+            android:name=".user.RegisterActivity"
+            android:theme="@style/AppTheme.Grey"
+            android:screenOrientation="portrait">
         </activity>
 
     </application>
