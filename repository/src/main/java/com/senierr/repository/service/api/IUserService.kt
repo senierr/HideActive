@@ -12,13 +12,28 @@ import io.reactivex.Single
 interface IUserService {
 
     /**
+     * 检查账号是否重复
+     *
+     * @param account 账号
+     */
+    fun checkAccountIfRepeat(account: String): Single<Boolean>
+
+    /**
+     * 检查昵称是否重复
+     *
+     * @param nickname 昵称
+     */
+    fun checkNicknameIfRepeat(nickname: String): Single<Boolean>
+
+    /**
      * 注册
      *
      * @param username 账号
      * @param password 密码
+     * @param nickname 昵称
      * @return 用户ID: objectId
      */
-    fun register(username: String, password: String): Single<String>
+    fun register(username: String, password: String, nickname: String): Single<String>
 
     /**
      * 登录

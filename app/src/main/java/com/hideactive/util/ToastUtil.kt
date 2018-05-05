@@ -34,7 +34,8 @@ object ToastUtil {
      * @param context 上下文
      * @param message 文本
      */
-    fun showShort(context: Context, message: String) {
+    fun showShort(context: Context, message: String?) {
+        if (message == null) return
         if (toast == null) {
             toast = Toast.makeText(context.applicationContext, message, Toast.LENGTH_SHORT)
         }
@@ -64,7 +65,8 @@ object ToastUtil {
      * @param context 上下文
      * @param message 文本
      */
-    fun showLong(context: Context, message: String) {
+    fun showLong(context: Context, message: String?) {
+        if (message == null) return
         if (toast == null) {
             toast = Toast.makeText(context.applicationContext, message, Toast.LENGTH_LONG)
         }

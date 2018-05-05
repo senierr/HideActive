@@ -17,7 +17,7 @@
         android:inputType="number"
         android:singleLine="true"
         android:background="@color/bg_content_white"
-        android:layout_marginTop="@dimen/dp_56"
+        android:layout_marginTop="@dimen/dp_16"
         android:paddingStart="@dimen/dp_16"
         android:paddingEnd="@dimen/dp_16"
         android:layout_width="match_parent"
@@ -83,11 +83,9 @@
         android:layout_height="@dimen/px_1"/>
 
     <LinearLayout
-        android:id="@+id/ll_verification"
         android:orientation="horizontal"
         android:background="@color/bg_content_white"
         android:gravity="center_vertical"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48">
 

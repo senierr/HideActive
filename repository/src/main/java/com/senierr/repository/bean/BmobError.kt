@@ -7,6 +7,12 @@ package com.senierr.repository.bean
  * @date 2018/5/2
  */
 data class BmobError(
-        var code: Int = -1,
+        var code: Int = UNKNOWN,
         var error: String? = null
-) : Throwable(error)
+) : Throwable(error) {
+    companion object {
+        const val UNKNOWN = -1
+        const val ACCOUNT_REPEAT = 0
+        const val NICKNAME_REPEAT = 1
+    }
+}

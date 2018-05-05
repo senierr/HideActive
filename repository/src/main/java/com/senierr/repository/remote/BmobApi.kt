@@ -13,5 +13,5 @@ const val REST_API_VALUE = "80d58182b3231908c9da68adbd83fc90"
 
 private const val HOST = "https://api.bmob.cn"
 
-const val USER_REGISTER = "$HOST/1/users"
-const val USER_LOGIN = "$HOST/1/login"
+const val API_USER = "$HOST/1/users"
+const val API_USER_LOGIN = "$HOST/1/login"

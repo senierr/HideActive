@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">Time</string>
 
+    <string name="network_error">网络连接失败，请检查网络！</string>
+
     <string name="account">手机号</string>
     <string name="nickname">昵称</string>
     <string name="password">密码</string>
@@ -17,10 +19,8 @@
     <string name="password_error">密码格式错误</string>
     <string name="verification_code_empty">请输入验证码</string>
     <string name="verification_code_error">验证码错误</string>
-
-
-
-
+    <string name="account_repeat">手机号已注册</string>
+    <string name="nickname_repeat">昵称已注册</string>
 
 
 

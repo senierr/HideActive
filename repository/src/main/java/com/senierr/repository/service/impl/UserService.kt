@@ -4,12 +4,11 @@ import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.senierr.repository.bean.BmobError
 import com.senierr.repository.bean.User
-import com.senierr.repository.remote.USER_LOGIN
-import com.senierr.repository.remote.USER_REGISTER
+import com.senierr.repository.remote.API_USER
+import com.senierr.repository.remote.API_USER_LOGIN
 import com.senierr.repository.service.api.IUserService
 import com.senierr.sehttp.SeHttp
 import io.reactivex.Single
-import org.json.JSONObject
 
 /**
  * @author zhouchunjie
@@ -17,30 +16,72 @@ import org.json.JSONObject
  */
 class UserService : IUserService {
 
-    override fun register(username: String, password: String): Single<String> {
+    override fun checkAccountIfRepeat(account: String): Single<Boolean> {
         return Single.fromCallable {
             // 构造参数
-            val user = User("")
-            user.username = username
-            user.password = password
+            val param = "{\"username\":\"$account\"}"
             // 发送请求
-            val requestBuilder = SeHttp.post(USER_REGISTER)
-                    .requestBody4JSon(Gson().toJson(user))
+            val requestBuilder = SeHttp.get(API_USER)
+                    .addUrlParam("where", param)
+                    .addUrlParam("count", "0")
             val response = requestBuilder.execute()
             // 解析请求
             response.use {
-                val responseCode = it.code()
                 val responseStr = it.body()?.string()
-                if (responseCode in 200 until 400) {
-                    // 请求成功
-                    return@fromCallable JsonParser().parse(responseStr)
-                            .asJsonObject
-                            .get("objectId")
-                            .asString
-                } else {
-                    // 请求失败
+                if (it.code() >= 400) {
                     throw Gson().fromJson(responseStr, BmobError::class.java)
                 }
+                return@fromCallable JsonParser().parse(responseStr)
+                        .asJsonObject
+                        .get("count")
+                        .asInt > 0
+            }
+        }
+    }
+
+    override fun checkNicknameIfRepeat(nickname: String): Single<Boolean> {
+        return Single.fromCallable {
+            // 构造参数
+            val param = "{\"nickname\":\"$nickname\"}"
+            // 发送请求
+            val requestBuilder = SeHttp.get(API_USER)
+                    .addUrlParam("where", param)
+                    .addUrlParam("count", "0")
+            val response = requestBuilder.execute()
+            // 解析请求
+            response.use {
+                val responseStr = it.body()?.string()
+                if (it.code() >= 400) {
+                    throw Gson().fromJson(responseStr, BmobError::class.java)
+                }
+                return@fromCallable JsonParser().parse(responseStr)
+                        .asJsonObject
+                        .get("count")
+                        .asInt > 0
+            }
+        }
+    }
+
+    override fun register(username: String, password: String, nickname: String): Single<String> {
+        return Single.fromCallable {
+            // 构造参数
+            val param = "{\"username\":\"$username\", " +
+                    "\"password\":\"$password\", " +
+                    "\"nickname\":\"$nickname\"}"
+            // 发送请求
+            val requestBuilder = SeHttp.post(API_USER)
+                    .requestBody4JSon(param)
+            val response = requestBuilder.execute()
+            // 解析请求
+            response.use {
+                val responseStr = it.body()?.string()
+                if (it.code() >= 400) {
+                    throw Gson().fromJson(responseStr, BmobError::class.java)
+                }
+                return@fromCallable JsonParser().parse(responseStr)
+                        .asJsonObject
+                        .get("objectId")
+                        .asString
             }
         }
     }
@@ -48,21 +89,17 @@ class UserService : IUserService {
     override fun login(username: String, password: String): Single<User> {
         return Single.fromCallable {
             // 发送请求
-            val requestBuilder = SeHttp.get(USER_LOGIN)
+            val requestBuilder = SeHttp.get(API_USER_LOGIN)
                     .addUrlParam("username", username)
                     .addUrlParam("password", password)
             val response = requestBuilder.execute()
             // 解析请求
             response.use {
-                val responseCode = it.code()
                 val responseStr = it.body()?.string()
-                if (responseCode in 200 until 400) {
-                    // 请求成功
-                    return@fromCallable Gson().fromJson(responseStr, User::class.java)
-                } else {
-                    // 请求失败
+                if (it.code() >= 400) {
                     throw Gson().fromJson(responseStr, BmobError::class.java)
                 }
+                return@fromCallable Gson().fromJson(responseStr, User::class.java)
             }
         }
     }

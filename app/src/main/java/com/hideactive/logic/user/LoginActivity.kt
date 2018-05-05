@@ -17,14 +17,13 @@ import com.hideactive.util.EditTextWatcher
 import com.hideactive.util.NotificationUtil
 import com.hideactive.util.OnThrottleClickListener
 import com.hideactive.util.ToastUtil
-import com.hideactive.widget.CircularAnim
 import com.senierr.repository.Repository
 import com.senierr.repository.bean.BmobError
 import com.senierr.repository.service.api.IUserService
+import com.senierr.repository.util.LogUtil
 import kotlinx.android.synthetic.main.activity_register.*
 import java.util.*
 import java.util.regex.Pattern
-
 
 /**
  * 注册
@@ -32,7 +31,7 @@ import java.util.regex.Pattern
  * @author zhouchunjie
  * @date 2018/5/2
  */
-class RegisterActivity : BaseActivity() {
+class LoginActivity : BaseActivity() {
 
     private val userService: IUserService = Repository.getService()
     private var verificationCode = 0
@@ -101,11 +100,11 @@ class RegisterActivity : BaseActivity() {
     private fun checkAccount(): Boolean {
         val account = et_account.text.toString().trim()
         if (account.isEmpty()) {
-            ToastUtil.showShort(this@RegisterActivity, R.string.account_empty)
+            ToastUtil.showShort(this@LoginActivity, R.string.account_empty)
             return false
         }
         if (!Pattern.matches(REGEX_MOBILE_EXACT, account)) {
-            ToastUtil.showShort(this@RegisterActivity, R.string.account_error)
+            ToastUtil.showShort(this@LoginActivity, R.string.account_error)
             return false
         }
         return true
@@ -117,7 +116,7 @@ class RegisterActivity : BaseActivity() {
     private fun checkNickname(): Boolean {
         val nickname = et_nickname.text.toString().trim()
         if (nickname.isEmpty()) {
-            ToastUtil.showShort(this@RegisterActivity, R.string.nickname_empty)
+            ToastUtil.showShort(this@LoginActivity, R.string.nickname_empty)
             return false
         }
         return true
@@ -129,11 +128,11 @@ class RegisterActivity : BaseActivity() {
     private fun checkPassword(): Boolean {
         val password = et_password.text.toString().trim()
         if (password.isEmpty()) {
-            ToastUtil.showShort(this@RegisterActivity, R.string.password_empty)
+            ToastUtil.showShort(this@LoginActivity, R.string.password_empty)
             return false
         }
         if (!Pattern.matches(REGEX_PASSWORD, password)) {
-            ToastUtil.showShort(this@RegisterActivity, R.string.password_error)
+            ToastUtil.showShort(this@LoginActivity, R.string.password_error)
             return false
         }
         return true
@@ -145,11 +144,11 @@ class RegisterActivity : BaseActivity() {
     private fun checkVerificationCode(): Boolean {
         val code = et_verification.text.toString().trim()
         if (code.isEmpty()) {
-            ToastUtil.showShort(this@RegisterActivity, R.string.verification_code_empty)
+            ToastUtil.showShort(this@LoginActivity, R.string.verification_code_empty)
             return false
         }
         if (verificationCode.toString() != code) {
-            ToastUtil.showShort(this@RegisterActivity, R.string.verification_code_error)
+            ToastUtil.showShort(this@LoginActivity, R.string.verification_code_error)
             return false
         }
         return true
@@ -195,13 +194,7 @@ class RegisterActivity : BaseActivity() {
                 .subscribeOnIO()
                 .observeOnUI()
                 .subscribe({
-                    CircularAnim().fullActivity(this, btn_register)
-                            .colorOrImageRes(R.color.colorPrimary)
-                            .go(object : CircularAnim.OnAnimationEndListener {
-                                override fun onAnimationEnd() {
-                                    finish()
-                                }
-                            })
+                    LogUtil.logE("success: $it")
                 }, {
                     if (it is BmobError) {
                         ToastUtil.showShort(this, it.error)
