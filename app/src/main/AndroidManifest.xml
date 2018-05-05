@@ -36,6 +36,12 @@
             android:theme="@style/AppTheme.Grey"
             android:screenOrientation="portrait">
         </activity>
+        <!-- 登录 -->
+        <activity
+            android:name=".logic.user.LoginActivity"
+            android:theme="@style/AppTheme.Grey"
+            android:screenOrientation="portrait">
+        </activity>
 
     </application>
 </manifest>

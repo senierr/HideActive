@@ -1,5 +1,6 @@
 package com.hideactive.logic.user
 
+import android.app.Activity
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
@@ -7,6 +8,8 @@ import android.text.method.PasswordTransformationMethod
 import android.view.View
 import com.hideactive.R
 import com.hideactive.base.BaseActivity
+import com.hideactive.comm.KEY_ACCOUNT
+import com.hideactive.comm.KEY_PASSWORD
 import com.hideactive.comm.REGEX_MOBILE_EXACT
 import com.hideactive.comm.REGEX_PASSWORD
 import com.hideactive.ext.bindToLifecycle
@@ -182,13 +185,13 @@ class RegisterActivity : BaseActivity() {
         userService.checkAccountIfRepeat(account)
                 .flatMap {
                     // 账号重复
-                    if (it) throw BmobError(BmobError.ACCOUNT_REPEAT, getString(R.string.account_repeat))
+                    if (it) throw BmobError(BmobError.ACCOUNT_REPEAT)
                     // 检测昵称是否重复
                     return@flatMap userService.checkNicknameIfRepeat(nickname)
                 }
                 .flatMap {
                     // 昵称重复
-                    if (it) throw BmobError(BmobError.NICKNAME_REPEAT, getString(R.string.nickname_repeat))
+                    if (it) throw BmobError(BmobError.NICKNAME_REPEAT)
                     // 注册
                     return@flatMap userService.register(account, password, nickname)
                 }
@@ -204,16 +207,22 @@ class RegisterActivity : BaseActivity() {
                     btn_register.setText(R.string.register)
                 }
                 .subscribe({
-                    CircularAnim().fullActivity(this, btn_register)
-                            .colorOrImageRes(R.color.colorPrimary)
-                            .go(object : CircularAnim.OnAnimationEndListener {
-                                override fun onAnimationEnd() {
-                                    finish()
-                                }
-                            })
+                    // 注册成功，返回登录页面
+                    val data = intent
+                    data.putExtra(KEY_ACCOUNT, account)
+                    data.putExtra(KEY_PASSWORD, password)
+                    setResult(Activity.RESULT_OK, data)
+                    finish()
                 }, {
                     if (it is BmobError) {
-                        ToastUtil.showShort(this, it.error)
+                        when(it.code) {
+                            BmobError.ACCOUNT_REPEAT ->
+                                ToastUtil.showShort(this, R.string.account_repeat)
+                            BmobError.NICKNAME_REPEAT ->
+                                ToastUtil.showShort(this, R.string.nickname_repeat)
+                            else ->
+                                ToastUtil.showShort(this, it.error)
+                        }
                     } else {
                         ToastUtil.showShort(this, R.string.network_error)
                     }

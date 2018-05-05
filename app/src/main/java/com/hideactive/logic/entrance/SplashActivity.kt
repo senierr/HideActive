@@ -7,6 +7,7 @@ import com.hideactive.base.BaseActivity
 import com.hideactive.ext.bindToLifecycle
 import com.hideactive.ext.observeOnUI
 import com.hideactive.ext.subscribeOnIO
+import com.hideactive.logic.user.LoginActivity
 import com.hideactive.logic.user.RegisterActivity
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
@@ -21,7 +22,7 @@ class SplashActivity : BaseActivity() {
                 .subscribeOnIO()
                 .observeOnUI()
                 .subscribe {
-                    startActivity(Intent(this@SplashActivity, RegisterActivity::class.java))
+                    startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
                     finish()
                 }
                 .bindToLifecycle(this)

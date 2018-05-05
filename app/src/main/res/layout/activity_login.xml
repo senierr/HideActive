@@ -61,7 +61,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_register"
+        android:id="@+id/btn_login"
         android:text="@string/login"
         android:textColor="@color/text_white"
         android:textSize="@dimen/sp_15"
@@ -72,4 +72,20 @@
         android:layout_marginTop="@dimen/dp_16"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48" />
+
+    <Button
+        android:id="@+id/btn_register"
+        android:text="@string/register_account"
+        android:textColor="@color/text_sub"
+        android:textSize="@dimen/sp_14"
+        android:background="@color/transparent"
+        style="@style/BaseButton"
+        android:layout_gravity="end"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_8"
+        android:paddingBottom="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>

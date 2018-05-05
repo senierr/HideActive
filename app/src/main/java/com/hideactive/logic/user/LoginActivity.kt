@@ -1,29 +1,30 @@
 package com.hideactive.logic.user
 
-import android.graphics.BitmapFactory
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import com.hideactive.R
 import com.hideactive.base.BaseActivity
+import com.hideactive.comm.KEY_ACCOUNT
+import com.hideactive.comm.KEY_PASSWORD
 import com.hideactive.comm.REGEX_MOBILE_EXACT
 import com.hideactive.comm.REGEX_PASSWORD
 import com.hideactive.ext.bindToLifecycle
+import com.hideactive.ext.hideSoftInput
 import com.hideactive.ext.observeOnUI
 import com.hideactive.ext.subscribeOnIO
-import com.hideactive.util.EditTextWatcher
-import com.hideactive.util.NotificationUtil
 import com.hideactive.util.OnThrottleClickListener
 import com.hideactive.util.ToastUtil
+import com.hideactive.widget.CircularAnim
 import com.senierr.repository.Repository
 import com.senierr.repository.bean.BmobError
 import com.senierr.repository.service.api.IUserService
-import com.senierr.repository.util.LogUtil
-import kotlinx.android.synthetic.main.activity_register.*
-import java.util.*
+import kotlinx.android.synthetic.main.activity_login.*
 import java.util.regex.Pattern
+
 
 /**
  * 注册
@@ -34,11 +35,10 @@ import java.util.regex.Pattern
 class LoginActivity : BaseActivity() {
 
     private val userService: IUserService = Repository.getService()
-    private var verificationCode = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
+        setContentView(R.layout.activity_login)
 
         initView()
     }
@@ -47,7 +47,7 @@ class LoginActivity : BaseActivity() {
      * 初始化界面
      */
     private fun initView() {
-        tb_top.setTitle(R.string.register)
+        tb_top.setTitle(R.string.login)
         tb_top.setTitleTextAppearance(this, R.style.ToolbarTitleTextAppearance)
         setSupportActionBar(tb_top)
         tb_top.setNavigationIcon(R.mipmap.ic_back_white)
@@ -57,7 +57,7 @@ class LoginActivity : BaseActivity() {
 
         btn_eye.isSelected = false
         btn_eye.setOnClickListener(onThrottleClickListener)
-        btn_request_code.setOnClickListener(onThrottleClickListener)
+        btn_login.setOnClickListener(onThrottleClickListener)
         btn_register.setOnClickListener(onThrottleClickListener)
     }
 
@@ -77,20 +77,28 @@ class LoginActivity : BaseActivity() {
                     }
                     et_password.setSelection(et_password.text.length)
                 }
-                // 发送验证码
-                R.id.btn_request_code -> {
-                    if (checkAccount()) {
-                        requestVerificationCode()
+                // 登录
+                R.id.btn_login -> {
+                    if (checkAccount() && checkPassword()) {
+                        login()
                     }
                 }
                 // 注册
                 R.id.btn_register -> {
-                    if (checkAccount() && checkNickname()
-                            && checkPassword() && checkVerificationCode()) {
-                        register()
-                    }
+                    startActivityForResult(Intent(this@LoginActivity, RegisterActivity::class.java), 0)
                 }
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK) return
+        data?.let {
+            val account = it.getStringExtra(KEY_ACCOUNT)
+            val password = it.getStringExtra(KEY_PASSWORD)
+            et_account.setText(account)
+            et_password.setText(password)
         }
     }
 
@@ -105,18 +113,6 @@ class LoginActivity : BaseActivity() {
         }
         if (!Pattern.matches(REGEX_MOBILE_EXACT, account)) {
             ToastUtil.showShort(this@LoginActivity, R.string.account_error)
-            return false
-        }
-        return true
-    }
-
-    /**
-     * 检查昵称
-     */
-    private fun checkNickname(): Boolean {
-        val nickname = et_nickname.text.toString().trim()
-        if (nickname.isEmpty()) {
-            ToastUtil.showShort(this@LoginActivity, R.string.nickname_empty)
             return false
         }
         return true
@@ -139,65 +135,39 @@ class LoginActivity : BaseActivity() {
     }
 
     /**
-     * 检查验证码
+     * 登录
      */
-    private fun checkVerificationCode(): Boolean {
-        val code = et_verification.text.toString().trim()
-        if (code.isEmpty()) {
-            ToastUtil.showShort(this@LoginActivity, R.string.verification_code_empty)
-            return false
-        }
-        if (verificationCode.toString() != code) {
-            ToastUtil.showShort(this@LoginActivity, R.string.verification_code_error)
-            return false
-        }
-        return true
-    }
-
-    /**
-     * 请求验证码
-     */
-    private fun requestVerificationCode() {
-        verificationCode = Random().nextInt(1000) + 9000
-        NotificationUtil.manager.notify(NotificationUtil.ID_SYSTEM,
-                NotificationUtil.getBuilder(NotificationUtil.CHANNEL_ID_SYSTEM)
-                        .setContentTitle(getString(R.string.verification_code))
-                        .setContentText(String.format(getString(R.string.verification_code_msg), verificationCode))
-                        .setWhen(System.currentTimeMillis())
-                        .setAutoCancel(true)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
-                        .build())
-    }
-
-    /**
-     * 注册
-     */
-    private fun register() {
+    private fun login() {
         val account = et_account.text.toString().trim()
-        val nickname = et_nickname.text.toString().trim()
         val password = et_password.text.toString().trim()
-        // 检测账号是否重复
-        userService.checkAccountIfRepeat(account)
-                .flatMap {
-                    // 抛出账号重复异常
-                    if (it) throw BmobError(BmobError.ACCOUNT_REPEAT, getString(R.string.account_repeat))
-                    // 检测昵称是否重复
-                    return@flatMap userService.checkNicknameIfRepeat(nickname)
-                }
-                .flatMap {
-                    // 抛出昵称重复异常
-                    if (it) throw BmobError(BmobError.NICKNAME_REPEAT, getString(R.string.nickname_repeat))
-                    // 注册
-                    return@flatMap userService.register(account, password, nickname)
-                }
+        userService.login(account, password)
                 .subscribeOnIO()
                 .observeOnUI()
+                .doOnSubscribe {
+                    hideSoftInput()
+                    btn_login.isEnabled = false
+                    btn_login.setText(R.string.logging)
+                }
+                .doFinally {
+                    btn_login.isEnabled = true
+                    btn_login.setText(R.string.login)
+                }
                 .subscribe({
-                    LogUtil.logE("success: $it")
+                    CircularAnim().fullActivity(this, btn_login)
+                            .colorOrImageRes(R.color.colorPrimary)
+                            .go(object : CircularAnim.OnAnimationEndListener {
+                                override fun onAnimationEnd() {
+                                    finish()
+                                }
+                            })
                 }, {
                     if (it is BmobError) {
-                        ToastUtil.showShort(this, it.error)
+                        when(it.code) {
+                            BmobError.ACCOUNT_OR_PASSWORD_ERROR ->
+                                ToastUtil.showShort(this, R.string.account_or_password_error)
+                            else ->
+                                ToastUtil.showShort(this, it.error)
+                        }
                     } else {
                         ToastUtil.showShort(this, R.string.network_error)
                     }
