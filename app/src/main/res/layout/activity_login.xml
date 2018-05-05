@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_top"
+        style="@style/Toolbar"/>
+
+    <EditText
+        android:id="@+id/et_account"
+        android:hint="@string/account"
+        android:textSize="@dimen/sp_15"
+        android:textColor="@color/text_normal"
+        android:inputType="number"
+        android:singleLine="true"
+        android:background="@color/bg_content_white"
+        android:layout_marginTop="@dimen/dp_16"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48" />
+
+    <View
+        android:background="@color/bg_content_grey"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_1"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:background="@color/bg_content_white"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48">
+
+        <EditText
+            android:id="@+id/et_password"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:textSize="@dimen/sp_15"
+            android:textColor="@color/text_normal"
+            android:maxLength="15"
+            android:singleLine="true"
+            android:background="@color/transparent"
+            android:paddingStart="@dimen/dp_16"
+            android:paddingEnd="@dimen/dp_16"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:id="@+id/btn_eye"
+            android:src="@drawable/selector_eye"
+            android:background="@color/transparent"
+            android:paddingStart="@dimen/dp_16"
+            android:paddingEnd="@dimen/dp_16"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_register"
+        android:text="@string/login"
+        android:textColor="@color/text_white"
+        android:textSize="@dimen/sp_15"
+        android:background="@drawable/selector_primary_corner"
+        style="@style/BaseButton"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_16"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48" />
+</LinearLayout>

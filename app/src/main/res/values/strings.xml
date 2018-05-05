@@ -4,14 +4,15 @@
 
     <string name="network_error">网络连接失败，请检查网络！</string>
 
+    <string name="register">注册</string>
+    <string name="registering">注册中&#8230;</string>
     <string name="account">手机号</string>
     <string name="nickname">昵称</string>
     <string name="password">密码</string>
     <string name="verification_code">验证码</string>
     <string name="request_code">发送验证码</string>
-    <string name="verification_code_msg">【Time】您本次申请注册的验证码为%1$d</string>
+    <string name="verification_code_msg">【Time】您的验证码为%1$d，请妥善保管！</string>
     <string name="hint_password">提示：密码由4~15位字母数字及下划线组成，区分大小写</string>
-
     <string name="account_empty">请输入手机号</string>
     <string name="account_error">手机号格式错误</string>
     <string name="nickname_empty">请输入昵称</string>
@@ -21,6 +22,8 @@
     <string name="verification_code_error">验证码错误</string>
     <string name="account_repeat">手机号已注册</string>
     <string name="nickname_repeat">昵称已注册</string>
+
+    <string name="login">登录</string>
 
 
 
@@ -34,9 +37,8 @@
     <string name="edit">编辑</string>
     <string name="detail">详情</string>
 
-    <string name="login">登录</string>
     <string name="logging">登录中&#8230;</string>
-    <string name="register">注册</string>
+
     <string name="login_out">注销登录</string>
 
     <string name="register_tips">提示：由4~15位字母数字及下划线组成，区分大小写</string>

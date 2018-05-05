@@ -2,7 +2,6 @@ package com.hideactive.logic.user
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.text.Editable
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
@@ -11,9 +10,9 @@ import com.hideactive.base.BaseActivity
 import com.hideactive.comm.REGEX_MOBILE_EXACT
 import com.hideactive.comm.REGEX_PASSWORD
 import com.hideactive.ext.bindToLifecycle
+import com.hideactive.ext.hideSoftInput
 import com.hideactive.ext.observeOnUI
 import com.hideactive.ext.subscribeOnIO
-import com.hideactive.util.EditTextWatcher
 import com.hideactive.util.NotificationUtil
 import com.hideactive.util.OnThrottleClickListener
 import com.hideactive.util.ToastUtil
@@ -21,6 +20,7 @@ import com.hideactive.widget.CircularAnim
 import com.senierr.repository.Repository
 import com.senierr.repository.bean.BmobError
 import com.senierr.repository.service.api.IUserService
+import com.senierr.repository.util.LogUtil
 import kotlinx.android.synthetic.main.activity_register.*
 import java.util.*
 import java.util.regex.Pattern
@@ -159,10 +159,10 @@ class RegisterActivity : BaseActivity() {
      * 请求验证码
      */
     private fun requestVerificationCode() {
-        verificationCode = Random().nextInt(1000) + 9000
+        verificationCode = Random().nextInt(9000) + 1000
         NotificationUtil.manager.notify(NotificationUtil.ID_SYSTEM,
                 NotificationUtil.getBuilder(NotificationUtil.CHANNEL_ID_SYSTEM)
-                        .setContentTitle(getString(R.string.verification_code))
+                        .setContentTitle(getString(R.string.register))
                         .setContentText(String.format(getString(R.string.verification_code_msg), verificationCode))
                         .setWhen(System.currentTimeMillis())
                         .setAutoCancel(true)
@@ -181,19 +181,28 @@ class RegisterActivity : BaseActivity() {
         // 检测账号是否重复
         userService.checkAccountIfRepeat(account)
                 .flatMap {
-                    // 抛出账号重复异常
+                    // 账号重复
                     if (it) throw BmobError(BmobError.ACCOUNT_REPEAT, getString(R.string.account_repeat))
                     // 检测昵称是否重复
                     return@flatMap userService.checkNicknameIfRepeat(nickname)
                 }
                 .flatMap {
-                    // 抛出昵称重复异常
+                    // 昵称重复
                     if (it) throw BmobError(BmobError.NICKNAME_REPEAT, getString(R.string.nickname_repeat))
                     // 注册
                     return@flatMap userService.register(account, password, nickname)
                 }
                 .subscribeOnIO()
                 .observeOnUI()
+                .doOnSubscribe {
+                    hideSoftInput()
+                    btn_register.isEnabled = false
+                    btn_register.setText(R.string.registering)
+                }
+                .doFinally {
+                    btn_register.isEnabled = true
+                    btn_register.setText(R.string.register)
+                }
                 .subscribe({
                     CircularAnim().fullActivity(this, btn_register)
                             .colorOrImageRes(R.color.colorPrimary)
