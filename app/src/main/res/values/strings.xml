@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Time</string>
 
-    <string name="account">账号</string>
+    <string name="account">手机号</string>
+    <string name="nickname">昵称</string>
     <string name="password">密码</string>
-    <string name="re_password">确认密码</string>
+    <string name="verification_code">验证码</string>
+    <string name="request_code">发送验证码</string>
+    <string name="verification_code_msg">【Time】您本次申请注册的验证码为%1$d</string>
+    <string name="hint_password">提示：密码由4~15位字母数字及下划线组成，区分大小写</string>
+
+    <string name="account_empty">请输入手机号</string>
+    <string name="account_error">手机号格式错误</string>
+    <string name="nickname_empty">请输入昵称</string>
+    <string name="password_empty">请输入密码</string>
+    <string name="password_error">密码格式错误</string>
+    <string name="verification_code_empty">请输入验证码</string>
+    <string name="verification_code_error">验证码错误</string>
+
+
+
 
 
 

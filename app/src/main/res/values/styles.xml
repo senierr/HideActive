@@ -4,6 +4,8 @@
         <item name="colorPrimary">@color/colorPrimaryDark</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!-- 光标颜色 -->
+        <item name="android:textCursorDrawable">@drawable/bg_cursor</item>
         <!-- 默认白色背景 -->
         <item name="android:windowBackground">@color/bg_content_white</item>
     </style>
@@ -58,6 +60,13 @@
         <item name="android:windowBackground">@color/transparent</item>
         <!-- 模糊 -->
         <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <!--基础Button样式-->
+    <style name="BaseButton" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:minWidth">@dimen/dp_0</item>
+        <item name="android:minHeight">@dimen/dp_0</item>
     </style>
 
     <!-- 灰色背景主题 -->

@@ -1,4 +1,4 @@
-package com.hideactive.extension
+package com.hideactive.ext
 
 import com.hideactive.base.BaseActivity
 import com.hideactive.base.BaseFragment

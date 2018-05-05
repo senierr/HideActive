@@ -22,7 +22,7 @@
 
         <!-- 引导页 -->
         <activity
-            android:name=".entrance.SplashActivity"
+            android:name=".logic.entrance.SplashActivity"
             android:theme="@style/AppTheme.SplashTheme"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -32,7 +32,7 @@
         </activity>
         <!-- 注册 -->
         <activity
-            android:name=".user.RegisterActivity"
+            android:name=".logic.user.RegisterActivity"
             android:theme="@style/AppTheme.Grey"
             android:screenOrientation="portrait">
         </activity>
