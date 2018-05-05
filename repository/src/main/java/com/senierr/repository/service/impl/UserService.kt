@@ -68,7 +68,7 @@ class UserService : IUserService {
             val param = "{\"username\":\"$username\", " +
                     "\"password\":\"$password\", " +
                     "\"nickname\":\"$nickname\", " +
-                    "\"grander\":0}"
+                    "\"gender\":0}"
             // 发送请求
             val requestBuilder = SeHttp.post(API_USER)
                     .requestBody4JSon(param)

@@ -17,6 +17,6 @@ data class User(
         var password: String? = null,           // 密码
         var nickname: String? = null,           // 昵称
         var portrait: String? = null,           // 头像
-        var grander: Int = 0,                   // 性别 0：保密，1：男，2：女
+        var gender: Int = 0,                    // 性别 0：保密，1：男，2：女
         var sessionToken: String? = null        // 登录验证
 )
