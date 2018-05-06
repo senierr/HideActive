@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.activity_register.*
 import java.util.*
 import java.util.regex.Pattern
 
-
 /**
  * 注册
  *

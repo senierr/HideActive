@@ -20,6 +20,7 @@
     <color name="text_error">#ce3d3a</color>
 
     <color name="bg_content_white">#f2f4f5</color>
-    <color name="bg_content_grey">#DEE0E1</color>
-    <color name="bg_enable">#C3C3C3</color>
+    <color name="bg_content_grey">#E7E9E9</color>
+
+    <color name="bg_divider">#cdcdcd</color>
 </resources>

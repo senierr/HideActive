@@ -26,7 +26,6 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.regex.Pattern
 
-
 /**
  * 注册
  *

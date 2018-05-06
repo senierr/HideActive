@@ -45,7 +45,7 @@
         <!-- 帖子发布 -->
         <activity
             android:name=".logic.post.PublishPostActivity"
-            android:theme="@style/AppTheme.Grey"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:screenOrientation="portrait">
         </activity>
 

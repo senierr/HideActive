@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.hideactive.R
 import com.hideactive.base.BaseActivity
 import com.hideactive.ext.bindToLifecycle
+import com.hideactive.logic.post.PublishPostActivity
 import com.hideactive.logic.user.LoginActivity
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -17,11 +18,11 @@ class SplashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        Observable.timer(2, TimeUnit.SECONDS)
+        Observable.timer(1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+                    startActivity(Intent(this@SplashActivity, PublishPostActivity::class.java))
                     finish()
                 }
                 .bindToLifecycle(this)

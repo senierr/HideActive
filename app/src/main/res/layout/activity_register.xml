@@ -24,7 +24,7 @@
         android:layout_height="@dimen/dp_48" />
 
     <View
-        android:background="@color/bg_content_grey"
+        android:background="@color/bg_divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/px_1"/>
 
@@ -41,14 +41,13 @@
         android:layout_height="@dimen/dp_48" />
 
     <View
-        android:background="@color/bg_content_grey"
+        android:background="@color/bg_divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/px_1"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:background="@color/bg_content_white"
-        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48">
 
@@ -78,14 +77,13 @@
     </LinearLayout>
 
     <View
-        android:background="@color/bg_content_grey"
+        android:background="@color/bg_divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/px_1"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:background="@color/bg_content_white"
-        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48">
 
