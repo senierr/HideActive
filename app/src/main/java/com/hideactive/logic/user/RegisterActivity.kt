@@ -14,16 +14,14 @@ import com.hideactive.comm.REGEX_MOBILE_EXACT
 import com.hideactive.comm.REGEX_PASSWORD
 import com.hideactive.ext.bindToLifecycle
 import com.hideactive.ext.hideSoftInput
-import com.hideactive.ext.observeOnUI
-import com.hideactive.ext.subscribeOnIO
 import com.hideactive.util.NotificationUtil
 import com.hideactive.util.OnThrottleClickListener
 import com.hideactive.util.ToastUtil
-import com.hideactive.widget.CircularAnim
 import com.senierr.repository.Repository
 import com.senierr.repository.bean.BmobError
 import com.senierr.repository.service.api.IUserService
-import com.senierr.repository.util.LogUtil
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_register.*
 import java.util.*
 import java.util.regex.Pattern
@@ -195,8 +193,8 @@ class RegisterActivity : BaseActivity() {
                     // 注册
                     return@flatMap userService.register(account, password, nickname)
                 }
-                .subscribeOnIO()
-                .observeOnUI()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
                     hideSoftInput()
                     btn_register.isEnabled = false
