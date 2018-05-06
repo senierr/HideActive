@@ -9,7 +9,7 @@
         android:id="@+id/tb_top"
         style="@style/Toolbar"/>
 
-    <EditText
+    <com.hideactive.widget.ClearEditText
         android:id="@+id/et_account"
         android:hint="@string/account"
         android:textSize="@dimen/sp_15"
@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48">
 
-        <EditText
+        <com.hideactive.widget.ClearEditText
             android:id="@+id/et_password"
             android:hint="@string/password"
             android:inputType="textPassword"
@@ -45,7 +45,7 @@
             android:singleLine="true"
             android:background="@color/transparent"
             android:paddingStart="@dimen/dp_16"
-            android:paddingEnd="@dimen/dp_16"
+            android:paddingEnd="@dimen/dp_8"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
@@ -54,7 +54,7 @@
             android:id="@+id/btn_eye"
             android:src="@drawable/selector_eye"
             android:background="@color/transparent"
-            android:paddingStart="@dimen/dp_16"
+            android:paddingStart="@dimen/dp_8"
             android:paddingEnd="@dimen/dp_16"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />

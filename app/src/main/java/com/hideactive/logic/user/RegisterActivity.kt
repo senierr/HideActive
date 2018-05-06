@@ -52,7 +52,7 @@ class RegisterActivity : BaseActivity() {
         tb_top.setTitle(R.string.register)
         tb_top.setTitleTextAppearance(this, R.style.ToolbarTitleTextAppearance)
         setSupportActionBar(tb_top)
-        tb_top.setNavigationIcon(R.mipmap.ic_back_white)
+        tb_top.setNavigationIcon(R.drawable.ic_back_white)
         tb_top.setNavigationOnClickListener {
             finish()
         }

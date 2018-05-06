@@ -42,6 +42,12 @@
             android:theme="@style/AppTheme.Grey"
             android:screenOrientation="portrait">
         </activity>
+        <!-- 帖子发布 -->
+        <activity
+            android:name=".logic.post.PublishPostActivity"
+            android:theme="@style/AppTheme.Grey"
+            android:screenOrientation="portrait">
+        </activity>
 
     </application>
 </manifest>
