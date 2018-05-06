@@ -2,6 +2,7 @@ package com.senierr.repository.service.impl
 
 import com.google.gson.Gson
 import com.google.gson.JsonParser
+import com.senierr.repository.Repository
 import com.senierr.repository.bean.BmobError
 import com.senierr.repository.bean.User
 import com.senierr.repository.remote.API_USER
@@ -103,5 +104,10 @@ class UserService : IUserService {
                 return@fromCallable Gson().fromJson(responseStr, User::class.java)
             }
         }
+                .map {
+                    // 缓存至本地
+                    Repository.database.getUserDao().insertOrReplace(it)
+                    return@map it
+                }
     }
 }

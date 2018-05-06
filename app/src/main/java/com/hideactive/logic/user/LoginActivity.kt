@@ -20,6 +20,7 @@ import com.hideactive.widget.CircularAnim
 import com.senierr.repository.Repository
 import com.senierr.repository.bean.BmobError
 import com.senierr.repository.service.api.IUserService
+import com.senierr.repository.util.LogUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
