@@ -15,7 +15,7 @@
         android:textColor="@color/text_normal"
         android:gravity="start"
         android:minLines="9"
-        android:maxLength="20"
+        android:lineSpacingExtra="@dimen/dp_4"
         android:layout_below="@id/tb_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -26,4 +26,48 @@
         android:layout_margin="@dimen/dp_16"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:background="@color/bg_divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px_1"/>
+
+        <ImageButton
+            android:id="@+id/btn_add_image"
+            android:src="@drawable/ic_image_add"
+            android:background="@drawable/selector_transparent2grey"
+            android:paddingStart="@dimen/dp_16"
+            android:paddingEnd="@dimen/dp_8"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_48" />
+
+        <ImageButton
+            android:id="@+id/btn_add_emotion"
+            android:src="@drawable/ic_emotion"
+            android:background="@color/transparent"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingEnd="@dimen/dp_16"
+            android:layout_toEndOf="@id/btn_add_image"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_48" />
+
+        <View
+            android:background="@color/bg_divider"
+            android:layout_below="@id/btn_add_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/px_1"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_emotions"
+            android:layout_below="@id/btn_add_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_200"/>
+    </RelativeLayout>
 </RelativeLayout>

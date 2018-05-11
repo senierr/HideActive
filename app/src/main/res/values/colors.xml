@@ -19,7 +19,7 @@
     <color name="text_sub_sub_sub">#b2b2b2</color>
     <color name="text_error">#ce3d3a</color>
 
-    <color name="bg_content_white">#f2f4f5</color>
+    <color name="bg_content_white">#fafbfc</color>
     <color name="bg_content_grey">#E7E9E9</color>
 
     <color name="bg_divider">#cdcdcd</color>
