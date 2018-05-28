@@ -1,9 +1,8 @@
-package com.hideactive.ext
+package com.module.library.extension
 
 import android.app.Activity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-
 
 /**
  * Activity扩展函数
@@ -24,8 +23,6 @@ fun Activity.showSoftInput() {
 
 /**
  * 动态隐藏软键盘
- *
- * @param activity activity
  */
 fun Activity.hideSoftInput() {
     var view = this.currentFocus

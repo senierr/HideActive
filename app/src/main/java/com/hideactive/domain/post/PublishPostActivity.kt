@@ -1,28 +1,23 @@
-package com.hideactive.logic.post
+package com.hideactive.domain.post
 
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialog
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.text.Selection
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.ViewGroup
-import android.widget.GridView
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.hideactive.R
-import com.hideactive.base.BaseActivity
-import com.hideactive.ext.hideSoftInput
-import com.hideactive.ext.isGone
-import com.hideactive.util.EmotionUtil
-import com.hideactive.util.GridItemDecoration
+import com.module.library.extension.hideSoftInput
+import com.module.library.extension.isGone
+import com.module.library.util.GridItemDecoration
 import com.senierr.adapter.internal.MultiTypeAdapter
 import com.senierr.adapter.internal.RVHolder
 import com.senierr.adapter.internal.ViewHolderWrapper
-import com.senierr.repository.util.LogUtil
 import kotlinx.android.synthetic.main.activity_publish_post.*
 import kotlinx.android.synthetic.main.item_image.*
 
@@ -32,7 +27,7 @@ import kotlinx.android.synthetic.main.item_image.*
  * @author zhouchunjie
  * @date 2018/5/6
  */
-class PublishPostActivity : BaseActivity() {
+class PublishPostActivity : AppCompatActivity() {
 
     private val multiTypeAdapter = MultiTypeAdapter()
 
@@ -75,8 +70,6 @@ class PublishPostActivity : BaseActivity() {
         rv_images.setHasFixedSize(true)
         rv_images.addItemDecoration(GridItemDecoration(this, R.dimen.dp_4))
         rv_images.adapter = multiTypeAdapter
-        // 表情
-        initEmotion()
         // 添加图片按钮
 
         // 添加表情按钮
@@ -98,42 +91,5 @@ class PublishPostActivity : BaseActivity() {
             bottomSheetDialog.show()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    /**
-     * 初始化表情
-     */
-    private fun initEmotion() {
-        val emotionAdapter = MultiTypeAdapter()
-        val emotionWrapper = object : ViewHolderWrapper<EmotionUtil.Emotion>() {
-            override fun onCreateViewHolder(p0: ViewGroup): RVHolder {
-                return RVHolder.create(p0, R.layout.item_image)
-            }
-
-            override fun onBindViewHolder(p0: RVHolder, p1: EmotionUtil.Emotion) {
-                val imageView = p0.getView<ImageView>(R.id.iv_image)
-                Glide.with(imageView)
-                        .asBitmap()
-                        .apply(RequestOptions().placeholder(R.drawable.ic_emotion))
-                        .load(p1.resId)
-                        .into(imageView)
-            }
-        }
-        emotionWrapper.onItemClickListener = object : ViewHolderWrapper.OnItemClickListener() {
-            override fun onClick(viewHolder: RVHolder?, position: Int) {
-                // 插入表情
-                val startIndex = et_content.selectionStart
-                val tag = EmotionUtil.emotions[position].tag
-                et_content.setText(EmotionUtil.format(et_content, et_content.text.insert(startIndex, tag)))
-                // 定位光标位置
-                Selection.setSelection(et_content.text, startIndex + tag.length)
-            }
-        }
-        emotionAdapter.bind(EmotionUtil.Emotion::class.java, emotionWrapper)
-        rv_emotions.layoutManager = GridLayoutManager(this, 7)
-        rv_emotions.setHasFixedSize(true)
-        rv_emotions.addItemDecoration(GridItemDecoration(this, R.dimen.dp_16, true))
-        emotionAdapter.dataList.addAll(EmotionUtil.emotions)
-        rv_emotions.adapter = emotionAdapter
     }
 }

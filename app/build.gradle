@@ -12,7 +12,13 @@ android {
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
     }
-    
+
+    sourceSets {
+        main {
+            res.srcDirs += "src/main/res-user"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -23,12 +29,13 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':library')
     implementation project(':repository')
-    implementation rootProject.ext.dependencies.kotlin
     implementation rootProject.ext.dependencies.appcompat_v7
     implementation rootProject.ext.dependencies.design
     implementation rootProject.ext.dependencies.rxandroid
     implementation rootProject.ext.dependencies.rxjava
+    implementation rootProject.ext.dependencies.kotlin
     implementation rootProject.ext.dependencies.multiTypeAdapter
     implementation rootProject.ext.dependencies.glide
 

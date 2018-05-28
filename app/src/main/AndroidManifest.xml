@@ -22,7 +22,7 @@
 
         <!-- 引导页 -->
         <activity
-            android:name=".logic.entrance.SplashActivity"
+            android:name=".domain.entrance.SplashActivity"
             android:theme="@style/AppTheme.SplashTheme"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -32,19 +32,19 @@
         </activity>
         <!-- 注册 -->
         <activity
-            android:name=".logic.user.RegisterActivity"
+            android:name=".domain.user.RegisterActivity"
             android:theme="@style/AppTheme.Grey"
             android:screenOrientation="portrait">
         </activity>
         <!-- 登录 -->
         <activity
-            android:name=".logic.user.LoginActivity"
+            android:name=".domain.user.login.LoginActivity"
             android:theme="@style/AppTheme.Grey"
             android:screenOrientation="portrait">
         </activity>
         <!-- 帖子发布 -->
         <activity
-            android:name=".logic.post.PublishPostActivity"
+            android:name=".domain.post.PublishPostActivity"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:screenOrientation="portrait">
         </activity>

@@ -1,4 +1,4 @@
-package com.hideactive.logic.dialog
+package com.hideactive.domain.dialog
 
 import android.content.Context
 import android.os.Bundle

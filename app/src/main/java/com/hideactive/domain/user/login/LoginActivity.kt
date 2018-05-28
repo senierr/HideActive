@@ -1,45 +1,40 @@
-package com.hideactive.logic.user
+package com.hideactive.domain.user.login
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import com.hideactive.R
-import com.hideactive.base.BaseActivity
 import com.hideactive.comm.KEY_ACCOUNT
 import com.hideactive.comm.KEY_PASSWORD
 import com.hideactive.comm.REGEX_MOBILE_EXACT
 import com.hideactive.comm.REGEX_PASSWORD
-import com.hideactive.ext.bindToLifecycle
-import com.hideactive.ext.hideSoftInput
-import com.hideactive.util.OnThrottleClickListener
-import com.hideactive.util.ToastUtil
+import com.hideactive.domain.user.RegisterActivity
 import com.hideactive.widget.CircularAnim
-import com.senierr.repository.Repository
-import com.senierr.repository.bean.BmobError
-import com.senierr.repository.service.api.IUserService
-import com.senierr.repository.util.LogUtil
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.module.library.extension.hideSoftInput
+import com.module.library.util.OnThrottleClickListener
+import com.module.library.util.ToastUtil
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.regex.Pattern
 
 /**
- * 注册
+ * 登录
  *
  * @author zhouchunjie
  * @date 2018/5/2
  */
-class LoginActivity : BaseActivity() {
+class LoginActivity : AppCompatActivity(), ILoginView {
 
-    private val userService: IUserService = Repository.getService()
+    private val loginPresenter = LoginPresenter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        lifecycle.addObserver(loginPresenter)
         initView()
     }
 
@@ -68,25 +63,14 @@ class LoginActivity : BaseActivity() {
         override fun onThrottleClick(view: View?) {
             when(view?.id) {
                 // 密码可见
-                R.id.btn_eye -> {
-                    btn_eye.isSelected = !btn_eye.isSelected
-                    if (btn_eye.isSelected) {
-                        et_password.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                    } else {
-                        et_password.transformationMethod = PasswordTransformationMethod.getInstance()
-                    }
-                    et_password.setSelection(et_password.text.length)
-                }
+                R.id.btn_eye ->
+                    toggleEye()
                 // 登录
-                R.id.btn_login -> {
-                    if (checkAccount() && checkPassword()) {
-                        login()
-                    }
-                }
+                R.id.btn_login ->
+                    if (checkAccount() && checkPassword()) loginPresenter.login()
                 // 注册
-                R.id.btn_register -> {
+                R.id.btn_register ->
                     startActivityForResult(Intent(this@LoginActivity, RegisterActivity::class.java), 0)
-                }
             }
         }
     }
@@ -95,6 +79,7 @@ class LoginActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK) return
         data?.let {
+            // 注册信息自动填入
             val account = it.getStringExtra(KEY_ACCOUNT)
             val password = it.getStringExtra(KEY_PASSWORD)
             et_account.setText(account)
@@ -135,43 +120,56 @@ class LoginActivity : BaseActivity() {
     }
 
     /**
-     * 登录
+     * 密码可见切换
      */
-    private fun login() {
-        val account = et_account.text.toString().trim()
-        val password = et_password.text.toString().trim()
-        userService.login(account, password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    hideSoftInput()
-                    btn_login.isEnabled = false
-                    btn_login.setText(R.string.logging)
-                }
-                .doFinally {
-                    btn_login.isEnabled = true
-                    btn_login.setText(R.string.login)
-                }
-                .subscribe({
-                    CircularAnim().fullActivity(this, btn_login)
-                            .colorOrImageRes(R.color.colorPrimary)
-                            .go(object : CircularAnim.OnAnimationEndListener {
-                                override fun onAnimationEnd() {
-                                    finish()
-                                }
-                            })
-                }, {
-                    if (it is BmobError) {
-                        when(it.code) {
-                            BmobError.ACCOUNT_OR_PASSWORD_ERROR ->
-                                ToastUtil.showShort(this, R.string.account_or_password_error)
-                            else ->
-                                ToastUtil.showShort(this, it.error)
-                        }
-                    } else {
-                        ToastUtil.showShort(this, R.string.network_error)
+    private fun toggleEye() {
+        btn_eye.isSelected = !btn_eye.isSelected
+        if (btn_eye.isSelected) {
+            et_password.transformationMethod = HideReturnsTransformationMethod.getInstance()
+        } else {
+            et_password.transformationMethod = PasswordTransformationMethod.getInstance()
+        }
+        et_password.setSelection(et_password.text.length)
+    }
+
+    override fun getAccount(): String {
+        return et_account.text.toString().trim()
+    }
+
+    override fun getPassword(): String {
+        return et_password.text.toString().trim()
+    }
+
+    override fun showLoginStart() {
+        hideSoftInput()
+        btn_login.isEnabled = false
+        btn_login.setText(R.string.logging)
+    }
+
+    override fun showLoginEnd() {
+        btn_login.isEnabled = true
+        btn_login.setText(R.string.login)
+    }
+
+    override fun showLoginSuccess() {
+        CircularAnim().fullActivity(this, btn_login)
+                .colorOrImageRes(R.color.colorPrimary)
+                .go(object : CircularAnim.OnAnimationEndListener {
+                    override fun onAnimationEnd() {
+                        finish()
                     }
                 })
-                .bindToLifecycle(this)
+    }
+
+    override fun showAccountOrPasswordError() {
+        ToastUtil.showShort(this, R.string.account_or_password_error)
+    }
+
+    override fun showOtherError(msg: String) {
+        ToastUtil.showShort(this, msg)
+    }
+
+    override fun showNetworkError() {
+        ToastUtil.showShort(this, R.string.network_error)
     }
 }

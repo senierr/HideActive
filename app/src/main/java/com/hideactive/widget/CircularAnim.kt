@@ -9,7 +9,6 @@ import android.view.ViewAnimationUtils
 import android.view.ViewGroup
 import android.widget.ImageView
 
-
 /**
  *
  * @author zhouchunjie

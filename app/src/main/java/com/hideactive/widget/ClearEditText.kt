@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.EditText
 import com.hideactive.R
-import com.hideactive.util.EditTextWatcher
+import com.module.library.util.EditTextWatcher
 
 /**
  * 带清除按钮的输入框

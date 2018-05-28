@@ -1,22 +1,23 @@
-package com.hideactive.logic.user
+package com.hideactive.domain.user
 
 import android.app.Activity
+import android.app.NotificationManager
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import com.hideactive.R
-import com.hideactive.base.BaseActivity
 import com.hideactive.comm.KEY_ACCOUNT
 import com.hideactive.comm.KEY_PASSWORD
 import com.hideactive.comm.REGEX_MOBILE_EXACT
 import com.hideactive.comm.REGEX_PASSWORD
-import com.hideactive.ext.bindToLifecycle
-import com.hideactive.ext.hideSoftInput
-import com.hideactive.util.NotificationUtil
-import com.hideactive.util.OnThrottleClickListener
-import com.hideactive.util.ToastUtil
+import com.module.library.extension.hideSoftInput
+import com.module.library.util.NotificationUtil
+import com.module.library.util.OnThrottleClickListener
+import com.module.library.util.ToastUtil
 import com.senierr.repository.Repository
 import com.senierr.repository.bean.BmobError
 import com.senierr.repository.service.api.IUserService
@@ -32,7 +33,7 @@ import java.util.regex.Pattern
  * @author zhouchunjie
  * @date 2018/5/2
  */
-class RegisterActivity : BaseActivity() {
+class RegisterActivity : AppCompatActivity() {
 
     private val userService: IUserService = Repository.getService()
     private var verificationCode = 0
@@ -160,8 +161,9 @@ class RegisterActivity : BaseActivity() {
      */
     private fun requestVerificationCode() {
         verificationCode = Random().nextInt(9000) + 1000
-        NotificationUtil.manager.notify(NotificationUtil.ID_SYSTEM,
-                NotificationUtil.getBuilder(NotificationUtil.CHANNEL_ID_SYSTEM)
+
+        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.notify(1, NotificationUtil.getBuilder(this)
                         .setContentTitle(getString(R.string.register))
                         .setContentText(String.format(getString(R.string.verification_code_msg), verificationCode))
                         .setWhen(System.currentTimeMillis())
@@ -224,6 +226,5 @@ class RegisterActivity : BaseActivity() {
                         ToastUtil.showShort(this, R.string.network_error)
                     }
                 })
-                .bindToLifecycle(this)
     }
 }

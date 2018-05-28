@@ -1,4 +1,4 @@
-package com.hideactive.util
+package com.module.library.util
 
 import android.view.View
 
