@@ -2,24 +2,25 @@ package com.hideactive.domain.entrance
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import com.hideactive.R
-import com.hideactive.domain.user.login.LoginActivity
+import com.hideactive.domain.base.BaseActivity
+import com.hideactive.domain.user.LoginActivity
+import com.hideactive.ext.bindToLifecycle
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import java.util.concurrent.TimeUnit
 
-class SplashActivity : AppCompatActivity(), ISplashView {
-
-    private val splashPresenter = SplashPresenter(this)
+class SplashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        lifecycle.addObserver(splashPresenter)
-        splashPresenter.startDelay()
-    }
-
-    override fun showMainPage() {
-        startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
-        finish()
+        Observable.timer(1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+                .subscribe {
+                    startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+                    finish()
+                }
+                .bindToLifecycle(this)
     }
 }

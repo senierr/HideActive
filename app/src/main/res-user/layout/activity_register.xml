@@ -28,23 +28,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/px_1"/>
 
-    <com.hideactive.widget.ClearEditText
-        android:id="@+id/et_nickname"
-        android:hint="@string/nickname"
-        android:textSize="@dimen/sp_15"
-        android:textColor="@color/text_normal"
-        android:singleLine="true"
-        android:background="@color/bg_content_white"
-        android:paddingStart="@dimen/dp_16"
-        android:paddingEnd="@dimen/dp_16"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_48" />
-
-    <View
-        android:background="@color/bg_divider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/px_1"/>
-
     <LinearLayout
         android:orientation="horizontal"
         android:background="@color/bg_content_white"

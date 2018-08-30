@@ -3,6 +3,8 @@ package com.hideactive.widget
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.EditText
@@ -72,5 +74,17 @@ class ClearEditText : EditText {
         val right = if (visible) mClearDrawable else null
         setCompoundDrawables(compoundDrawables[0],
                 compoundDrawables[1], right, compoundDrawables[3])
+    }
+
+    /**
+     * 设置密码可见性
+     */
+    fun setPasswordVisible(visible: Boolean) {
+        transformationMethod = if (!visible) {
+            HideReturnsTransformationMethod.getInstance()
+        } else {
+            PasswordTransformationMethod.getInstance()
+        }
+        setSelection(text.length)
     }
 }

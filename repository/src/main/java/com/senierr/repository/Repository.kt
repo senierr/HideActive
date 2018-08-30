@@ -3,7 +3,8 @@ package com.senierr.repository
 import android.arch.persistence.room.Room
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
+import com.senierr.http.RxHttp
+import com.senierr.http.internal.LogInterceptor
 import com.senierr.repository.db.AppDatabase
 import com.senierr.repository.remote.APP_ID_KEY
 import com.senierr.repository.remote.APP_ID_VALUE
@@ -12,9 +13,6 @@ import com.senierr.repository.remote.REST_API_VALUE
 import com.senierr.repository.service.api.IUserService
 import com.senierr.repository.service.impl.UserService
 import com.senierr.repository.util.LogUtil
-import com.senierr.sehttp.SeHttp
-import com.senierr.sehttp.interceptor.LogLevel
-import io.reactivex.plugins.RxJavaPlugins
 
 /**
  * 数据服务入口
@@ -30,6 +28,7 @@ object Repository {
     private const val DB_NAME = "HideActive.db"
     private const val SP_NAME = "HideActive"
 
+    internal lateinit var rxHttp: RxHttp
     internal lateinit var database: AppDatabase
     internal lateinit var sp: SharedPreferences
 
@@ -40,14 +39,15 @@ object Repository {
         // 日志
         LogUtil.isDebug = true
         LogUtil.tag = DEBUG_TAG
-        // 网络
-        SeHttp.getInstance()
-                .debug(DEBUG_TAG, LogLevel.BODY)
+        // 网络请求
+        rxHttp = RxHttp.Builder()
+                .debug(DEBUG_TAG, LogInterceptor.LogLevel.BODY)
                 .addCommonHeader(APP_ID_KEY, APP_ID_VALUE)
                 .addCommonHeader(REST_API_KEY, REST_API_VALUE)
                 .connectTimeout(TIMEOUT)
                 .readTimeout(TIMEOUT)
                 .writeTimeout(TIMEOUT)
+                .build()
         // 数据库
         database = Room.databaseBuilder(context,
                 AppDatabase::class.java,
@@ -55,10 +55,6 @@ object Repository {
                 .build()
         // SharedPreferences
         sp = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
-        // RxJava
-        RxJavaPlugins.setErrorHandler({
-            LogUtil.logW("Error: ${Log.getStackTraceString(it)}")
-        })
     }
 
     /**

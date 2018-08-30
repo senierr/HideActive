@@ -8,9 +8,9 @@ package com.hideactive.comm
  */
 
 /** 正则表达式 **/
-const val REGEX_PASSWORD = "^[a-zA-Z0-9_]{4,15}$"
-const val REGEX_MOBILE_EXACT = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|(147))\\d{8}$"
+const val REGEX_PASSWORD = "^[a-zA-Z0-9_]{5,20}$"
+const val REGEX_ACCOUNT = "^[a-zA-Z0-9_]{4,15}$"
 
 /** 参数Key **/
-const val KEY_ACCOUNT = "account"
-const val KEY_PASSWORD = "password"
+const val EXTRA_KEY_ACCOUNT = "account"
+const val EXTRA_KEY_PASSWORD = "password"

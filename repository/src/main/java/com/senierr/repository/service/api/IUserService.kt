@@ -28,19 +28,25 @@ interface IUserService {
     /**
      * 注册
      *
-     * @param username 账号
+     * @param account 账号
      * @param password 密码
-     * @param nickname 昵称
      * @return 用户ID: objectId
      */
-    fun register(username: String, password: String, nickname: String): Single<String>
+    fun register(account: String, password: String): Single<String>
 
     /**
      * 登录
      *
-     * @param username 账号
+     * @param account 账号
      * @param password 密码
      * @return 用户
      */
-    fun login(username: String, password: String): Single<User>
+    fun login(account: String, password: String): Single<User>
+
+    /**
+     * 更新用户信息
+     *
+     * @param user 昵称
+     */
+    fun updateUserInfo(user: User): Single<Boolean>
 }

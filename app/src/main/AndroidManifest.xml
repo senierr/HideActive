@@ -38,7 +38,7 @@
         </activity>
         <!-- 登录 -->
         <activity
-            android:name=".domain.user.login.LoginActivity"
+            android:name=".domain.user.LoginActivity"
             android:theme="@style/AppTheme.Grey"
             android:screenOrientation="portrait">
         </activity>

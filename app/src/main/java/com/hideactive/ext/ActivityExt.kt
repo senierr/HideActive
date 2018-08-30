@@ -1,4 +1,4 @@
-package com.module.library.extension
+package com.hideactive.ext
 
 import android.app.Activity
 import android.view.View

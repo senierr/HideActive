@@ -9,8 +9,7 @@ package com.senierr.repository.bean
 data class BmobError(
         var code: Int = UNKNOWN,
         var error: String? = null
-) : Throwable(error) {
-
+) : Exception(error) {
     companion object {
         const val UNKNOWN = -1
         const val ACCOUNT_REPEAT = 0
@@ -18,3 +17,21 @@ data class BmobError(
         const val ACCOUNT_OR_PASSWORD_ERROR = 101
     }
 }
+
+data class BmobInsert(
+        var objectId: String,
+        var createdAt: String
+)
+
+data class BmobUpdate(
+        var updatedAt: String
+)
+
+data class BmobDelete(
+        var msg: String     // ok/fail
+)
+
+data class BmobArray<T>(
+        var result: MutableList<T>? = null,
+        var count: Int = 0
+)

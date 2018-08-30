@@ -6,15 +6,11 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.text.method.HideReturnsTransformationMethod
-import android.text.method.PasswordTransformationMethod
 import android.view.View
 import com.hideactive.R
-import com.hideactive.comm.KEY_ACCOUNT
-import com.hideactive.comm.KEY_PASSWORD
-import com.hideactive.comm.REGEX_MOBILE_EXACT
-import com.hideactive.comm.REGEX_PASSWORD
-import com.module.library.extension.hideSoftInput
+import com.hideactive.comm.EXTRA_KEY_ACCOUNT
+import com.hideactive.comm.EXTRA_KEY_PASSWORD
+import com.hideactive.ext.hideSoftInput
 import com.module.library.util.NotificationUtil
 import com.module.library.util.OnThrottleClickListener
 import com.module.library.util.ToastUtil
@@ -25,7 +21,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_register.*
 import java.util.*
-import java.util.regex.Pattern
 
 /**
  * 注册
@@ -72,88 +67,18 @@ class RegisterActivity : AppCompatActivity() {
                 // 密码可见
                 R.id.btn_eye -> {
                     btn_eye.isSelected = !btn_eye.isSelected
-                    if (btn_eye.isSelected) {
-                        et_password.transformationMethod = HideReturnsTransformationMethod.getInstance()
-                    } else {
-                        et_password.transformationMethod = PasswordTransformationMethod.getInstance()
-                    }
-                    et_password.setSelection(et_password.text.length)
+                    et_password.setPasswordVisible(btn_eye.isSelected)
                 }
                 // 发送验证码
                 R.id.btn_request_code -> {
-                    if (checkAccount()) {
-                        requestVerificationCode()
-                    }
+                    requestVerificationCode()
                 }
                 // 注册
                 R.id.btn_register -> {
-                    if (checkAccount() && checkNickname()
-                            && checkPassword() && checkVerificationCode()) {
-                        register()
-                    }
+                    register()
                 }
             }
         }
-    }
-
-    /**
-     * 检查手机号
-     */
-    private fun checkAccount(): Boolean {
-        val account = et_account.text.toString().trim()
-        if (account.isEmpty()) {
-            ToastUtil.showShort(this@RegisterActivity, R.string.account_empty)
-            return false
-        }
-        if (!Pattern.matches(REGEX_MOBILE_EXACT, account)) {
-            ToastUtil.showShort(this@RegisterActivity, R.string.account_error)
-            return false
-        }
-        return true
-    }
-
-    /**
-     * 检查昵称
-     */
-    private fun checkNickname(): Boolean {
-        val nickname = et_nickname.text.toString().trim()
-        if (nickname.isEmpty()) {
-            ToastUtil.showShort(this@RegisterActivity, R.string.nickname_empty)
-            return false
-        }
-        return true
-    }
-
-    /**
-     * 检查密码
-     */
-    private fun checkPassword(): Boolean {
-        val password = et_password.text.toString().trim()
-        if (password.isEmpty()) {
-            ToastUtil.showShort(this@RegisterActivity, R.string.password_empty)
-            return false
-        }
-        if (!Pattern.matches(REGEX_PASSWORD, password)) {
-            ToastUtil.showShort(this@RegisterActivity, R.string.password_error)
-            return false
-        }
-        return true
-    }
-
-    /**
-     * 检查验证码
-     */
-    private fun checkVerificationCode(): Boolean {
-        val code = et_verification.text.toString().trim()
-        if (code.isEmpty()) {
-            ToastUtil.showShort(this@RegisterActivity, R.string.verification_code_empty)
-            return false
-        }
-        if (verificationCode.toString() != code) {
-            ToastUtil.showShort(this@RegisterActivity, R.string.verification_code_error)
-            return false
-        }
-        return true
     }
 
     /**
@@ -178,21 +103,42 @@ class RegisterActivity : AppCompatActivity() {
      */
     private fun register() {
         val account = et_account.text.toString().trim()
-        val nickname = et_nickname.text.toString().trim()
         val password = et_password.text.toString().trim()
+        val code = et_verification.text.toString().trim()
+        // 检查账号
+//        if (account.isEmpty()) {
+//            ToastUtil.showShort(this@RegisterActivity, R.string.account_empty)
+//            return
+//        }
+//        if (!Pattern.matches(REGEX_ACCOUNT, account)) {
+//            ToastUtil.showShort(this@RegisterActivity, R.string.account_not_match_regex)
+//            return
+//        }
+//        // 检查密码
+//        if (password.isEmpty()) {
+//            ToastUtil.showShort(this@RegisterActivity, R.string.password_empty)
+//            return
+//        }
+//        if (!Pattern.matches(REGEX_PASSWORD, password)) {
+//            ToastUtil.showShort(this@RegisterActivity, R.string.password_not_match_regex)
+//            return
+//        }
+//        // 检查验证码
+//        if (code.isEmpty()) {
+//            ToastUtil.showShort(this@RegisterActivity, R.string.verification_code_empty)
+//            return
+//        }
+//        if (verificationCode.toString() != code) {
+//            ToastUtil.showShort(this@RegisterActivity, R.string.verification_code_error)
+//            return
+//        }
         // 检测账号是否重复
         userService.checkAccountIfRepeat(account)
                 .flatMap {
                     // 账号重复
                     if (it) throw BmobError(BmobError.ACCOUNT_REPEAT)
-                    // 检测昵称是否重复
-                    return@flatMap userService.checkNicknameIfRepeat(nickname)
-                }
-                .flatMap {
-                    // 昵称重复
-                    if (it) throw BmobError(BmobError.NICKNAME_REPEAT)
                     // 注册
-                    return@flatMap userService.register(account, password, nickname)
+                    return@flatMap userService.register(account, password)
                 }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -208,8 +154,8 @@ class RegisterActivity : AppCompatActivity() {
                 .subscribe({
                     // 注册成功，返回登录页面
                     val data = intent
-                    data.putExtra(KEY_ACCOUNT, account)
-                    data.putExtra(KEY_PASSWORD, password)
+                    data.putExtra(EXTRA_KEY_ACCOUNT, account)
+                    data.putExtra(EXTRA_KEY_PASSWORD, password)
                     setResult(Activity.RESULT_OK, data)
                     finish()
                 }, {
