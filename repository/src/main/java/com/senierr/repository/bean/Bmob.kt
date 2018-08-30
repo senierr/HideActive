@@ -32,6 +32,6 @@ data class BmobDelete(
 )
 
 data class BmobArray<T>(
-        var result: MutableList<T>? = null,
+        var results: MutableList<T>? = null,
         var count: Int = 0
 )

@@ -1,6 +1,8 @@
 package com.senierr.repository.service.api
 
+import com.senierr.repository.bean.BmobInsert
 import com.senierr.repository.bean.User
+import io.reactivex.Observable
 import io.reactivex.Single
 
 /**
@@ -16,14 +18,14 @@ interface IUserService {
      *
      * @param account 账号
      */
-    fun checkAccountIfRepeat(account: String): Single<Boolean>
+    fun checkAccountIfRepeat(account: String): Observable<Boolean>
 
     /**
      * 检查昵称是否重复
      *
      * @param nickname 昵称
      */
-    fun checkNicknameIfRepeat(nickname: String): Single<Boolean>
+    fun checkNicknameIfRepeat(nickname: String): Observable<Boolean>
 
     /**
      * 注册
@@ -32,7 +34,7 @@ interface IUserService {
      * @param password 密码
      * @return 用户ID: objectId
      */
-    fun register(account: String, password: String): Single<String>
+    fun register(account: String, password: String): Observable<BmobInsert>
 
     /**
      * 登录
@@ -41,12 +43,12 @@ interface IUserService {
      * @param password 密码
      * @return 用户
      */
-    fun login(account: String, password: String): Single<User>
+    fun login(account: String, password: String): Observable<User>
 
     /**
      * 更新用户信息
      *
      * @param user 昵称
      */
-    fun updateUserInfo(user: User): Single<Boolean>
+    fun updateUserInfo(user: User): Observable<Boolean>
 }
