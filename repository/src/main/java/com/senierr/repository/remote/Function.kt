@@ -59,3 +59,15 @@ class ArrayFunction<T> : Function<Result<BmobArray<T>>, BmobArray<T>> {
         }
     }
 }
+
+/** 解析列表 */
+class ArrayFirstFunction<T> : Function<Result<BmobArray<T>>, T> {
+    override fun apply(t: Result<BmobArray<T>>): T {
+        val result: T? = t.body()?.results?.first()
+        if (result == null) {
+            throw IOException("Response body is null!")
+        } else {
+            return result
+        }
+    }
+}

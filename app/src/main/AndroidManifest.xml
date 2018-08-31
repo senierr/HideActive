@@ -42,9 +42,16 @@
             android:theme="@style/AppTheme.Grey"
             android:screenOrientation="portrait">
         </activity>
-        <!-- 帖子发布 -->
+        <!-- 登录 -->
         <activity
-            android:name=".domain.post.PublishPostActivity"
+            android:name=".domain.user.UserInfoActivity"
+            android:theme="@style/AppTheme.Grey"
+            android:screenOrientation="portrait">
+        </activity>
+        <!-- 首页 -->
+        <activity
+            android:name=".domain.main.MainActivity"
+            android:theme="@style/AppTheme.Grey"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:screenOrientation="portrait">
         </activity>

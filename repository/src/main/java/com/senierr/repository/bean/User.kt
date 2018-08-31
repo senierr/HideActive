@@ -13,11 +13,13 @@ import android.arch.persistence.room.PrimaryKey
 data class User(
         @PrimaryKey
         var objectId: String,
+
         var account: String? = null,            // 账号
         var password: String? = null,           // 密码
         var nickname: String? = null,           // 昵称
         var portrait: String? = null,           // 头像
-        var gender: Int = 0,                    // 性别 0：保密，1：男，2：女
+        var pushToken: String? = null,          // 推送token
+
         var createdAt: String? = null,          // 创建时间
         var updatedAt: String? = null           // 更新时间
         )

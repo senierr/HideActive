@@ -1,12 +1,13 @@
 package com.senierr.repository.remote
 
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.senierr.http.converter.Converter
 import com.senierr.repository.bean.BmobArray
 import com.senierr.repository.bean.BmobError
 import okhttp3.Response
 import java.io.IOException
+import java.lang.reflect.ParameterizedType
+import java.lang.reflect.Type
 
 /**
  * Bmob数据转换器
@@ -28,7 +29,7 @@ class BmobObjectConverter<T>(private val clazz: Class<T>) : Converter<T> {
     }
 }
 
-class BmobArrayConverter<T> : Converter<BmobArray<T>> {
+class BmobArrayConverter<T>(private val clazz: Class<T>) : Converter<BmobArray<T>> {
     override fun convertResponse(p0: Response): BmobArray<T> {
         val responseStr = p0.body()?.string()
         if (responseStr == null) {
@@ -37,7 +38,23 @@ class BmobArrayConverter<T> : Converter<BmobArray<T>> {
             if (p0.code() >= 400) {
                 throw Gson().fromJson(responseStr, BmobError::class.java)
             }
-            return Gson().fromJson(responseStr, object : TypeToken<BmobArray<T>>(){}.type)
+            val type = ParameterizedTypeImpl(BmobArray::class.java, arrayOf(clazz))
+            return Gson().fromJson(responseStr, type)
         }
+    }
+}
+
+class ParameterizedTypeImpl(
+        private val raw: Class<*>,
+        private val args: Array<Type> = emptyArray()
+) : ParameterizedType {
+    override fun getActualTypeArguments(): Array<Type> {
+        return args
+    }
+    override fun getRawType(): Type {
+        return raw
+    }
+    override fun getOwnerType(): Type? {
+        return null
     }
 }

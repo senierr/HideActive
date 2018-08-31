@@ -1,7 +1,7 @@
 package com.senierr.repository.bean
 
 /**
- * Bmob请求错误
+ * Bmob对象
  *
  * @author zhouchunjie
  * @date 2018/5/2

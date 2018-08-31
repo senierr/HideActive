@@ -3,6 +3,7 @@ package com.senierr.repository.service.impl
 import com.google.gson.Gson
 import com.senierr.repository.Repository
 import com.senierr.repository.bean.BmobInsert
+import com.senierr.repository.bean.BmobUpdate
 import com.senierr.repository.bean.User
 import com.senierr.repository.remote.*
 import com.senierr.repository.service.api.IUserService
@@ -19,7 +20,7 @@ class UserService : IUserService {
         return Repository.rxHttp.get(API_USER)
                 .addUrlParam("where", Gson().toJson(param))
                 .addUrlParam("count", "0")
-                .execute(BmobArrayConverter<User>())
+                .execute(BmobArrayConverter(User::class.java))
                 .map(ExistFunction())
     }
 
@@ -28,7 +29,7 @@ class UserService : IUserService {
         return Repository.rxHttp.get(API_USER)
                 .addUrlParam("where", Gson().toJson(param))
                 .addUrlParam("count", "0")
-                .execute(BmobArrayConverter<User>())
+                .execute(BmobArrayConverter(User::class.java))
                 .map(ExistFunction())
     }
 
@@ -44,37 +45,35 @@ class UserService : IUserService {
     }
 
     override fun login(account: String, password: String): Observable<User> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val param = mapOf(Pair("account", account))
+        return Repository.rxHttp.get(API_USER)
+                .addUrlParam("where", Gson().toJson(param))
+                .execute(BmobArrayConverter(User::class.java))
+                .map(ArrayFirstFunction())
+                .map {
+                    // 清除缓存
+                    Repository.database.getUserDao().deleteAll()
+                    // 缓存本地
+                    Repository.database.getUserDao().insertOrReplace(it)
+                    return@map it
+                }
     }
 
-    override fun updateUserInfo(user: User): Observable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun updateUserInfo(user: User): Observable<BmobUpdate> {
+        return Repository.rxHttp.put("$API_USER/${user.objectId}")
+                .setRequestBody4JSon(Gson().toJson(user))
+                .execute(BmobObjectConverter(BmobUpdate::class.java))
+                .map(ObjectFunction())
+                .map {
+                    // 更新本地
+                    Repository.database.getUserDao().insertOrReplace(user)
+                    return@map it
+                }
     }
 
-//    override fun login(account: String, password: String): Single<User> {
-//        return Single.fromCallable {
-//            // 发送请求
-//            val requestBuilder = SeHttp.get(API_USER_LOGIN)
-//                    .addUrlParam("account", account)
-//                    .addUrlParam("password", password)
-//            val response = requestBuilder.execute()
-//            // 解析请求
-//            response.use {
-//                val responseStr = it.body()?.string()
-//                if (it.code() >= 400) {
-//                    throw Gson().fromJson(responseStr, Bmob::class.java)
-//                }
-//                return@fromCallable Gson().fromJson(responseStr, User::class.java)
-//            }
-//        }
-//                .map {
-//                    // 缓存至本地
-//                    Repository.database.getUserDao().insertOrReplace(it)
-//                    return@map it
-//                }
-//    }
-//
-//    override fun updateUserInfo(user: User): Single<Boolean> {
-//
-//    }
+    override fun getCurrentUser(): Observable<User> {
+        return Observable.fromCallable {
+            return@fromCallable Repository.database.getUserDao().getList().first()
+        }
+    }
 }

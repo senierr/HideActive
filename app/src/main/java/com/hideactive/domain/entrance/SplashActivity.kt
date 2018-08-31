@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.hideactive.R
 import com.hideactive.domain.base.BaseActivity
-import com.hideactive.domain.user.LoginActivity
+import com.hideactive.domain.user.UserInfoActivity
 import com.hideactive.ext.bindToLifecycle
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,7 +18,7 @@ class SplashActivity : BaseActivity() {
 
         Observable.timer(1, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                 .subscribe {
-                    startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+                    startActivity(Intent(this@SplashActivity, UserInfoActivity::class.java))
                     finish()
                 }
                 .bindToLifecycle(this)

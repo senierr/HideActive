@@ -10,6 +10,8 @@ import android.view.View
 import com.hideactive.R
 import com.hideactive.comm.EXTRA_KEY_ACCOUNT
 import com.hideactive.comm.EXTRA_KEY_PASSWORD
+import com.hideactive.comm.REGEX_ACCOUNT
+import com.hideactive.comm.REGEX_PASSWORD
 import com.hideactive.ext.hideSoftInput
 import com.module.library.util.NotificationUtil
 import com.module.library.util.OnThrottleClickListener
@@ -21,6 +23,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_register.*
 import java.util.*
+import java.util.regex.Pattern
 
 /**
  * 注册
@@ -106,32 +109,32 @@ class RegisterActivity : AppCompatActivity() {
         val password = et_password.text.toString().trim()
         val code = et_verification.text.toString().trim()
         // 检查账号
-//        if (account.isEmpty()) {
-//            ToastUtil.showShort(this@RegisterActivity, R.string.account_empty)
-//            return
-//        }
-//        if (!Pattern.matches(REGEX_ACCOUNT, account)) {
-//            ToastUtil.showShort(this@RegisterActivity, R.string.account_not_match_regex)
-//            return
-//        }
-//        // 检查密码
-//        if (password.isEmpty()) {
-//            ToastUtil.showShort(this@RegisterActivity, R.string.password_empty)
-//            return
-//        }
-//        if (!Pattern.matches(REGEX_PASSWORD, password)) {
-//            ToastUtil.showShort(this@RegisterActivity, R.string.password_not_match_regex)
-//            return
-//        }
-//        // 检查验证码
-//        if (code.isEmpty()) {
-//            ToastUtil.showShort(this@RegisterActivity, R.string.verification_code_empty)
-//            return
-//        }
-//        if (verificationCode.toString() != code) {
-//            ToastUtil.showShort(this@RegisterActivity, R.string.verification_code_error)
-//            return
-//        }
+        if (account.isEmpty()) {
+            ToastUtil.showShort(this@RegisterActivity, R.string.account_empty)
+            return
+        }
+        if (!Pattern.matches(REGEX_ACCOUNT, account)) {
+            ToastUtil.showShort(this@RegisterActivity, R.string.account_not_match_regex)
+            return
+        }
+        // 检查密码
+        if (password.isEmpty()) {
+            ToastUtil.showShort(this@RegisterActivity, R.string.password_empty)
+            return
+        }
+        if (!Pattern.matches(REGEX_PASSWORD, password)) {
+            ToastUtil.showShort(this@RegisterActivity, R.string.password_not_match_regex)
+            return
+        }
+        // 检查验证码
+        if (code.isEmpty()) {
+            ToastUtil.showShort(this@RegisterActivity, R.string.verification_code_empty)
+            return
+        }
+        if (verificationCode.toString() != code) {
+            ToastUtil.showShort(this@RegisterActivity, R.string.verification_code_error)
+            return
+        }
         // 检测账号是否重复
         userService.checkAccountIfRepeat(account)
                 .flatMap {

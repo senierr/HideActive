@@ -13,11 +13,11 @@ android {
         versionName rootProject.ext.android.versionName
     }
 
-    sourceSets {
-        main {
-            res.srcDirs += "src/main/res-user"
-        }
-    }
+//    sourceSets {
+//        main {
+//            res.srcDirs += "src/main/res-user"
+//        }
+//    }
 
     buildTypes {
         release {

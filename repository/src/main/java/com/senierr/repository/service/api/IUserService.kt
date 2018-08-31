@@ -1,9 +1,9 @@
 package com.senierr.repository.service.api
 
 import com.senierr.repository.bean.BmobInsert
+import com.senierr.repository.bean.BmobUpdate
 import com.senierr.repository.bean.User
 import io.reactivex.Observable
-import io.reactivex.Single
 
 /**
  * 用户数据接口
@@ -50,5 +50,10 @@ interface IUserService {
      *
      * @param user 昵称
      */
-    fun updateUserInfo(user: User): Observable<Boolean>
+    fun updateUserInfo(user: User): Observable<BmobUpdate>
+
+    /**
+     * 获取当前登录用户
+     */
+    fun getCurrentUser(): Observable<User>
 }

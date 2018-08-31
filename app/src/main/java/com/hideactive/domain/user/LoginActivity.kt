@@ -140,8 +140,8 @@ class LoginActivity : BaseActivity() {
                             BmobError.ACCOUNT_OR_PASSWORD_ERROR ->
                                 ToastUtil.showShort(this, R.string.account_or_password_error)
                             else ->
-                                it.error?.let {
-                                    ToastUtil.showShort(this, it)
+                                it.error?.let { error ->
+                                    ToastUtil.showShort(this, error)
                                 }
                         }
                     } else {
