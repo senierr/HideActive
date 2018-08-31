@@ -33,12 +33,8 @@
             android:layout_height="@dimen/dp_48"/>
     </RelativeLayout>
 
-    <View
-        android:background="@color/bg_divider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/px_1"/>
-
     <RelativeLayout
+        android:layout_marginTop="@dimen/dp_8"
         android:background="@color/white"
         android:padding="@dimen/dp_16"
         android:layout_width="match_parent"

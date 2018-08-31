@@ -42,7 +42,7 @@
             android:theme="@style/AppTheme.Grey"
             android:screenOrientation="portrait">
         </activity>
-        <!-- 登录 -->
+        <!-- 用户信息 -->
         <activity
             android:name=".domain.user.UserInfoActivity"
             android:theme="@style/AppTheme.Grey"

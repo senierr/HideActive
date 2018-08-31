@@ -1,4 +1,4 @@
-package com.senierr.repository.util
+package com.hideactive.util
 
 import android.util.Log
 
@@ -10,7 +10,7 @@ import android.util.Log
  */
 object LogUtil {
 
-    var isDebug = true
+    var isDebug = false
     var tag = "LogUtil"
 
     fun logV(msg: String) {

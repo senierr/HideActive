@@ -12,7 +12,6 @@ import com.senierr.repository.remote.REST_API_KEY
 import com.senierr.repository.remote.REST_API_VALUE
 import com.senierr.repository.service.api.IUserService
 import com.senierr.repository.service.impl.UserService
-import com.senierr.repository.util.LogUtil
 
 /**
  * 数据服务入口
@@ -36,9 +35,6 @@ object Repository {
      * 数据层初始化
      */
     fun initialize(context: Context) {
-        // 日志
-        LogUtil.isDebug = true
-        LogUtil.tag = DEBUG_TAG
         // 网络请求
         rxHttp = RxHttp.Builder()
                 .debug(DEBUG_TAG, LogInterceptor.LogLevel.BODY)

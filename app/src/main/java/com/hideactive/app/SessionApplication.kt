@@ -1,6 +1,8 @@
 package com.hideactive.app
 
 import android.app.Application
+import com.hideactive.R
+import com.hideactive.util.LogUtil
 import com.senierr.repository.Repository
 
 /**
@@ -21,5 +23,8 @@ class SessionApplication : Application() {
         instance = this
 
         Repository.initialize(this)
+
+        LogUtil.isDebug = true
+        LogUtil.tag = getString(R.string.app_name)
     }
 }

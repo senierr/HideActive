@@ -71,9 +71,27 @@ class UserService : IUserService {
                 }
     }
 
-    override fun getCurrentUser(): Observable<User> {
+    override fun getLocalUser(): Observable<User> {
         return Observable.fromCallable {
-            return@fromCallable Repository.database.getUserDao().getList().first()
+            return@fromCallable Repository.database.getUserDao().getList()?.first()
+        }
+    }
+
+    override fun getRemoteUser(objectId: String): Observable<User> {
+        return Repository.rxHttp.get("$API_USER/$objectId")
+                .execute(BmobObjectConverter(User::class.java))
+                .map(ObjectFunction())
+                .map {
+                    // 更新本地
+                    Repository.database.getUserDao().insertOrReplace(it)
+                    return@map it
+                }
+    }
+
+    override fun isLoggedIn(): Observable<Boolean> {
+        return Observable.fromCallable {
+            val userList = Repository.database.getUserDao().getList()
+            return@fromCallable userList != null && userList.isNotEmpty()
         }
     }
 }

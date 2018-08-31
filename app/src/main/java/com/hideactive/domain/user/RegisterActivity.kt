@@ -5,13 +5,14 @@ import android.app.NotificationManager
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.hideactive.R
 import com.hideactive.comm.EXTRA_KEY_ACCOUNT
 import com.hideactive.comm.EXTRA_KEY_PASSWORD
 import com.hideactive.comm.REGEX_ACCOUNT
 import com.hideactive.comm.REGEX_PASSWORD
+import com.hideactive.domain.base.BaseActivity
+import com.hideactive.ext.bindToLifecycle
 import com.hideactive.ext.hideSoftInput
 import com.module.library.util.NotificationUtil
 import com.module.library.util.OnThrottleClickListener
@@ -31,9 +32,9 @@ import java.util.regex.Pattern
  * @author zhouchunjie
  * @date 2018/5/2
  */
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity : BaseActivity() {
 
-    private val userService: IUserService = Repository.getService()
+    private val userService = Repository.getService<IUserService>()
     private var verificationCode = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -162,18 +163,8 @@ class RegisterActivity : AppCompatActivity() {
                     setResult(Activity.RESULT_OK, data)
                     finish()
                 }, {
-                    if (it is BmobError) {
-                        when(it.code) {
-                            BmobError.ACCOUNT_REPEAT ->
-                                ToastUtil.showShort(this, R.string.account_repeat)
-                            BmobError.NICKNAME_REPEAT ->
-                                ToastUtil.showShort(this, R.string.nickname_repeat)
-                            else ->
-                                ToastUtil.showShort(this, it.error)
-                        }
-                    } else {
-                        ToastUtil.showShort(this, R.string.network_error)
-                    }
+                    showNetworkError(it)
                 })
+                .bindToLifecycle(this)
     }
 }

@@ -15,45 +15,41 @@ interface IUserService {
 
     /**
      * 检查账号是否重复
-     *
-     * @param account 账号
      */
     fun checkAccountIfRepeat(account: String): Observable<Boolean>
 
     /**
      * 检查昵称是否重复
-     *
-     * @param nickname 昵称
      */
     fun checkNicknameIfRepeat(nickname: String): Observable<Boolean>
 
     /**
      * 注册
-     *
-     * @param account 账号
-     * @param password 密码
-     * @return 用户ID: objectId
      */
     fun register(account: String, password: String): Observable<BmobInsert>
 
     /**
      * 登录
-     *
-     * @param account 账号
-     * @param password 密码
-     * @return 用户
      */
     fun login(account: String, password: String): Observable<User>
 
     /**
      * 更新用户信息
-     *
-     * @param user 昵称
      */
     fun updateUserInfo(user: User): Observable<BmobUpdate>
 
     /**
-     * 获取当前登录用户
+     * 获取本地用户信息
      */
-    fun getCurrentUser(): Observable<User>
+    fun getLocalUser(): Observable<User>
+
+    /**
+     * 获取远程用户信息
+     */
+    fun getRemoteUser(objectId: String): Observable<User>
+
+    /**
+     * 是否已登录
+     */
+    fun isLoggedIn(): Observable<Boolean>
 }

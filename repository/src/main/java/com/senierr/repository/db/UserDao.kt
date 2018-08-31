@@ -9,6 +9,8 @@ import com.senierr.repository.bean.User
 /**
  * 用户DB接口
  *
+ * 注：接口返回对象可能为空
+ *
  * @author zhouchunjie
  * @date 2018/3/29
  */
@@ -16,10 +18,10 @@ import com.senierr.repository.bean.User
 interface UserDao {
 
     @Query("SELECT * FROM User WHERE objectId = :objectId")
-    fun get(objectId: String): User
+    fun get(objectId: String): User?
 
     @Query("SELECT * FROM User")
-    fun getList(): MutableList<User>
+    fun getList(): MutableList<User>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrReplace(user: User)

@@ -16,7 +16,6 @@ import com.hideactive.widget.CircularAnim
 import com.module.library.util.OnThrottleClickListener
 import com.module.library.util.ToastUtil
 import com.senierr.repository.Repository
-import com.senierr.repository.bean.BmobError
 import com.senierr.repository.service.api.IUserService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -31,7 +30,7 @@ import java.util.regex.Pattern
  */
 class LoginActivity : BaseActivity() {
 
-    private val userService: IUserService = Repository.getService()
+    private val userService = Repository.getService<IUserService>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +46,7 @@ class LoginActivity : BaseActivity() {
         tb_top.setTitle(R.string.login)
         tb_top.setTitleTextAppearance(this, R.style.ToolbarTitleTextAppearance)
         setSupportActionBar(tb_top)
-        tb_top.setNavigationIcon(R.drawable.ic_back_white)
+        tb_top.setNavigationIcon(R.drawable.ic_close_white)
         tb_top.setNavigationOnClickListener {
             finish()
         }
@@ -131,22 +130,12 @@ class LoginActivity : BaseActivity() {
                             .colorOrImageRes(R.color.colorPrimary)
                             .go(object : CircularAnim.OnAnimationEndListener {
                                 override fun onAnimationEnd() {
+                                    startActivity(Intent(this@LoginActivity, UserInfoActivity::class.java))
                                     finish()
                                 }
                             })
                 }, {
-                    if (it is BmobError) {
-                        when(it.code) {
-                            BmobError.ACCOUNT_OR_PASSWORD_ERROR ->
-                                ToastUtil.showShort(this, R.string.account_or_password_error)
-                            else ->
-                                it.error?.let { error ->
-                                    ToastUtil.showShort(this, error)
-                                }
-                        }
-                    } else {
-                        ToastUtil.showShort(this, R.string.network_error)
-                    }
+                    showNetworkError(it)
                 })
                 .bindToLifecycle(this)
     }
