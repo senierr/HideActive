@@ -1,11 +1,16 @@
 package com.hideactive.domain.user
 
+import android.app.Activity
+import android.content.DialogInterface
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.hideactive.R
+import com.hideactive.domain.comm.ErrorHandler
 import com.hideactive.domain.base.BaseActivity
+import com.hideactive.widget.ClearEditText
 import com.module.library.util.OnThrottleClickListener
 import com.senierr.repository.Repository
 import com.senierr.repository.bean.User
@@ -47,6 +52,8 @@ class UserInfoActivity : BaseActivity() {
         tb_top.setNavigationOnClickListener {
             finish()
         }
+
+        rl_nickname.setOnClickListener(onThrottleClickListener)
     }
 
     /**
@@ -55,8 +62,17 @@ class UserInfoActivity : BaseActivity() {
     private val onThrottleClickListener = object : OnThrottleClickListener() {
         override fun onThrottleClick(view: View?) {
             when(view?.id) {
-                // 密码可见
-                R.id.btn_eye -> {
+                R.id.rl_nickname -> {
+                    val customView = layoutInflater.inflate(R.layout.dialog_edit_text, null)
+                    val alertDialog = AlertDialog.Builder(this@UserInfoActivity)
+                            .setTitle(R.string.edit_nickname)
+                            .setView(R.layout.dialog_edit_text)
+                            .setNegativeButton(R.string.cancel, null)
+                            .setPositiveButton(R.string.confirm, DialogInterface.OnClickListener { dialog, _ ->
+
+                            })
+                            .create()
+                    alertDialog.show()
                 }
             }
         }
@@ -95,7 +111,7 @@ class UserInfoActivity : BaseActivity() {
                 .subscribe({
                     refreshUserInfo(it)
                 }, {
-                    showNetworkError(it)
+                    ErrorHandler.showNetworkError(this@UserInfoActivity, it)
                 })
     }
 }

@@ -50,9 +50,8 @@
 
         <TextView
             android:id="@+id/tv_account"
-            android:text="ahuddd"
             android:textSize="@dimen/sp_14"
-            android:textColor="@color/text_sub_sub"
+            android:textColor="@color/text_normal"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
@@ -65,6 +64,7 @@
         android:layout_height="@dimen/px_1"/>
 
     <RelativeLayout
+        android:id="@+id/rl_nickname"
         android:background="@color/white"
         android:padding="@dimen/dp_16"
         android:layout_width="match_parent"
@@ -80,9 +80,9 @@
 
         <TextView
             android:id="@+id/tv_nickname"
-            android:text="ahuddd"
             android:textSize="@dimen/sp_14"
-            android:textColor="@color/text_sub_sub"
+            android:textColor="@color/text_normal"
+            android:hint="@string/click_to_edit"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"

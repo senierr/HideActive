@@ -5,11 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.hideactive.R
-import com.hideactive.comm.EXTRA_KEY_ACCOUNT
-import com.hideactive.comm.EXTRA_KEY_PASSWORD
-import com.hideactive.comm.REGEX_ACCOUNT
-import com.hideactive.comm.REGEX_PASSWORD
 import com.hideactive.domain.base.BaseActivity
+import com.hideactive.domain.comm.ErrorHandler
+import com.hideactive.domain.comm.REGEX_ACCOUNT
+import com.hideactive.domain.comm.REGEX_PASSWORD
 import com.hideactive.ext.bindToLifecycle
 import com.hideactive.ext.hideSoftInput
 import com.hideactive.widget.CircularAnim
@@ -30,12 +29,16 @@ import java.util.regex.Pattern
  */
 class LoginActivity : BaseActivity() {
 
+    companion object {
+        const val EXTRA_KEY_ACCOUNT = "login_account"
+        const val EXTRA_KEY_PASSWORD = "login_password"
+    }
+
     private val userService = Repository.getService<IUserService>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
         initView()
     }
 
@@ -130,12 +133,12 @@ class LoginActivity : BaseActivity() {
                             .colorOrImageRes(R.color.colorPrimary)
                             .go(object : CircularAnim.OnAnimationEndListener {
                                 override fun onAnimationEnd() {
-                                    startActivity(Intent(this@LoginActivity, UserInfoActivity::class.java))
+                                    setResult(Activity.RESULT_OK, intent)
                                     finish()
                                 }
                             })
                 }, {
-                    showNetworkError(it)
+                    ErrorHandler.showNetworkError(this@LoginActivity, it)
                 })
                 .bindToLifecycle(this)
     }

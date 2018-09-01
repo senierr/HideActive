@@ -7,11 +7,12 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
 import com.hideactive.R
-import com.hideactive.comm.EXTRA_KEY_ACCOUNT
-import com.hideactive.comm.EXTRA_KEY_PASSWORD
-import com.hideactive.comm.REGEX_ACCOUNT
-import com.hideactive.comm.REGEX_PASSWORD
 import com.hideactive.domain.base.BaseActivity
+import com.hideactive.domain.comm.ErrorHandler
+import com.hideactive.domain.comm.REGEX_ACCOUNT
+import com.hideactive.domain.comm.REGEX_PASSWORD
+import com.hideactive.domain.user.LoginActivity.Companion.EXTRA_KEY_ACCOUNT
+import com.hideactive.domain.user.LoginActivity.Companion.EXTRA_KEY_PASSWORD
 import com.hideactive.ext.bindToLifecycle
 import com.hideactive.ext.hideSoftInput
 import com.module.library.util.NotificationUtil
@@ -163,7 +164,7 @@ class RegisterActivity : BaseActivity() {
                     setResult(Activity.RESULT_OK, data)
                     finish()
                 }, {
-                    showNetworkError(it)
+                    ErrorHandler.showNetworkError(this@RegisterActivity, it)
                 })
                 .bindToLifecycle(this)
     }
