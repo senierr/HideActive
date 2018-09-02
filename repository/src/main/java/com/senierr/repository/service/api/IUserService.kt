@@ -34,9 +34,14 @@ interface IUserService {
     fun login(account: String, password: String): Observable<User>
 
     /**
-     * 更新用户信息
+     * 更新用户头像
      */
-    fun updateUserInfo(user: User): Observable<BmobUpdate>
+    fun updateUserPortrait(objectId: String, portrait: String): Observable<BmobUpdate>
+
+    /**
+     * 更新用户昵称
+     */
+    fun updateUserNickname(objectId: String, nickname: String): Observable<BmobUpdate>
 
     /**
      * 获取本地用户信息

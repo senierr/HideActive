@@ -50,8 +50,9 @@
 
         <TextView
             android:id="@+id/tv_account"
-            android:textSize="@dimen/sp_14"
-            android:textColor="@color/text_normal"
+            android:textSize="@dimen/sp_15"
+            android:textColor="@color/text_sub_sub"
+            android:gravity="end"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
@@ -80,9 +81,10 @@
 
         <TextView
             android:id="@+id/tv_nickname"
-            android:textSize="@dimen/sp_14"
-            android:textColor="@color/text_normal"
-            android:hint="@string/click_to_edit"
+            android:text="@string/click_to_edit"
+            android:textSize="@dimen/sp_15"
+            android:textColor="@color/text_sub_sub"
+            android:gravity="end"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"

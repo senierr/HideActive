@@ -59,16 +59,20 @@ class UserService : IUserService {
                 }
     }
 
-    override fun updateUserInfo(user: User): Observable<BmobUpdate> {
-        return Repository.rxHttp.put("$API_USER/${user.objectId}")
-                .setRequestBody4JSon(Gson().toJson(user))
+    override fun updateUserPortrait(objectId: String, portrait: String): Observable<BmobUpdate> {
+        val param = mapOf(Pair("portrait", portrait))
+        return Repository.rxHttp.put("$API_USER/$objectId")
+                .setRequestBody4JSon(Gson().toJson(param))
                 .execute(BmobObjectConverter(BmobUpdate::class.java))
                 .map(ObjectFunction())
-                .map {
-                    // 更新本地
-                    Repository.database.getUserDao().insertOrReplace(user)
-                    return@map it
-                }
+    }
+
+    override fun updateUserNickname(objectId: String, nickname: String): Observable<BmobUpdate> {
+        val param = mapOf(Pair("nickname", nickname))
+        return Repository.rxHttp.put("$API_USER/$objectId")
+                .setRequestBody4JSon(Gson().toJson(param))
+                .execute(BmobObjectConverter(BmobUpdate::class.java))
+                .map(ObjectFunction())
     }
 
     override fun getLocalUser(): Observable<User> {

@@ -5,6 +5,7 @@
     android:layout_height="wrap_content">
 
     <com.hideactive.widget.ClearEditText
+        android:id="@+id/et_content"
         android:textColor="@color/text_normal"
         android:textSize="@dimen/sp_14"
         android:layout_marginTop="@dimen/dp_8"
