@@ -21,7 +21,7 @@ class UserService : IUserService {
                 .addUrlParam("where", Gson().toJson(param))
                 .addUrlParam("count", "0")
                 .execute(BmobArrayConverter(User::class.java))
-                .map(ExistFunction())
+                .map(BmobExistFunction())
     }
 
     override fun checkNicknameIfRepeat(nickname: String): Observable<Boolean> {
@@ -30,7 +30,7 @@ class UserService : IUserService {
                 .addUrlParam("where", Gson().toJson(param))
                 .addUrlParam("count", "0")
                 .execute(BmobArrayConverter(User::class.java))
-                .map(ExistFunction())
+                .map(BmobExistFunction())
     }
 
     override fun register(account: String, password: String): Observable<BmobInsert> {
@@ -49,7 +49,7 @@ class UserService : IUserService {
         return Repository.rxHttp.get(API_USER)
                 .addUrlParam("where", Gson().toJson(param))
                 .execute(BmobArrayConverter(User::class.java))
-                .map(ArrayFirstFunction())
+                .map(BmobArrayFirstFunction())
                 .map {
                     // 清除缓存
                     Repository.database.getUserDao().deleteAll()

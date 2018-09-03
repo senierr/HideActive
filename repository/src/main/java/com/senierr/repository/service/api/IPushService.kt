@@ -1,6 +1,7 @@
 package com.senierr.repository.service.api
 
 import com.senierr.repository.bean.BmobUpdate
+import com.senierr.repository.bean.PushResponse
 import io.reactivex.Observable
 
 /**
@@ -16,5 +17,10 @@ interface IPushService {
      */
     fun register(userId: String, pushToken: String): Observable<BmobUpdate>
 
-    fun pushMessage(userId: String, message: String)
+    /**
+     * 用户取消注册
+     */
+    fun unregister(userId: String, pushToken: String): Observable<BmobUpdate>
+
+    fun pushMessage(userId: String, message: String): Observable<PushResponse>
 }

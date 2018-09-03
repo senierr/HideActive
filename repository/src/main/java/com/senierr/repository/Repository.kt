@@ -12,6 +12,7 @@ import com.senierr.repository.remote.REST_API_KEY
 import com.senierr.repository.remote.REST_API_VALUE
 import com.senierr.repository.service.api.IUserService
 import com.senierr.repository.service.impl.UserService
+import com.tencent.android.tpush.XGPushManager
 
 /**
  * 数据服务入口
@@ -51,6 +52,8 @@ object Repository {
                 .build()
         // SharedPreferences
         sp = context.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
+        // 信鸽
+        XGPushManager.registerPush(context)
     }
 
     /**

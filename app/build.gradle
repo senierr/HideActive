@@ -48,12 +48,6 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.6.1'
     implementation 'com.github.senierr:PermissionManager:1.0.4'
 
-    //信鸽jar，不包含厂商通道
-    implementation 'com.tencent.xinge:xinge:4.0.3-Beta'
-    implementation'com.tencent.jg:jg:1.1'
-    implementation 'com.tencent.wup:wup:1.0.0.E-release'
-    implementation 'com.tencent.mid:mid:4.0.7'
-
 //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
 //    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 //    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'

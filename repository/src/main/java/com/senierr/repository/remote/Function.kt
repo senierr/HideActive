@@ -13,7 +13,7 @@ import java.io.IOException
  */
 
 /** 数量统计 */
-class CountFunction<T> : Function<Result<BmobArray<T>>, Int> {
+class BmobCountFunction<T> : Function<Result<BmobArray<T>>, Int> {
     override fun apply(t: Result<BmobArray<T>>): Int {
         val body = t.body()
         if (body == null) {
@@ -25,7 +25,7 @@ class CountFunction<T> : Function<Result<BmobArray<T>>, Int> {
 }
 
 /** 是否存在 */
-class ExistFunction<T> : Function<Result<BmobArray<T>>, Boolean> {
+class BmobExistFunction<T> : Function<Result<BmobArray<T>>, Boolean> {
     override fun apply(t: Result<BmobArray<T>>): Boolean {
         val body = t.body()
         if (body == null) {
@@ -49,7 +49,7 @@ class ObjectFunction<T> : Function<Result<T>, T> {
 }
 
 /** 解析列表 */
-class ArrayFunction<T> : Function<Result<BmobArray<T>>, BmobArray<T>> {
+class BmobArrayFunction<T> : Function<Result<BmobArray<T>>, BmobArray<T>> {
     override fun apply(t: Result<BmobArray<T>>): BmobArray<T> {
         val body = t.body()
         if (body == null) {
@@ -61,7 +61,7 @@ class ArrayFunction<T> : Function<Result<BmobArray<T>>, BmobArray<T>> {
 }
 
 /** 解析列表 */
-class ArrayFirstFunction<T> : Function<Result<BmobArray<T>>, T> {
+class BmobArrayFirstFunction<T> : Function<Result<BmobArray<T>>, T> {
     override fun apply(t: Result<BmobArray<T>>): T {
         val result: T? = t.body()?.results?.first()
         if (result == null) {

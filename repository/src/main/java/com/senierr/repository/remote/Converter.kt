@@ -10,11 +10,22 @@ import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
 /**
- * Bmob数据转换器
+ * 数据转换器
  *
  * @author zhouchunjie
  * @date 2018/8/30
  */
+class ObjectConverter<T>(private val clazz: Class<T>) : Converter<T> {
+    override fun convertResponse(p0: Response): T {
+        val responseStr = p0.body()?.string()
+        if (responseStr == null) {
+            throw IOException("Response body is null!")
+        } else {
+            return Gson().fromJson(responseStr, clazz)
+        }
+    }
+}
+
 class BmobObjectConverter<T>(private val clazz: Class<T>) : Converter<T> {
     override fun convertResponse(p0: Response): T {
         val responseStr = p0.body()?.string()
