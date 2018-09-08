@@ -14,6 +14,8 @@ data class BmobError(
         const val UNKNOWN = -1
         const val ACCOUNT_REPEAT = 0
         const val NICKNAME_REPEAT = 1
+        const val UN_LOGGED_IN = 2
+        // 服务器返回错误
         const val ACCOUNT_OR_PASSWORD_ERROR = 101
     }
 }

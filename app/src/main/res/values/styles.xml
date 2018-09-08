@@ -17,6 +17,7 @@
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:minHeight">@dimen/dp_48</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="android:elevation">@dimen/dp_2</item>
         <item name="theme">@style/ToolbarTheme</item>
     </style>
 

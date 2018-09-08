@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- BottomNavigationView字体大小 -->
+    <dimen
+        tools:override="true"
+        name="design_bottom_navigation_active_text_size">12sp</dimen>
+    <dimen
+        tools:override="true"
+        name="design_bottom_navigation_text_size">12sp</dimen>
 
     <dimen name="px_1">1px</dimen>
     <dimen name="px_2">2px</dimen>

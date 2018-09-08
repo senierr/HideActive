@@ -3,6 +3,7 @@ package com.senierr.repository.service.api
 import com.senierr.repository.bean.BmobInsert
 import com.senierr.repository.bean.BmobUpdate
 import com.senierr.repository.bean.User
+import io.reactivex.Maybe
 import io.reactivex.Observable
 
 /**

@@ -17,7 +17,11 @@ data class PushBean(
 
 data class PushMessage(
         val title: String,
-        val content: MutableList<String>,
+        val content: String,
+        val android: ThroughMessage
+)
+
+data class ThroughMessage(
         val custom_content: Map<String, String>
 )
 

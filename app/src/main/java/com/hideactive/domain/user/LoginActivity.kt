@@ -1,6 +1,7 @@
 package com.hideactive.domain.user
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -32,6 +33,8 @@ class LoginActivity : BaseActivity() {
     companion object {
         const val EXTRA_KEY_ACCOUNT = "login_account"
         const val EXTRA_KEY_PASSWORD = "login_password"
+        const val LOGIN_SUCCESS = 65534
+        const val LOGIN_FAILURE = 65535
     }
 
     private val userService = Repository.getService<IUserService>()
@@ -49,9 +52,9 @@ class LoginActivity : BaseActivity() {
         tb_top.setTitle(R.string.login)
         tb_top.setTitleTextAppearance(this, R.style.ToolbarTitleTextAppearance)
         setSupportActionBar(tb_top)
-        tb_top.setNavigationIcon(R.drawable.ic_close_white)
+        tb_top.setNavigationIcon(R.drawable.ic_close_white_24dp)
         tb_top.setNavigationOnClickListener {
-            finish()
+            doFinish(false)
         }
 
         btn_eye.isSelected = false
@@ -133,13 +136,24 @@ class LoginActivity : BaseActivity() {
                             .colorOrImageRes(R.color.colorPrimary)
                             .go(object : CircularAnim.OnAnimationEndListener {
                                 override fun onAnimationEnd() {
-                                    setResult(Activity.RESULT_OK, intent)
-                                    finish()
+                                    doFinish(true)
                                 }
                             })
                 }, {
                     ErrorHandler.showNetworkError(this@LoginActivity, it)
                 })
                 .bindToLifecycle(this)
+    }
+
+    /**
+     * 页面关闭处理
+     */
+    private fun doFinish(isSuccess: Boolean) {
+        if (isSuccess) {
+            setResult(LOGIN_SUCCESS, intent)
+        } else {
+            setResult(LOGIN_FAILURE, intent)
+        }
+        finish()
     }
 }

@@ -3,14 +3,14 @@ package com.senierr.repository
 import android.arch.persistence.room.Room
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Base64
 import com.senierr.http.RxHttp
 import com.senierr.http.internal.LogInterceptor
 import com.senierr.repository.db.AppDatabase
-import com.senierr.repository.remote.APP_ID_KEY
-import com.senierr.repository.remote.APP_ID_VALUE
-import com.senierr.repository.remote.REST_API_KEY
-import com.senierr.repository.remote.REST_API_VALUE
+import com.senierr.repository.remote.*
+import com.senierr.repository.service.api.IPushService
 import com.senierr.repository.service.api.IUserService
+import com.senierr.repository.service.impl.PushService
 import com.senierr.repository.service.impl.UserService
 import com.tencent.android.tpush.XGPushManager
 
@@ -28,7 +28,8 @@ object Repository {
     private const val DB_NAME = "HideActive.db"
     private const val SP_NAME = "HideActive"
 
-    internal lateinit var rxHttp: RxHttp
+    internal lateinit var dataHttp: RxHttp
+    internal lateinit var pushHttp: RxHttp
     internal lateinit var database: AppDatabase
     internal lateinit var sp: SharedPreferences
 
@@ -37,10 +38,18 @@ object Repository {
      */
     fun initialize(context: Context) {
         // 网络请求
-        rxHttp = RxHttp.Builder()
+        dataHttp = RxHttp.Builder()
                 .debug(DEBUG_TAG, LogInterceptor.LogLevel.BODY)
                 .addCommonHeader(APP_ID_KEY, APP_ID_VALUE)
                 .addCommonHeader(REST_API_KEY, REST_API_VALUE)
+                .connectTimeout(TIMEOUT)
+                .readTimeout(TIMEOUT)
+                .writeTimeout(TIMEOUT)
+                .build()
+        pushHttp = RxHttp.Builder()
+                .debug(DEBUG_TAG, LogInterceptor.LogLevel.BODY)
+                .addCommonHeader(AUTHORIZATION_KEY, "Basic " + Base64.encodeToString(
+                        "$APP_ID:$SECRET_KEY".toByteArray(), Base64.NO_WRAP))
                 .connectTimeout(TIMEOUT)
                 .readTimeout(TIMEOUT)
                 .writeTimeout(TIMEOUT)
@@ -62,6 +71,8 @@ object Repository {
     inline fun <reified T> getService(): T = when(T::class.java) {
         IUserService::class.java ->
             UserService() as T
+        IPushService::class.java ->
+            PushService() as T
         else -> throw IllegalArgumentException("Can not find this type of the service!")
     }
 }

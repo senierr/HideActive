@@ -8,8 +8,9 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.hideactive.R
-import com.hideactive.domain.comm.ErrorHandler
 import com.hideactive.domain.base.BaseActivity
+import com.hideactive.domain.comm.ErrorHandler
+import com.hideactive.ext.bindToLifecycle
 import com.hideactive.widget.ClearEditText
 import com.module.library.util.OnThrottleClickListener
 import com.module.library.util.ToastUtil
@@ -38,8 +39,8 @@ class UserInfoActivity : BaseActivity() {
         initView()
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onStart() {
+        super.onStart()
         loadUser()
     }
 
@@ -50,7 +51,7 @@ class UserInfoActivity : BaseActivity() {
         tb_top.setTitle(R.string.user_info)
         tb_top.setTitleTextAppearance(this, R.style.ToolbarTitleTextAppearance)
         setSupportActionBar(tb_top)
-        tb_top.setNavigationIcon(R.drawable.ic_back_white)
+        tb_top.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
         tb_top.setNavigationOnClickListener {
             finish()
         }
@@ -115,13 +116,8 @@ class UserInfoActivity : BaseActivity() {
     private fun loadUser() {
         userService.getLocalUser()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext {
-                    refreshUserInfo(it)
-                }
                 .flatMap {
                     return@flatMap userService.getRemoteUser(it.objectId)
-                            .subscribeOn(Schedulers.io())
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -129,6 +125,7 @@ class UserInfoActivity : BaseActivity() {
                 }, {
                     ErrorHandler.showNetworkError(this@UserInfoActivity, it)
                 })
+                .bindToLifecycle(this)
     }
 
     /**
@@ -148,5 +145,6 @@ class UserInfoActivity : BaseActivity() {
                 }, {
                     ErrorHandler.showNetworkError(this@UserInfoActivity, it)
                 })
+                .bindToLifecycle(this)
     }
 }

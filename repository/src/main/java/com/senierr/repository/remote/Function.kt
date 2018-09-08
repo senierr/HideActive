@@ -12,6 +12,18 @@ import java.io.IOException
  * @date 2018/8/30
  */
 
+/** 解析对象 */
+class ObjectFunction<T> : Function<Result<T>, T> {
+    override fun apply(t: Result<T>): T {
+        val body = t.body()
+        if (body == null) {
+            throw IOException("Response body is null!")
+        } else {
+            return body
+        }
+    }
+}
+
 /** 数量统计 */
 class BmobCountFunction<T> : Function<Result<BmobArray<T>>, Int> {
     override fun apply(t: Result<BmobArray<T>>): Int {
@@ -32,18 +44,6 @@ class BmobExistFunction<T> : Function<Result<BmobArray<T>>, Boolean> {
             throw IOException("Response body is null!")
         } else {
             return body.count > 0
-        }
-    }
-}
-
-/** 解析对象 */
-class ObjectFunction<T> : Function<Result<T>, T> {
-    override fun apply(t: Result<T>): T {
-        val body = t.body()
-        if (body == null) {
-            throw IOException("Response body is null!")
-        } else {
-            return body
         }
     }
 }

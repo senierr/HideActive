@@ -20,7 +20,10 @@ interface IPushService {
     /**
      * 用户取消注册
      */
-    fun unregister(userId: String, pushToken: String): Observable<BmobUpdate>
+    fun unregister(userId: String): Observable<BmobUpdate>
 
-    fun pushMessage(userId: String, message: String): Observable<PushResponse>
+    /**
+     * 推送消息
+     */
+    fun pushMessage(pushToken: String, message: String): Observable<PushResponse>
 }
