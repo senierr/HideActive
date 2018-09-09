@@ -19,6 +19,7 @@ data class User(
         var nickname: String? = null,           // 昵称
         var portrait: String? = null,           // 头像
         var pushToken: String? = null,          // 推送token
+        var isOnline: Boolean = false,          // 是否在线
 
         var createdAt: String? = null,          // 创建时间
         var updatedAt: String? = null           // 更新时间

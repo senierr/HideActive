@@ -9,6 +9,7 @@ import com.senierr.repository.remote.*
 import com.senierr.repository.service.api.IUserService
 import io.reactivex.Maybe
 import io.reactivex.Observable
+import io.reactivex.functions.Function
 
 /**
  * @author zhouchunjie
@@ -46,11 +47,26 @@ class UserService : IUserService {
     }
 
     override fun login(account: String, password: String): Observable<User> {
+        var userId = ""
         val param = mapOf(Pair("account", account))
         return Repository.dataHttp.get(API_USER)
                 .addUrlParam("where", Gson().toJson(param))
                 .execute(BmobArrayConverter(User::class.java))
                 .map(BmobArrayFirstFunction())
+                .flatMap {
+                    userId = it.objectId
+                    // 更新用户在线状态
+                    return@flatMap Repository.dataHttp.put("$API_USER/${it.objectId}")
+                            .setRequestBody4JSon(Gson().toJson(mapOf(Pair("isOnline", true))))
+                            .execute(BmobObjectConverter(BmobUpdate::class.java))
+                            .map(ObjectFunction())
+                }
+                .flatMap {
+                    // 获取最新数据
+                    return@flatMap Repository.dataHttp.get("$API_USER/$userId")
+                            .execute(BmobObjectConverter(User::class.java))
+                            .map(ObjectFunction())
+                }
                 .map {
                     // 清除缓存
                     Repository.database.getUserDao().deleteAll()
@@ -102,5 +118,13 @@ class UserService : IUserService {
             val userList = Repository.database.getUserDao().getList()
             return@fromCallable userList != null && userList.isNotEmpty()
         }
+    }
+
+    override fun getFriends(): Observable<MutableList<User>> {
+        val param = mapOf(Pair("isOnline", true))
+        return Repository.dataHttp.get(API_USER)
+                .addUrlParam("where", Gson().toJson(param))
+                .execute(BmobArrayConverter(User::class.java))
+                .map(BmobArrayFunction())
     }
 }

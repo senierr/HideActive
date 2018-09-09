@@ -49,13 +49,13 @@ class BmobExistFunction<T> : Function<Result<BmobArray<T>>, Boolean> {
 }
 
 /** 解析列表 */
-class BmobArrayFunction<T> : Function<Result<BmobArray<T>>, BmobArray<T>> {
-    override fun apply(t: Result<BmobArray<T>>): BmobArray<T> {
-        val body = t.body()
-        if (body == null) {
+class BmobArrayFunction<T> : Function<Result<BmobArray<T>>, MutableList<T>> {
+    override fun apply(t: Result<BmobArray<T>>): MutableList<T> {
+        val result = t.body()?.results
+        if (result == null) {
             throw IOException("Response body is null!")
         } else {
-            return body
+            return result
         }
     }
 }
@@ -63,7 +63,7 @@ class BmobArrayFunction<T> : Function<Result<BmobArray<T>>, BmobArray<T>> {
 /** 解析列表 */
 class BmobArrayFirstFunction<T> : Function<Result<BmobArray<T>>, T> {
     override fun apply(t: Result<BmobArray<T>>): T {
-        val result: T? = t.body()?.results?.first()
+        val result = t.body()?.results?.first()
         if (result == null) {
             throw IOException("Response body is null!")
         } else {

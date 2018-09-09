@@ -58,4 +58,9 @@ interface IUserService {
      * 是否已登录
      */
     fun isLoggedIn(): Observable<Boolean>
+
+    /**
+     * 获取好友
+     */
+    fun getFriends(): Observable<MutableList<User>>
 }

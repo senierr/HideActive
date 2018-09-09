@@ -140,7 +140,7 @@ class LoginActivity : BaseActivity() {
                                 }
                             })
                 }, {
-                    ErrorHandler.showNetworkError(this@LoginActivity, it)
+                    ErrorHandler.showNetworkError(this, it)
                 })
                 .bindToLifecycle(this)
     }
