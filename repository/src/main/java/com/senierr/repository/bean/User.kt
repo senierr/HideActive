@@ -23,4 +23,4 @@ data class User(
 
         var createdAt: String? = null,          // 创建时间
         var updatedAt: String? = null           // 更新时间
-        )
+)
