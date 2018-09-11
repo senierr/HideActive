@@ -22,12 +22,6 @@ android {
         ]
     }
 
-//    sourceSets {
-//        main {
-//            res.srcDirs += "src/main/res-user"
-//        }
-//    }
-
     buildTypes {
         release {
             minifyEnabled false

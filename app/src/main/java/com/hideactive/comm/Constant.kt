@@ -1,4 +1,4 @@
-package com.hideactive.domain.comm
+package com.hideactive.comm
 
 /**
  * 常量

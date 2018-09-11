@@ -1,7 +1,6 @@
-package com.hideactive.domain.push
+package com.hideactive.push
 
 import android.content.Context
-import android.util.Log
 import com.hideactive.util.LogUtil
 import com.senierr.repository.Repository
 import com.senierr.repository.service.api.IPushService

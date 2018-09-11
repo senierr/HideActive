@@ -51,6 +51,7 @@
         <ImageButton
             android:id="@+id/btn_eye"
             android:src="@drawable/selector_eye"
+            android:tint="@color/colorPrimaryDark"
             android:background="@color/transparent"
             android:paddingStart="@dimen/dp_8"
             android:paddingEnd="@dimen/dp_16"

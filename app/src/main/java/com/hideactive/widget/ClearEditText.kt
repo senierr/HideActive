@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.EditText
 import com.hideactive.R
+import com.hideactive.util.DrawableUtil
 import com.module.library.util.EditTextWatcher
 
 /**
@@ -35,7 +36,7 @@ class ClearEditText : EditText {
         }
         mClearDrawable?.let {
             it.setBounds(0, 0, it.intrinsicWidth, it.intrinsicHeight)
-            it.setTint(ContextCompat.getColor(context, R.color.text_normal))
+            DrawableUtil.tintDrawable(it, ContextCompat.getColor(context, R.color.text_sub))
         }
 
         setClearIconVisible(false)
@@ -81,7 +82,7 @@ class ClearEditText : EditText {
      * 设置密码可见性
      */
     fun setPasswordVisible(visible: Boolean) {
-        transformationMethod = if (!visible) {
+        transformationMethod = if (visible) {
             HideReturnsTransformationMethod.getInstance()
         } else {
             PasswordTransformationMethod.getInstance()

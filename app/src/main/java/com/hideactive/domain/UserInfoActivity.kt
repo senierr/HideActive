@@ -1,4 +1,4 @@
-package com.hideactive.domain.user
+package com.hideactive.domain
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -8,8 +8,8 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.hideactive.R
-import com.hideactive.domain.base.BaseActivity
-import com.hideactive.domain.comm.ErrorHandler
+import com.hideactive.base.BaseActivity
+import com.hideactive.comm.ErrorHandler
 import com.hideactive.ext.bindToLifecycle
 import com.hideactive.widget.ClearEditText
 import com.module.library.util.OnThrottleClickListener

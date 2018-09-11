@@ -25,7 +25,7 @@
 
         <!-- 引导页 -->
         <activity
-            android:name=".domain.entrance.SplashActivity"
+            android:name=".domain.SplashActivity"
             android:theme="@style/AppTheme.SplashTheme"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -35,31 +35,31 @@
         </activity>
         <!-- 注册 -->
         <activity
-            android:name=".domain.user.RegisterActivity"
+            android:name=".domain.RegisterActivity"
             android:theme="@style/AppTheme.Grey"
             android:screenOrientation="portrait">
         </activity>
         <!-- 登录 -->
         <activity
-            android:name=".domain.user.LoginActivity"
+            android:name=".domain.LoginActivity"
             android:theme="@style/AppTheme.Grey"
             android:screenOrientation="portrait">
         </activity>
         <!-- 用户信息 -->
         <activity
-            android:name=".domain.user.UserInfoActivity"
+            android:name=".domain.UserInfoActivity"
             android:theme="@style/AppTheme.Grey"
             android:screenOrientation="portrait">
         </activity>
         <!-- 首页 -->
         <activity
-            android:name=".domain.main.MainActivity"
+            android:name=".domain.MainActivity"
             android:theme="@style/AppTheme.Grey"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:screenOrientation="portrait">
         </activity>
 
-        <receiver android:name=".domain.push.MessageReceiver"
+        <receiver android:name="com.hideactive.push.MessageReceiver"
             android:exported="true" >
             <intent-filter>
                 <!-- 接收消息透传 -->

@@ -1,15 +1,14 @@
-package com.hideactive.domain.user
+package com.hideactive.domain
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.hideactive.R
-import com.hideactive.domain.base.BaseActivity
-import com.hideactive.domain.comm.ErrorHandler
-import com.hideactive.domain.comm.REGEX_ACCOUNT
-import com.hideactive.domain.comm.REGEX_PASSWORD
+import com.hideactive.base.BaseActivity
+import com.hideactive.comm.ErrorHandler
+import com.hideactive.comm.REGEX_ACCOUNT
+import com.hideactive.comm.REGEX_PASSWORD
 import com.hideactive.ext.bindToLifecycle
 import com.hideactive.ext.hideSoftInput
 import com.hideactive.widget.CircularAnim

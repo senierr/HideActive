@@ -10,18 +10,8 @@
         android:id="@+id/tb_top"
         style="@style/Toolbar"/>
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bnv_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/navigation_home"/>
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp_pager"
-        android:layout_below="@id/tb_top"
-        android:layout_above="@id/bnv_bottom"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_users"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </RelativeLayout>

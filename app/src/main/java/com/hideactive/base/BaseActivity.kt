@@ -1,4 +1,4 @@
-package com.hideactive.domain.base
+package com.hideactive.base
 
 import android.support.v7.app.AppCompatActivity
 import io.reactivex.disposables.CompositeDisposable

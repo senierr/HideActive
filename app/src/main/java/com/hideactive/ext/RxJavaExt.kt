@@ -1,6 +1,6 @@
 package com.hideactive.ext
 
-import com.hideactive.domain.base.BaseActivity
+import com.hideactive.base.BaseActivity
 import io.reactivex.disposables.Disposable
 
 /**

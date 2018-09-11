@@ -1,13 +1,10 @@
-package com.hideactive.domain.entrance
+package com.hideactive.domain
 
 import android.content.Intent
 import android.os.Bundle
 import com.hideactive.R
-import com.hideactive.domain.base.BaseActivity
-import com.hideactive.domain.comm.ErrorHandler
-import com.hideactive.domain.main.MainActivity
-import com.hideactive.domain.user.LoginActivity
-import com.hideactive.domain.user.UserInfoActivity
+import com.hideactive.base.BaseActivity
+import com.hideactive.comm.ErrorHandler
 import com.hideactive.ext.bindToLifecycle
 import com.senierr.repository.Repository
 import com.senierr.repository.service.api.IUserService
