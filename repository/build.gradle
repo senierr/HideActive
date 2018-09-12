@@ -37,5 +37,5 @@ dependencies {
     api 'com.tencent.wup:wup:1.0.0.E-release'
     api 'com.tencent.mid:mid:4.0.7'
 
-//    debugImplementation 'com.amitshekhar.android:debug-db:1.0.3'
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.3'
 }

@@ -1,8 +1,10 @@
 package com.hideactive.util
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.StateListDrawable
+import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 
 /**
@@ -33,5 +35,15 @@ object DrawableUtil {
         val wrappedDrawable = DrawableCompat.wrap(drawable).mutate()
         DrawableCompat.setTint(wrappedDrawable, colors)
         return wrappedDrawable
+    }
+
+    fun tintDrawable(context: Context, drawableId: Int, colors: Int): Drawable? {
+        val drawable = ContextCompat.getDrawable(context, drawableId)
+        if (drawable != null) {
+            val wrappedDrawable = DrawableCompat.wrap(drawable).mutate()
+            DrawableCompat.setTint(wrappedDrawable, colors)
+            return wrappedDrawable
+        }
+        return null
     }
 }

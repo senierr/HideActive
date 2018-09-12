@@ -11,6 +11,7 @@ import com.hideactive.comm.REGEX_ACCOUNT
 import com.hideactive.comm.REGEX_PASSWORD
 import com.hideactive.ext.bindToLifecycle
 import com.hideactive.ext.hideSoftInput
+import com.hideactive.util.DrawableUtil
 import com.hideactive.widget.CircularAnim
 import com.module.library.util.OnThrottleClickListener
 import com.module.library.util.ToastUtil
@@ -19,6 +20,7 @@ import com.senierr.repository.service.api.IUserService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.layout_top_bar_normal.*
 import java.util.regex.Pattern
 
 /**
@@ -48,13 +50,9 @@ class LoginActivity : BaseActivity() {
      * 初始化界面
      */
     private fun initView() {
-        tb_top.setTitle(R.string.login)
-        tb_top.setTitleTextAppearance(this, R.style.ToolbarTitleTextAppearance)
-        setSupportActionBar(tb_top)
-        tb_top.setNavigationIcon(R.drawable.ic_close_white_24dp)
-        tb_top.setNavigationOnClickListener {
-            doFinish(false)
-        }
+        tv_title.setText(R.string.login)
+        btn_left.setImageResource(R.drawable.ic_close_black_24dp)
+        btn_left.setOnClickListener(onThrottleClickListener)
 
         btn_eye.isSelected = false
         btn_eye.setOnClickListener(onThrottleClickListener)
@@ -68,6 +66,10 @@ class LoginActivity : BaseActivity() {
     private val onThrottleClickListener = object : OnThrottleClickListener() {
         override fun onThrottleClick(view: View?) {
             when(view?.id) {
+                // 退出
+                R.id.btn_left -> {
+                    doFinish(false)
+                }
                 // 密码可见
                 R.id.btn_eye -> {
                     btn_eye.isSelected = !btn_eye.isSelected

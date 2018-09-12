@@ -5,9 +5,8 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/tb_top"
-        style="@style/Toolbar"/>
+    <include
+        layout="@layout/layout_top_bar_normal"/>
 
     <com.hideactive.widget.ClearEditText
         android:id="@+id/et_account"
@@ -59,45 +58,6 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
-    <View
-        android:background="@color/bg_divider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/px_1"/>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:background="@color/bg_content_white"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_48">
-
-        <com.hideactive.widget.ClearEditText
-            android:id="@+id/et_verification"
-            android:hint="@string/verification_code"
-            android:inputType="number"
-            android:textSize="@dimen/sp_15"
-            android:textColor="@color/text_normal"
-            android:maxLength="4"
-            android:singleLine="true"
-            android:background="@color/transparent"
-            android:paddingStart="@dimen/dp_16"
-            android:paddingEnd="@dimen/dp_16"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
-
-        <Button
-            android:id="@+id/btn_request_code"
-            android:text="@string/request_code"
-            android:textSize="@dimen/sp_15"
-            android:textColor="@color/text_link"
-            style="@style/BaseButton"
-            android:background="@color/transparent"
-            android:paddingStart="@dimen/dp_16"
-            android:paddingEnd="@dimen/dp_16"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-    </LinearLayout>
-
     <TextView
         android:text="@string/hint_password"
         android:textColor="@color/text_sub_sub"
@@ -113,7 +73,8 @@
         android:text="@string/register"
         android:textColor="@color/text_white"
         android:textSize="@dimen/sp_15"
-        android:background="@drawable/selector_primary_corner"
+        android:background="@drawable/bg_primary_corner"
+        android:backgroundTint="@color/color_bg_button_primary"
         style="@style/BaseButton"
         android:layout_marginStart="@dimen/dp_16"
         android:layout_marginEnd="@dimen/dp_16"

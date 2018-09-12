@@ -5,9 +5,8 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/tb_top"
-        style="@style/Toolbar"/>
+    <include
+        layout="@layout/layout_top_bar_normal"/>
 
     <com.hideactive.widget.ClearEditText
         android:id="@+id/et_account"
@@ -64,7 +63,8 @@
         android:text="@string/login"
         android:textColor="@color/text_white"
         android:textSize="@dimen/sp_15"
-        android:background="@drawable/selector_primary_corner"
+        android:background="@drawable/bg_primary_corner"
+        android:backgroundTint="@color/color_bg_button_primary"
         style="@style/BaseButton"
         android:layout_marginStart="@dimen/dp_16"
         android:layout_marginEnd="@dimen/dp_16"
