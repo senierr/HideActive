@@ -5,44 +5,9 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <!-- 光标颜色 -->
-        <item name="android:textCursorDrawable">@drawable/bg_cursor</item>
+        <item name="android:textCursorDrawable">@drawable/shape_cursor</item>
         <!-- 默认白色背景 -->
         <item name="android:windowBackground">@color/bg_content_white</item>
-    </style>
-
-    <!-- ToolBar菜单样式 -->
-    <style name="Toolbar">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/dp_48</item>
-        <item name="android:background">?attr/colorPrimary</item>
-        <item name="android:minHeight">@dimen/dp_48</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-        <item name="android:elevation">@dimen/dp_2</item>
-        <item name="theme">@style/ToolbarTheme</item>
-    </style>
-
-    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <!-- 菜单选项文字颜色 -->
-        <item name="actionMenuTextColor">@android:color/white</item>
-        <!-- 菜单选项文字尺寸 -->
-        <item name="android:textSize">@dimen/sp_14</item>
-        <!-- 标题颜色-->
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:textColorSecondary">@color/white</item>
-    </style>
-
-    <!-- ToolBar标题文字样式 -->
-    <style name="ToolbarTitleTextAppearance" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">@dimen/sp_18</item>
-        <item name="android:ellipsize">middle</item>
-        <item name="android:singleLine">true</item>
-    </style>
-
-    <!-- ToolBar标题文字样式 -->
-    <style name="ToolbarSubTitleTextAppearance" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">@dimen/sp_12</item>
     </style>
 
     <!--基础Dialog样式-->
@@ -92,7 +57,7 @@
     </style>
 	
     <style name="AppTheme.SplashTheme">
-        <item name="android:windowBackground">@drawable/bg_splash</item>
+        <item name="android:windowBackground">@drawable/shape_splash</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 

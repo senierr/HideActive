@@ -51,7 +51,7 @@ class SplashActivity : BaseActivity() {
         if (requestCode == REQUEST_CODE && resultCode == LoginActivity.LOGIN_SUCCESS) {
             // 登录成功，继续跳转
             startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-            finish()
         }
+        finish()
     }
 }

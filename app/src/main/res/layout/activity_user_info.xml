@@ -5,9 +5,8 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/tb_top"
-        style="@style/Toolbar"/>
+    <include
+        layout="@layout/layout_top_bar_normal"/>
 
     <RelativeLayout
         android:layout_marginTop="@dimen/dp_16"
@@ -91,15 +90,11 @@
             android:layout_height="wrap_content"/>
     </RelativeLayout>
 
-    <View
-        android:background="@color/bg_divider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/px_1"/>
-
     <RelativeLayout
         android:id="@+id/rl_remark"
         android:background="@color/white"
         android:padding="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -130,9 +125,24 @@
         android:padding="@dimen/dp_16"
         android:layout_marginStart="@dimen/dp_16"
         android:layout_marginEnd="@dimen/dp_16"
-        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_32"
         style="@style/BaseButton"
-        android:background="@color/text_error"
+        android:background="@drawable/shape_corner"
+        android:backgroundTint="@color/color_button_red"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:text="@string/logout"
+        android:textSize="@dimen/sp_15"
+        android:textColor="@color/text_white"
+        android:padding="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_32"
+        style="@style/BaseButton"
+        android:background="@drawable/shape_corner"
+        android:backgroundTint="@color/color_button_red"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </LinearLayout>

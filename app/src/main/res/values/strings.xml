@@ -16,9 +16,6 @@
     <string name="account">账号</string>
     <string name="nickname">昵称</string>
     <string name="password">密码</string>
-    <string name="verification_code">验证码</string>
-    <string name="request_code">获取验证码</string>
-    <string name="verification_code_msg">【Time】您的验证码为%1$d，请妥善保管。</string>
     <string name="hint_password">提示：密码由4~15位字母数字及下划线组成，区分大小写</string>
     <string name="account_empty">请输入账号</string>
     <string name="account_not_match_regex">账号格式错误</string>
@@ -37,7 +34,6 @@
 
     <string name="logout">注销登录</string>
 
-    <string name="user_info">个人资料</string>
     <string name="setting">设置</string>
 
     <string name="portrait">头像</string>

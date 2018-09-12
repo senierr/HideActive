@@ -12,6 +12,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.hideactive.R
 import com.hideactive.base.BaseActivity
 import com.hideactive.comm.ErrorHandler
+import com.hideactive.dialog.LoadingDialog
 import com.hideactive.ext.bindToLifecycle
 import com.hideactive.widget.ClearEditText
 import com.module.library.util.OnThrottleClickListener
@@ -22,6 +23,7 @@ import com.senierr.repository.service.api.IUserService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user_info.*
+import kotlinx.android.synthetic.main.layout_top_bar_normal.*
 
 /**
  * 登录
@@ -64,13 +66,8 @@ class UserInfoActivity : BaseActivity() {
      * 初始化界面
      */
     private fun initView() {
-        tb_top.setTitle(R.string.user_info)
-        tb_top.setTitleTextAppearance(this, R.style.ToolbarTitleTextAppearance)
-        setSupportActionBar(tb_top)
-        tb_top.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-        tb_top.setNavigationOnClickListener {
-            finish()
-        }
+        tv_title.setText(R.string.detail)
+        btn_left.setOnClickListener(onThrottleClickListener)
 
         rl_nickname.setOnClickListener(onThrottleClickListener)
     }
@@ -81,6 +78,9 @@ class UserInfoActivity : BaseActivity() {
     private val onThrottleClickListener = object : OnThrottleClickListener() {
         override fun onThrottleClick(view: View?) {
             when(view?.id) {
+                R.id.btn_left -> {
+                    finish()
+                }
                 R.id.rl_nickname -> {
                     val alertDialog = AlertDialog.Builder(this@UserInfoActivity)
                             .setTitle(R.string.edit_nickname)
@@ -130,6 +130,9 @@ class UserInfoActivity : BaseActivity() {
         userService.getRemoteUser(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+//                    loadingDialog.show()
+                }
                 .subscribe({
                     refreshUserInfo(it)
                 }, {
