@@ -1,25 +1,37 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingBottom="@dimen/dp_8"
-    android:paddingEnd="@dimen/dp_16"
-    android:paddingStart="@dimen/dp_16"
-    android:paddingTop="@dimen/dp_8">
-
-    <ImageView
-        android:id="@+id/iv_icon"
-        android:layout_width="@dimen/dp_32"
-        android:layout_height="@dimen/dp_32"
-        android:src="@mipmap/ic_launcher" />
+    android:background="@drawable/selector_item_bg">
 
     <TextView
-        android:id="@+id/tv_nickname"
+        android:id="@+id/tv_portrait"
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:background="@drawable/bg_portrait"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:text="@string/app_name"
+        android:textColor="@color/text_white"
+        android:textSize="@dimen/sp_16"/>
+
+    <TextView
+        android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tv_portrait"
+        android:layout_centerVertical="true"
         android:layout_marginStart="@dimen/dp_8"
         android:text="@string/app_name"
         android:textColor="@color/text_normal"
-        android:textSize="@dimen/sp_15" />
-</LinearLayout>
+        android:textSize="@dimen/sp_16"/>
+
+    <View
+        android:layout_below="@id/tv_portrait"
+        android:background="@color/bg_divider"
+        android:layout_marginTop="@dimen/dp_16"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_1"/>
+</RelativeLayout>

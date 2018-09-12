@@ -35,41 +35,14 @@
     <string name="register_account">注册账号</string>
     <string name="account_or_password_error">账号或密码错误</string>
 
-    <string name="login_out">注销登录</string>
+    <string name="logout">注销登录</string>
 
-    <string name="home">首页</string>
-    <string name="contacts">通讯录</string>
-    <string name="mine">我的</string>
-
-
-    <string name="message">消息</string>
     <string name="user_info">个人资料</string>
     <string name="setting">设置</string>
 
     <string name="portrait">头像</string>
     <string name="edit_nickname">编辑昵称</string>
+    <string name="remark">备注</string>
     <string name="click_to_edit">点击填写</string>
-    <string name="wu">无</string>
-
-    <string name="say_something">说点什么吧</string>
-    <string name="comment">评论</string>
-    <string name="like">赞</string>
-    <string name="unlike">取消赞</string>
-
-    <string name="is_notify">接收新评论通知</string>
-    <string name="is_notify_detail">通知显示评论详情</string>
-    <string name="is_notify_voice">声音</string>
-    <string name="is_notify_virbate">振动</string>
-    <string name="is_offsite_notify">异地登录提醒</string>
-    <string name="clear_cache">清除缓存</string>
-    <string name="about">关于</string>
-
-    <string name="new_comment">您有新的评论</string>
-    <string name="offsite_notify_message">您已在其他设备登录</string>
-
-    <string name="load_more">正在加载...</string>
-    <string name="no_more">没有更多图片</string>
-    <string name="load_completed">加载完成</string>
-    <string name="load_error">加载失败，点击重新加载！</string>
 
 </resources>

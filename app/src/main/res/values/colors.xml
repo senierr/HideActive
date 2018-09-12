@@ -23,4 +23,8 @@
     <color name="bg_content_grey">#F4F6F9</color>
 
     <color name="bg_divider">#cdcdcd</color>
+
+    <color name="color_cdcdcd">#cdcdcd</color>
+    <color name="color_ce3d3a">#ce3d3a</color>
+    <color name="color_BC2D2A">#BC2D2A</color>
 </resources>

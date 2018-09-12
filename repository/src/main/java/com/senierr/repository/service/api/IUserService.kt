@@ -3,7 +3,6 @@ package com.senierr.repository.service.api
 import com.senierr.repository.bean.BmobInsert
 import com.senierr.repository.bean.BmobUpdate
 import com.senierr.repository.bean.User
-import io.reactivex.Maybe
 import io.reactivex.Observable
 
 /**
@@ -35,6 +34,11 @@ interface IUserService {
     fun login(account: String, password: String): Observable<User>
 
     /**
+     * 登出
+     */
+    fun logout(userId: String): Observable<BmobUpdate>
+
+    /**
      * 更新用户头像
      */
     fun updateUserPortrait(objectId: String, portrait: String): Observable<BmobUpdate>
@@ -62,5 +66,5 @@ interface IUserService {
     /**
      * 获取好友
      */
-    fun getFriends(): Observable<MutableList<User>>
+    fun getFriends(userId: String): Observable<MutableList<User>>
 }

@@ -1,6 +1,8 @@
 package com.hideactive.domain
 
+import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
@@ -30,11 +32,25 @@ import kotlinx.android.synthetic.main.activity_user_info.*
 class UserInfoActivity : BaseActivity() {
 
     private val userService = Repository.getService<IUserService>()
-    private var user: User? = null
+
+    private lateinit var userId: String
+    private var isCurrent: Boolean = false
+
+    companion object {
+        fun openUserInfo(context: Context, userId: String, isCurrent: Boolean) {
+            val intent = Intent(context, UserInfoActivity::class.java)
+            intent.putExtra("userId", userId)
+            intent.putExtra("isCurrent", isCurrent)
+            context.startActivity(intent)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_info)
+
+        userId = intent.getStringExtra("userId")
+        isCurrent = intent.getBooleanExtra("isCurrent", false)
 
         initView()
     }
@@ -76,9 +92,7 @@ class UserInfoActivity : BaseActivity() {
                                 if (TextUtils.isEmpty(nickname)) {
                                     ToastUtil.showLong(this@UserInfoActivity, R.string.nickname_empty)
                                 } else {
-                                    user?.let {
-                                        updateUserNickname(it.objectId, nickname)
-                                    }
+                                    updateUserNickname(userId, nickname)
                                 }
                             })
                             .create()
@@ -92,7 +106,6 @@ class UserInfoActivity : BaseActivity() {
      * 刷新用户信息
      */
     private fun refreshUserInfo(user: User) {
-        this.user = user
         // 头像
         Glide.with(this)
                 .load(user.portrait)
@@ -114,16 +127,13 @@ class UserInfoActivity : BaseActivity() {
      * 加载用户信息
      */
     private fun loadUser() {
-        userService.getLocalUser()
+        userService.getRemoteUser(userId)
                 .subscribeOn(Schedulers.io())
-                .flatMap {
-                    return@flatMap userService.getRemoteUser(it.objectId)
-                }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     refreshUserInfo(it)
                 }, {
-                    ErrorHandler.showNetworkError(this@UserInfoActivity, it)
+                    ErrorHandler.showNetworkError(this, it)
                 })
                 .bindToLifecycle(this)
     }
@@ -143,7 +153,7 @@ class UserInfoActivity : BaseActivity() {
                 .subscribe({
                     refreshUserInfo(it)
                 }, {
-                    ErrorHandler.showNetworkError(this@UserInfoActivity, it)
+                    ErrorHandler.showNetworkError(this, it)
                 })
                 .bindToLifecycle(this)
     }

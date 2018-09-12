@@ -90,4 +90,49 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
+
+    <View
+        android:background="@color/bg_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_1"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_remark"
+        android:background="@color/white"
+        android:padding="@dimen/dp_16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="@string/remark"
+            android:textColor="@color/text_title"
+            android:textSize="@dimen/sp_16"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tv_remark"
+            android:text="@string/click_to_edit"
+            android:textSize="@dimen/sp_15"
+            android:textColor="@color/text_sub_sub"
+            android:gravity="end"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <Button
+        android:text="@string/logout"
+        android:textSize="@dimen/sp_15"
+        android:textColor="@color/text_white"
+        android:padding="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_16"
+        style="@style/BaseButton"
+        android:background="@color/text_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

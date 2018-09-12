@@ -7,9 +7,7 @@ import com.senierr.repository.bean.BmobUpdate
 import com.senierr.repository.bean.User
 import com.senierr.repository.remote.*
 import com.senierr.repository.service.api.IUserService
-import io.reactivex.Maybe
 import io.reactivex.Observable
-import io.reactivex.functions.Function
 
 /**
  * @author zhouchunjie
@@ -76,6 +74,13 @@ class UserService : IUserService {
                 }
     }
 
+    override fun logout(userId: String): Observable<BmobUpdate> {
+        return Repository.dataHttp.put("$API_USER/$userId")
+                .setRequestBody4JSon(Gson().toJson(mapOf(Pair("isOnline", false))))
+                .execute(BmobObjectConverter(BmobUpdate::class.java))
+                .map(ObjectFunction())
+    }
+
     override fun updateUserPortrait(objectId: String, portrait: String): Observable<BmobUpdate> {
         val param = mapOf(Pair("portrait", portrait))
         return Repository.dataHttp.put("$API_USER/$objectId")
@@ -120,10 +125,10 @@ class UserService : IUserService {
         }
     }
 
-    override fun getFriends(): Observable<MutableList<User>> {
-        val param = mapOf(Pair("isOnline", true))
+    override fun getFriends(userId: String): Observable<MutableList<User>> {
+        val param = "{\"\$and\":[{\"objectId\":{\"\$ne\":\"$userId\"}},{\"isOnline\":true}]}"
         return Repository.dataHttp.get(API_USER)
-                .addUrlParam("where", Gson().toJson(param))
+                .addUrlParam("where", param)
                 .execute(BmobArrayConverter(User::class.java))
                 .map(BmobArrayFunction())
     }
