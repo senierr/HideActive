@@ -27,7 +27,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.1.10'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.60'
     implementation 'com.github.senierr:RxHttp:3.0.0'
-    implementation 'com.google.code.gson:gson:2.8.2'
+    api 'com.google.code.gson:gson:2.8.2'
     implementation 'android.arch.persistence.room:runtime:1.0.0'
     kapt 'android.arch.persistence.room:compiler:1.0.0'
 

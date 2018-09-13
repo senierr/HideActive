@@ -14,7 +14,6 @@
         android:background="@drawable/shape_oval"
         android:gravity="center"
         android:textAllCaps="true"
-        android:text="@string/app_name"
         android:textColor="@color/text_white"
         android:textSize="@dimen/sp_16"/>
 
@@ -25,8 +24,17 @@
         android:layout_toEndOf="@id/tv_portrait"
         android:layout_centerVertical="true"
         android:layout_marginStart="@dimen/dp_8"
-        android:text="@string/app_name"
         android:textColor="@color/text_normal"
+        android:textSize="@dimen/sp_16"/>
+
+    <TextView
+        android:id="@+id/tv_remark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tv_name"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/dp_8"
+        android:textColor="@color/text_sub_sub"
         android:textSize="@dimen/sp_16"/>
 
     <View

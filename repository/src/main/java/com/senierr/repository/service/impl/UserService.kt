@@ -75,10 +75,19 @@ class UserService : IUserService {
     }
 
     override fun logout(userId: String): Observable<BmobUpdate> {
+        val param = mapOf(
+                Pair("isOnline", false),
+                Pair("pushToken", "")
+        )
         return Repository.dataHttp.put("$API_USER/$userId")
-                .setRequestBody4JSon(Gson().toJson(mapOf(Pair("isOnline", false))))
+                .setRequestBody4JSon(Gson().toJson(param))
                 .execute(BmobObjectConverter(BmobUpdate::class.java))
                 .map(ObjectFunction())
+                .map {
+                    // 清除缓存
+                    Repository.database.getUserDao().deleteAll()
+                    return@map it
+                }
     }
 
     override fun updateUserPortrait(objectId: String, portrait: String): Observable<BmobUpdate> {
@@ -97,7 +106,7 @@ class UserService : IUserService {
                 .map(ObjectFunction())
     }
 
-    override fun getLocalUser(): Observable<User> {
+    override fun getCurrentUser(): Observable<User> {
         return Observable.create {
             val user = Repository.database.getUserDao().getList()?.firstOrNull()
             if (user != null) {
@@ -111,11 +120,6 @@ class UserService : IUserService {
         return Repository.dataHttp.get("$API_USER/$objectId")
                 .execute(BmobObjectConverter(User::class.java))
                 .map(ObjectFunction())
-                .map {
-                    // 更新本地
-                    Repository.database.getUserDao().insertOrReplace(it)
-                    return@map it
-                }
     }
 
     override fun isLoggedIn(): Observable<Boolean> {
@@ -131,5 +135,13 @@ class UserService : IUserService {
                 .addUrlParam("where", param)
                 .execute(BmobArrayConverter(User::class.java))
                 .map(BmobArrayFunction())
+    }
+
+    override fun getRemark(userId: String): String {
+        return Repository.sp.getString(userId, "")
+    }
+
+    override fun setRemark(userId: String, remark: String) {
+        Repository.sp.edit().putString(userId, remark).apply()
     }
 }

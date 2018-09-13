@@ -49,9 +49,11 @@ interface IUserService {
     fun updateUserNickname(objectId: String, nickname: String): Observable<BmobUpdate>
 
     /**
-     * 获取本地用户信息
+     * 获取本地用户
+     *
+     * 注：用户登录状态校验，实际项目会存储Token
      */
-    fun getLocalUser(): Observable<User>
+    fun getCurrentUser(): Observable<User>
 
     /**
      * 获取远程用户信息
@@ -67,4 +69,14 @@ interface IUserService {
      * 获取好友
      */
     fun getFriends(userId: String): Observable<MutableList<User>>
+
+    /**
+     * 获取备注
+     */
+    fun getRemark(userId: String): String
+
+    /**
+     * 设置备注
+     */
+    fun setRemark(userId: String, remark: String)
 }

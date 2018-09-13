@@ -19,11 +19,9 @@
     <string name="hint_password">提示：密码由4~15位字母数字及下划线组成，区分大小写</string>
     <string name="account_empty">请输入账号</string>
     <string name="account_not_match_regex">账号格式错误</string>
+    <string name="password_not_match_regex">密码格式错误</string>
     <string name="nickname_empty">请输入昵称</string>
     <string name="password_empty">请输入密码</string>
-    <string name="password_not_match_regex">密码格式错误</string>
-    <string name="verification_code_empty">请输入验证码</string>
-    <string name="verification_code_error">验证码错误</string>
     <string name="account_repeat">账号已注册</string>
     <string name="nickname_repeat">昵称已注册</string>
 
@@ -33,6 +31,7 @@
     <string name="account_or_password_error">账号或密码错误</string>
 
     <string name="logout">注销登录</string>
+    <string name="video_talk">视频通话</string>
 
     <string name="setting">设置</string>
 
@@ -40,5 +39,13 @@
     <string name="edit_nickname">编辑昵称</string>
     <string name="remark">备注</string>
     <string name="click_to_edit">点击填写</string>
+
+    <string name="please_input_content">请填写内容</string>
+
+    <string name="hint_invitee">%1$s邀请您视频通话&#8230;</string>
+    <string name="reject">拒绝</string>
+    <string name="accept">接受</string>
+    <string name="invitee_not_online">被邀请者不在线！</string>
+    <string name="invitee_not_register_push">被邀请者未注册推送！</string>
 
 </resources>

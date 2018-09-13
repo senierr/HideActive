@@ -93,6 +93,7 @@
     <RelativeLayout
         android:id="@+id/rl_remark"
         android:background="@color/white"
+        android:visibility="gone"
         android:padding="@dimen/dp_16"
         android:layout_marginTop="@dimen/dp_8"
         android:layout_width="match_parent"
@@ -119,10 +120,11 @@
     </RelativeLayout>
 
     <Button
+        android:id="@+id/btn_logout"
         android:text="@string/logout"
         android:textSize="@dimen/sp_15"
         android:textColor="@color/text_white"
-        android:padding="@dimen/dp_16"
+        android:visibility="gone"
         android:layout_marginStart="@dimen/dp_16"
         android:layout_marginEnd="@dimen/dp_16"
         android:layout_marginTop="@dimen/dp_32"
@@ -130,13 +132,14 @@
         android:background="@drawable/shape_corner"
         android:backgroundTint="@color/color_button_red"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="@dimen/dp_48"/>
 
     <Button
-        android:text="@string/logout"
+        android:id="@+id/btn_video_talk"
+        android:text="@string/video_talk"
         android:textSize="@dimen/sp_15"
         android:textColor="@color/text_white"
-        android:padding="@dimen/dp_16"
+        android:visibility="gone"
         android:layout_marginStart="@dimen/dp_16"
         android:layout_marginEnd="@dimen/dp_16"
         android:layout_marginTop="@dimen/dp_32"
@@ -144,5 +147,5 @@
         android:background="@drawable/shape_corner"
         android:backgroundTint="@color/color_button_red"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="@dimen/dp_48"/>
 </LinearLayout>

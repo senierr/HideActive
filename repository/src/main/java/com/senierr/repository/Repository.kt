@@ -8,8 +8,10 @@ import com.senierr.http.RxHttp
 import com.senierr.http.internal.LogInterceptor
 import com.senierr.repository.db.AppDatabase
 import com.senierr.repository.remote.*
+import com.senierr.repository.service.api.IChannelService
 import com.senierr.repository.service.api.IPushService
 import com.senierr.repository.service.api.IUserService
+import com.senierr.repository.service.impl.ChannelService
 import com.senierr.repository.service.impl.PushService
 import com.senierr.repository.service.impl.UserService
 import com.tencent.android.tpush.XGPushManager
@@ -73,6 +75,8 @@ object Repository {
             UserService() as T
         IPushService::class.java ->
             PushService() as T
+        IChannelService::class.java ->
+            ChannelService() as T
         else -> throw IllegalArgumentException("Can not find this type of the service!")
     }
 }

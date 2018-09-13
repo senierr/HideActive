@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="@dimen/dp_16"
+    android:background="@drawable/shape_corner"
+    android:backgroundTint="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:text="@string/edit"
+        android:textColor="@color/text_normal"
+        android:textSize="@dimen/sp_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_accept"
+        android:text="@string/accept"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/sp_15"
+        android:background="@drawable/shape_corner"
+        android:backgroundTint="@color/color_button_transparent"
+        style="@style/BaseButton.Normal"
+        android:layout_below="@id/tv_message"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_reject"
+        android:text="@string/reject"
+        android:textColor="@color/text_error"
+        android:textSize="@dimen/sp_15"
+        android:background="@drawable/shape_corner"
+        android:backgroundTint="@color/color_button_transparent"
+        style="@style/BaseButton.Normal"
+        android:layout_below="@id/tv_message"
+        android:layout_toStartOf="@id/btn_accept"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>
