@@ -37,3 +37,8 @@ data class BmobArray<T>(
         var results: MutableList<T>? = null,
         var count: Int = 0
 )
+
+data class BmobServerData(
+        var timestamp: Long,
+        var datetime: String
+)

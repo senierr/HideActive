@@ -15,3 +15,4 @@ private const val HOST = "https://api.bmob.cn"
 
 const val API_USER = "$HOST/1/classes/user"
 const val API_CHANNEL = "$HOST/1/classes/channel"
+const val API_TIME = "$HOST/1/timestamp"

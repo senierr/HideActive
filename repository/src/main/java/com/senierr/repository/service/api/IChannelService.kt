@@ -1,5 +1,6 @@
 package com.senierr.repository.service.api
 
+import com.senierr.repository.bean.BmobServerData
 import com.senierr.repository.bean.Channel
 import com.senierr.repository.bean.User
 import io.reactivex.Observable
@@ -21,4 +22,14 @@ interface IChannelService {
      * 获取频道
      */
     fun get(channelId: String): Observable<Channel>
+
+    /**
+     * 获取服务器时间
+     */
+    fun getServerData(): Observable<BmobServerData>
+
+    /**
+     * 检查对方是否可接通
+     */
+    fun checkInviteeIsAvailable(inviteeId: String, currentData: BmobServerData): Observable<Boolean>
 }
