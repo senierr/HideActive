@@ -18,13 +18,13 @@ import com.senierr.adapter.internal.ViewHolderWrapper
 import com.senierr.repository.Repository
 import com.senierr.repository.bean.Channel
 import com.senierr.repository.bean.User
+import com.senierr.repository.service.api.IChannelService
 import com.senierr.repository.service.api.IUserService
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
+import java.util.concurrent.TimeUnit
 
 /**
  * 首页
@@ -34,6 +34,7 @@ import org.greenrobot.eventbus.ThreadMode
  */
 class MainActivity : BaseActivity() {
 
+    private val channelService = Repository.getService<IChannelService>()
     private val userService = Repository.getService<IUserService>()
     private val multiTypeAdapter = MultiTypeAdapter()
 
@@ -44,7 +45,7 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
 
         initView()
-        EventBus.getDefault().register(this)
+        checkChannel()
     }
 
     override fun onStart() {
@@ -54,11 +55,6 @@ class MainActivity : BaseActivity() {
             srl_refresh.isRefreshing = true
             loadData()
         }, 300)
-    }
-
-    override fun onDestroy() {
-        EventBus.getDefault().unregister(this)
-        super.onDestroy()
     }
 
     private fun initView() {
@@ -74,20 +70,18 @@ class MainActivity : BaseActivity() {
             override fun onBindViewHolder(p0: RVHolder, p1: User) {
                 val tvPortrait = p0.getView<TextView>(R.id.tv_portrait)
                 val tvName = p0.getView<TextView>(R.id.tv_name)
-                val tvRemark = p0.getView<TextView>(R.id.tv_remark)
 
-                val name = if (!TextUtils.isEmpty(p1.nickname)) {
+                val remark = userService.getRemark(p1.objectId)
+                val name = if (!TextUtils.isEmpty(remark)) {
+                    remark
+                } else if (!TextUtils.isEmpty(p1.nickname)) {
                     p1.nickname
                 } else {
                     p1.account
                 }
-                val remark = userService.getRemark(p1.objectId)
 
                 tvPortrait.text = name?.get(0).toString()
                 tvName.text = name
-                if (!TextUtils.isEmpty(remark)) {
-                    tvRemark.text = "($remark)"
-                }
             }
         }
         userWrapper.onItemClickListener = object : ViewHolderWrapper.OnItemClickListener() {
@@ -153,11 +147,42 @@ class MainActivity : BaseActivity() {
     }
 
     /**
-     * 显示邀请提示
+     * 检查是否有邀请
      */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun showInviteeDialog(channel: Channel) {
-        val inviteeDialog = InviteeDialog(this, channel)
-        inviteeDialog.show()
+    private fun checkChannel() {
+        Observable.interval(0, 15, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .flatMap {
+                    return@flatMap channelService.getServerData()
+                }
+                .flatMap {
+                    return@flatMap channelService.getAllAvailableChannel(it)
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ list->
+                    var channel: Channel? = null
+                    list.forEach {
+                        if (it.invitee.objectId == currentUser?.objectId) {
+                            channel = it
+                        }
+                    }
+                    channel?.let {
+                        val inviteeDialog = InviteeDialog(this, it)
+                        inviteeDialog.setOnAcceptListener(object : InviteeDialog.OnAcceptListener {
+                            override fun onAccept(channel: Channel) {
+                                // 接受邀请
+                                when (channel.line) {
+                                    "1" -> {
+                                        AgoraActivity.startChat(this@MainActivity, channel.objectId)
+                                    }
+                                }
+                            }
+                        })
+                        inviteeDialog.show()
+                    }
+                }, {
+                    ErrorHandler.showNetworkError(this, it)
+                })
+                .bindToLifecycle(this)
     }
 }

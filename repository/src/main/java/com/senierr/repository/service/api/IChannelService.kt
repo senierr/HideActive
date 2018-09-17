@@ -1,5 +1,6 @@
 package com.senierr.repository.service.api
 
+import com.senierr.repository.bean.BmobDelete
 import com.senierr.repository.bean.BmobServerData
 import com.senierr.repository.bean.Channel
 import com.senierr.repository.bean.User
@@ -29,7 +30,12 @@ interface IChannelService {
     fun getServerData(): Observable<BmobServerData>
 
     /**
-     * 检查对方是否可接通
+     * 获取所有可可用频道
      */
-    fun checkInviteeIsAvailable(inviteeId: String, currentData: BmobServerData): Observable<Boolean>
+    fun getAllAvailableChannel(currentData: BmobServerData): Observable<MutableList<Channel>>
+
+    /**
+     * 删除频道
+     */
+    fun deleteChannel(channelId: String): Observable<BmobDelete>
 }

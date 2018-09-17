@@ -31,11 +31,5 @@ dependencies {
     implementation 'android.arch.persistence.room:runtime:1.0.0'
     kapt 'android.arch.persistence.room:compiler:1.0.0'
 
-    //信鸽jar，不包含厂商通道
-    api 'com.tencent.xinge:xinge:4.0.3-Beta'
-    api'com.tencent.jg:jg:1.1'
-    api 'com.tencent.wup:wup:1.0.0.E-release'
-    api 'com.tencent.mid:mid:4.0.7'
-
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.3'
 }

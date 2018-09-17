@@ -2,15 +2,10 @@ package com.senierr.repository.service.impl
 
 import com.google.gson.Gson
 import com.senierr.repository.Repository
-import com.senierr.repository.bean.BmobInsert
-import com.senierr.repository.bean.BmobServerData
-import com.senierr.repository.bean.Channel
-import com.senierr.repository.bean.User
-import com.senierr.repository.remote.API_CHANNEL
-import com.senierr.repository.remote.API_TIME
-import com.senierr.repository.remote.BmobObjectConverter
-import com.senierr.repository.remote.ObjectFunction
+import com.senierr.repository.bean.*
+import com.senierr.repository.remote.*
 import com.senierr.repository.service.api.IChannelService
+import com.senierr.repository.util.DateUtil
 import io.reactivex.Observable
 
 /**
@@ -46,6 +41,37 @@ class ChannelService : IChannelService {
     override fun getServerData(): Observable<BmobServerData> {
         return Repository.dataHttp.get(API_TIME)
                 .execute(BmobObjectConverter(BmobServerData::class.java))
+                .map(ObjectFunction())
+    }
+
+    override fun getAllAvailableChannel(currentData: BmobServerData): Observable<MutableList<Channel>> {
+        val param = "{\"\$and\":[" +
+                        "{\"createdAt\":" +
+                            "{\"\$gte\":" +
+                                "{" +
+                                    "\"__type\":\"Date\", " +
+                                    "\"iso\":\"${DateUtil.format(currentData.timestamp * 1000 - 1000 * 15)}\"" +
+                                "}" +
+                            "}" +
+                        "}," +
+                        "{\"createdAt\":" +
+                            "{\"\$lte\":" +
+                                "{" +
+                                    "\"__type\":\"Date\", " +
+                                    "\"iso\":\"${currentData.datetime}\"" +
+                                "}" +
+                            "}" +
+                        "}" +
+                    "]}"
+        return Repository.dataHttp.get(API_CHANNEL)
+                .addUrlParam("where", param)
+                .execute(BmobArrayConverter(Channel::class.java))
+                .map(BmobArrayFunction())
+    }
+
+    override fun deleteChannel(channelId: String): Observable<BmobDelete> {
+        return Repository.dataHttp.delete("$API_CHANNEL/$channelId")
+                .execute(BmobObjectConverter(BmobDelete::class.java))
                 .map(ObjectFunction())
     }
 }

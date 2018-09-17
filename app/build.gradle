@@ -13,13 +13,9 @@ android {
         versionName rootProject.ext.android.versionName
 
         ndk {
-            abiFilters 'armeabi', 'armeabi-v7a'
+            //设置支持的SO库架构
+            abiFilters "armeabi-v7a", "x86"
         }
-
-        manifestPlaceholders = [
-                XG_ACCESS_ID:"2100309457",
-                XG_ACCESS_KEY : "AQE9U5CI172I",
-        ]
     }
 
     sourceSets {
@@ -47,9 +43,8 @@ dependencies {
     implementation 'com.github.senierr:MultiTypeAdapter:1.2.3'
     implementation 'com.github.bumptech.glide:glide:4.6.1'
     implementation 'com.github.senierr:PermissionManager:1.0.4'
-    implementation 'org.greenrobot:eventbus:3.1.1'
 
-//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-//    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-//    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 }

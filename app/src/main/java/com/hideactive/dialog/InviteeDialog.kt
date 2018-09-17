@@ -7,7 +7,6 @@ import android.text.TextUtils
 import android.view.View
 import com.hideactive.R
 import com.senierr.repository.bean.Channel
-import kotlinx.android.synthetic.main.dialog_edit.*
 import kotlinx.android.synthetic.main.dialog_invitee.*
 
 /**
@@ -35,11 +34,11 @@ class InviteeDialog(context: Context, val channel: Channel) : AlertDialog(contex
         }
         tv_message.text = String.format(context.getString(R.string.hint_invitee), name)
 
-        btn_cancel.setOnClickListener {
+        btn_reject.setOnClickListener {
             onCancelListener?.onClick(it)
             cancel()
         }
-        btn_confirm.setOnClickListener {
+        btn_accept.setOnClickListener {
             onAcceptListener?.onAccept(channel)
             cancel()
         }

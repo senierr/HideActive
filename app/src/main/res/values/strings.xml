@@ -45,7 +45,9 @@
     <string name="hint_invitee">%1$s邀请您视频通话&#8230;</string>
     <string name="reject">拒绝</string>
     <string name="accept">接受</string>
-    <string name="invitee_not_online">被邀请者不在线！</string>
-    <string name="invitee_not_register_push">被邀请者未注册推送！</string>
+
+    <string name="line_1">线路1(Agora)</string>
+    <string name="line_2">线路2(Zego)</string>
+    <string name="line_3">线路3</string>
 
 </resources>

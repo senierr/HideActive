@@ -3,10 +3,11 @@ package com.hideactive.domain
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.BottomSheetDialog
 import android.view.View
+import android.widget.Button
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.gson.Gson
 import com.hideactive.R
 import com.hideactive.base.BaseActivity
 import com.hideactive.comm.ErrorHandler
@@ -15,10 +16,8 @@ import com.hideactive.dialog.LoadingDialog
 import com.hideactive.ext.bindToLifecycle
 import com.module.library.util.OnThrottleClickListener
 import com.senierr.repository.Repository
-import com.senierr.repository.bean.BmobError
 import com.senierr.repository.bean.User
 import com.senierr.repository.service.api.IChannelService
-import com.senierr.repository.service.api.IPushService
 import com.senierr.repository.service.api.IUserService
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -39,7 +38,6 @@ class UserInfoActivity : BaseActivity() {
     private lateinit var loadingDialog: LoadingDialog
     private val userService = Repository.getService<IUserService>()
     private val channelService = Repository.getService<IChannelService>()
-    private val pushService = Repository.getService<IPushService>()
 
     private var user: User? = null  // 用户信息缓存
 
@@ -124,7 +122,24 @@ class UserInfoActivity : BaseActivity() {
                     logout()
                 }
                 R.id.btn_video_talk -> {
-                    createChannel()
+                    val bottomSheetDialog = BottomSheetDialog(this@UserInfoActivity)
+                    bottomSheetDialog.setContentView(R.layout.layout_lines)
+                    val btnLine1 = bottomSheetDialog.findViewById<Button>(R.id.btn_line_1)
+                    btnLine1?.setOnClickListener {
+                        createChannel("1")
+                        bottomSheetDialog.cancel()
+                    }
+                    val btnLine2 = bottomSheetDialog.findViewById<Button>(R.id.btn_line_2)
+                    btnLine2?.setOnClickListener {
+                        createChannel("2")
+                        bottomSheetDialog.cancel()
+                    }
+                    val btnLine3 = bottomSheetDialog.findViewById<Button>(R.id.btn_line_3)
+                    btnLine3?.setOnClickListener {
+                        createChannel("3")
+                        bottomSheetDialog.cancel()
+                    }
+                    bottomSheetDialog.show()
                 }
             }
         }
@@ -250,26 +265,20 @@ class UserInfoActivity : BaseActivity() {
     /**
      * 创建视频通话
      */
-    private fun createChannel() {
+    private fun createChannel(line: String) {
         user?.let { invitee ->
             userService.getCurrentUser()
                     .subscribeOn(Schedulers.io())
                     .flatMap {
-                        return@flatMap channelService.create(it, invitee, "1")
-                    }
-                    .flatMap {
-                        val pushToken = it.invitee.pushToken
-                        if (!it.invitee.isOnline) {
-                            throw BmobError(error = getString(R.string.invitee_not_online))
-                        } else if (pushToken == null) {
-                            throw BmobError(error = getString(R.string.invitee_not_register_push))
-                        } else {
-                            return@flatMap pushService.pushMessage(pushToken, Gson().toJson(it))
-                        }
+                        return@flatMap channelService.create(it, invitee, line)
                     }
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
-
+                        when (it.line) {
+                            "1" -> {
+                                AgoraActivity.startChat(this, it.objectId)
+                            }
+                        }
                     }, {
                         ErrorHandler.showNetworkError(this, it)
                     })

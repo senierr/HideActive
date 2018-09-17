@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_line_1"
+        android:text="@string/line_1"
+        android:textSize="@dimen/sp_15"
+        android:textColor="@color/text_title"
+        style="@style/BaseButton"
+        android:padding="@dimen/dp_16"
+        android:background="@color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:background="@color/bg_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_1"/>
+
+    <Button
+        android:id="@+id/btn_line_2"
+        android:text="@string/line_2"
+        android:textSize="@dimen/sp_15"
+        android:textColor="@color/text_title"
+        style="@style/BaseButton"
+        android:padding="@dimen/dp_16"
+        android:background="@color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:background="@color/bg_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/px_1"/>
+
+    <Button
+        android:id="@+id/btn_line_3"
+        android:text="@string/line_3"
+        android:textSize="@dimen/sp_15"
+        android:textColor="@color/text_title"
+        style="@style/BaseButton"
+        android:padding="@dimen/dp_16"
+        android:background="@color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
