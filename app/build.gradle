@@ -43,8 +43,4 @@ dependencies {
     implementation 'com.github.senierr:MultiTypeAdapter:1.2.3'
     implementation 'com.github.bumptech.glide:glide:4.6.1'
     implementation 'com.github.senierr:PermissionManager:1.0.4'
-
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 }

@@ -11,7 +11,6 @@ import com.hideactive.comm.REGEX_ACCOUNT
 import com.hideactive.comm.REGEX_PASSWORD
 import com.hideactive.ext.bindToLifecycle
 import com.hideactive.ext.hideSoftInput
-import com.hideactive.util.DrawableUtil
 import com.hideactive.widget.CircularAnim
 import com.module.library.util.OnThrottleClickListener
 import com.module.library.util.ToastUtil
@@ -26,6 +25,14 @@ import java.util.regex.Pattern
 /**
  * 登录
  *
+ * 感知登录状态跳转
+ * startActivityForResult
+ * 返回：LOGIN_SUCCESS/LOGIN_FAILURE
+ *
+ * 不感知登录状态跳转
+ * startActivity
+ * 传入：EXTRA_TARGET_INTENT
+ *
  * @author zhouchunjie
  * @date 2018/5/2
  */
@@ -34,6 +41,7 @@ class LoginActivity : BaseActivity() {
     companion object {
         const val EXTRA_KEY_ACCOUNT = "login_account"
         const val EXTRA_KEY_PASSWORD = "login_password"
+        const val EXTRA_TARGET_INTENT = "target_intent"
         const val LOGIN_SUCCESS = 65534
         const val LOGIN_FAILURE = 65535
     }
@@ -151,7 +159,12 @@ class LoginActivity : BaseActivity() {
      */
     private fun doFinish(isSuccess: Boolean) {
         if (isSuccess) {
-            setResult(LOGIN_SUCCESS, intent)
+            val targetIntent = intent.getParcelableExtra<Intent>(EXTRA_TARGET_INTENT)
+            if (targetIntent != null) {
+                startActivity(targetIntent)
+            } else {
+                setResult(LOGIN_SUCCESS, intent)
+            }
         } else {
             setResult(LOGIN_FAILURE, intent)
         }

@@ -4,7 +4,6 @@ import android.app.Application
 import com.hideactive.R
 import com.hideactive.util.LogUtil
 import com.senierr.repository.Repository
-import com.squareup.leakcanary.LeakCanary
 
 /**
  * 应用入口
@@ -22,11 +21,6 @@ class SessionApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return
-        }
-        LeakCanary.install(this)
 
         Repository.initialize(this)
 

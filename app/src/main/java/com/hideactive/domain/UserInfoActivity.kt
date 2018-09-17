@@ -254,6 +254,10 @@ class UserInfoActivity : BaseActivity() {
                 .subscribe({
                     val intent = Intent(this, LoginActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+
+                    val targetIntent = Intent(this, MainActivity::class.java)
+                    intent.putExtra(LoginActivity.EXTRA_TARGET_INTENT, targetIntent)
+
                     startActivity(intent)
                     finish()
                 }, {

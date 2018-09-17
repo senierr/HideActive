@@ -15,10 +15,6 @@ import java.util.concurrent.TimeUnit
 
 class SplashActivity : BaseActivity() {
 
-    companion object {
-        const val REQUEST_CODE = 0
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -33,25 +29,17 @@ class SplashActivity : BaseActivity() {
                     if (it) {
                         // 已登录，跳转
                         startActivity(Intent(this, MainActivity::class.java))
-                        finish()
                     } else {
                         // 未登录，跳转登录页
-                        startActivityForResult(
-                                Intent(this, LoginActivity::class.java),
-                                REQUEST_CODE)
+                        val intent = Intent(this, LoginActivity::class.java)
+                        val targetIntent = Intent(this, MainActivity::class.java)
+                        intent.putExtra(LoginActivity.EXTRA_TARGET_INTENT, targetIntent)
+                        startActivity(intent)
                     }
+                    finish()
                 }, {
                     ErrorHandler.showNetworkError(this, it)
                 })
                 .bindToLifecycle(this)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE && resultCode == LoginActivity.LOGIN_SUCCESS) {
-            // 登录成功，继续跳转
-            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-        }
-        finish()
     }
 }
