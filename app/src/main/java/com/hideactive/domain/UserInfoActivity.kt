@@ -282,6 +282,12 @@ class UserInfoActivity : BaseActivity() {
                             "1" -> {
                                 AgoraActivity.startChat(this, it.objectId)
                             }
+                            "2" -> {
+                                ZegoActivity.startChat(this,
+                                        it.objectId,
+                                        it.owner.objectId,
+                                        it.owner.account!!)
+                            }
                         }
                     }, {
                         ErrorHandler.showNetworkError(this, it)

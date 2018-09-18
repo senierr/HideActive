@@ -3,6 +3,7 @@ package com.hideactive.app
 import android.app.Application
 import com.hideactive.R
 import com.hideactive.util.LogUtil
+import com.hideactive.util.ZegoHelper
 import com.senierr.repository.Repository
 
 /**
@@ -26,5 +27,7 @@ class SessionApplication : Application() {
 
         LogUtil.isDebug = true
         LogUtil.tag = getString(R.string.app_name)
+
+        ZegoHelper.init()
     }
 }

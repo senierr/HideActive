@@ -175,6 +175,12 @@ class MainActivity : BaseActivity() {
                                     "1" -> {
                                         AgoraActivity.startChat(this@MainActivity, channel.objectId)
                                     }
+                                    "2" -> {
+                                        ZegoActivity.startChat(this@MainActivity,
+                                                channel.objectId,
+                                                channel.invitee.objectId,
+                                                it.invitee.account!!)
+                                    }
                                 }
                             }
                         })
