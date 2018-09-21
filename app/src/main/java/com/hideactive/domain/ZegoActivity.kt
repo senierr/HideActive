@@ -1,79 +1,53 @@
 package com.hideactive.domain
 
 import android.Manifest
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.view.TextureView
+import android.text.TextUtils
 import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.Toast
 import com.hideactive.R
-import com.hideactive.util.ZegoHelper
-import com.module.library.util.ToastUtil
+import com.hideactive.base.BaseActivity
+import com.hideactive.util.ZegoAppHelper
 import com.senierr.permission.CheckCallback
 import com.senierr.permission.PermissionManager
 import com.zego.zegoliveroom.callback.IZegoLoginCompletionCallback
+import com.zego.zegoliveroom.callback.IZegoRoomCallback
 import com.zego.zegoliveroom.constants.ZegoConstants
 import com.zego.zegoliveroom.constants.ZegoVideoViewMode
 import com.zego.zegoliveroom.entity.ZegoStreamInfo
-import kotlinx.android.synthetic.main.activity_agora.*
+import kotlinx.android.synthetic.main.activity_zego.*
 
-class ZegoActivity : AppCompatActivity() {
+class ZegoActivity : BaseActivity() {
 
-    private lateinit var channelId: String
-
-    private var isLoginRoom = false
-    private var hasLoginRoom = false
-
-    companion object {
-        fun startChat(context: Context, channelId: String, userId: String, userName: String) {
-            ZegoHelper.setUser(userId, userName)
-            val intent = Intent(context, ZegoActivity::class.java)
-            intent.putExtra("channelId", channelId)
-            context.startActivity(intent)
-        }
-    }
+    private var mPublishStreamId = ""
+    private var mIsLoginRoom: Boolean = false   // 是否正在登录房间
+    private var mHasLoginRoom: Boolean = false  // 是否已成功登录房间
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_agora)
-
+        setContentView(R.layout.activity_zego)
         // 禁止手机休眠
-        window.setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
-                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-
-        channelId = intent.getStringExtra("channelId")
+        window.setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         PermissionManager.with(this)
                 .permissions(Manifest.permission.CAMERA,
                         Manifest.permission.RECORD_AUDIO)
                 .request(object : CheckCallback() {
                     override fun onAllGranted() {
-                        initZego()
+                        initView()
+                        setupCallback()
+                        loginRoom()
                     }
                 })
     }
 
     override fun onDestroy() {
-        leaveChannel()
+        logoutRoom()
         super.onDestroy()
     }
 
-    private fun initZego() {
-        val success = ZegoHelper.zegoLiveRoom.loginRoom(channelId, ZegoConstants.RoomRole.Audience,
-                IZegoLoginCompletionCallback { i, arrayOfZegoStreamInfos ->
-            if (i != 0) {
-                ToastUtil.showLong(this, "Login room failed: $i")
-            }
-            startPublishStream()
-            startRemotePreview(arrayOfZegoStreamInfos)
-        })
-        if (success) {
-            isLoginRoom = true
-            startPreview()
-        }
-
+    private fun initView() {
         btn_mute.setOnClickListener {
             val iv = it as ImageView
             iv.isSelected = !iv.isSelected
@@ -90,64 +64,156 @@ class ZegoActivity : AppCompatActivity() {
     }
 
     /**
-     * 开启本地预览
-     */
-    private fun startPreview() {
-        ZegoHelper.zegoLiveRoom.enableMic(true)
-        ZegoHelper.zegoLiveRoom.enableCamera(true)
-        ZegoHelper.zegoLiveRoom.enableSpeaker(true)
-
-        val textureView = TextureView(this)
-        fl_local.addView(textureView)
-
-        ZegoHelper.zegoLiveRoom.setPreviewView(textureView)
-        ZegoHelper.zegoLiveRoom.setPreviewViewMode(ZegoVideoViewMode.ScaleAspectFit)
-        ZegoHelper.zegoLiveRoom.startPreview()
-    }
-
-    /**
-     * 开启推流
-     */
-    private fun startPublishStream() {
-        ZegoHelper.zegoLiveRoom.startPublishing(channelId, channelId, ZegoConstants.PublishFlag.JoinPublish)
-    }
-
-    /**
-     * 开启远程预览
-     */
-    private fun startRemotePreview(streamList: Array<ZegoStreamInfo>?) {
-        if (streamList != null && streamList.isNotEmpty()) {
-            val textureView = TextureView(this)
-            fl_remote.addView(textureView)
-
-            ZegoHelper.zegoLiveRoom.startPlayingStream(streamList[0].streamID, textureView)
-            ZegoHelper.zegoLiveRoom.setViewMode(ZegoVideoViewMode.ScaleAspectFit, streamList[0].streamID)
-        }
-    }
-
-    /**
      * 本地用户声音静默
      */
     private fun localAudioMuted(muted: Boolean) {
-        ZegoHelper.zegoLiveRoom.enableMic(muted)
+        ZegoAppHelper.getLiveRoom().enableMic(muted)
     }
 
     /**
      * 切换摄像头
      */
     private fun switchCamera(isFront: Boolean) {
-        ZegoHelper.zegoLiveRoom.setFrontCam(isFront)
+        ZegoAppHelper.getLiveRoom().setFrontCam(isFront)
     }
 
-    /**
-     * 离开频道
-     */
-    private fun leaveChannel() {
-        ZegoHelper.zegoLiveRoom.stopPlayingStream(channelId)
-        ZegoHelper.zegoLiveRoom.stopPublishing()
-        ZegoHelper.zegoLiveRoom.stopPreview()
-        if (isLoginRoom || hasLoginRoom) {
-            ZegoHelper.zegoLiveRoom.logoutRoom()
+    private fun showRemotePreview(streamInfo: ZegoStreamInfo) {
+        val liveRoom = ZegoAppHelper.getLiveRoom()
+        val userId = intent.getStringExtra("userId")
+        if (TextUtils.isEmpty(streamInfo.userID) || TextUtils.equals(streamInfo.userID, userId)) {
+            // preview
+            liveRoom.setPreviewView(fl_remote)
+            liveRoom.setPreviewViewMode(ZegoVideoViewMode.ScaleAspectFill)
+        } else {
+            // play
+            liveRoom.updatePlayView(streamInfo.streamID, fl_remote)
+            liveRoom.setViewMode(ZegoVideoViewMode.ScaleAspectFill, streamInfo.streamID)
         }
+    }
+
+    private fun setupCallback() {
+        val liveRoom = ZegoAppHelper.getLiveRoom()
+        liveRoom.setZegoRoomCallback(ZegoRoomCallback())
+    }
+
+    private fun loginRoom() {
+        val sessionId = intent.getStringExtra("channelId")
+        val roomName = String.format("From_%s", "video")
+        val success = ZegoAppHelper.getLiveRoom().loginRoom(sessionId, roomName, ZegoConstants.RoomRole.Audience, ZegoLgoinCompleteCallback())
+        if (success) {
+            mIsLoginRoom = true
+            startPreview()
+        }
+    }
+
+    private fun startPreview() {
+        val liveRoom = ZegoAppHelper.getLiveRoom()
+
+        liveRoom.enableMic(true)
+        liveRoom.enableCamera(true)
+        liveRoom.enableSpeaker(true)
+        liveRoom.setPreviewView(fl_local)
+        liveRoom.setPreviewViewMode(ZegoVideoViewMode.ScaleAspectFill)
+        liveRoom.startPreview()
+    }
+
+    private fun startPublishStream() {
+        val userId = intent.getStringExtra("userId")
+        val streamId = String.format("s-%s", userId)
+        val title = String.format("%s is comming", userId)
+
+        val liveRoom = ZegoAppHelper.getLiveRoom()
+
+        // 开始推流
+        mPublishStreamId = streamId
+        liveRoom.startPublishing(streamId, title, ZegoConstants.PublishFlag.JoinPublish)
+    }
+
+    private fun startPlayStreams(streamList: Array<ZegoStreamInfo>?) {
+        var i = 0
+        while (streamList != null && i < streamList.size) {
+            val streamInfo = streamList[i]
+            doPlayStream(streamInfo)
+            i++
+        }
+    }
+
+    private fun doPlayStream(streamInfo: ZegoStreamInfo) {
+        val streamId = streamInfo.streamID
+        val liveRoom = ZegoAppHelper.getLiveRoom()
+
+        liveRoom.startPlayingStream(streamId, null)
+        showRemotePreview(streamInfo)
+        liveRoom.activateVedioPlayStream(streamId, true, ZegoConstants.VideoStreamLayer.VideoStreamLayer_Auto)
+    }
+
+    private fun stopPlayStreams(streamList: Array<ZegoStreamInfo>?) {
+        var i = 0
+        while (streamList != null && i < streamList.size) {
+            val streamInfo = streamList[i]
+            doStopPlayStream(streamInfo)
+            i++
+        }
+    }
+
+    private fun doStopPlayStream(streamInfo: ZegoStreamInfo) {
+        val streamId = streamInfo.streamID ?: return
+
+        val liveRoom = ZegoAppHelper.getLiveRoom()
+        liveRoom.stopPlayingStream(streamId)
+    }
+
+    private fun logoutRoom() {
+        val liveRoom = ZegoAppHelper.getLiveRoom()
+        if (!TextUtils.isEmpty(mPublishStreamId)) {
+            liveRoom.stopPublishing()
+            liveRoom.stopPreview()
+        }
+
+        if (mIsLoginRoom || mHasLoginRoom) {
+            liveRoom.logoutRoom()
+        }
+
+        liveRoom.setZegoLivePublisherCallback(null)
+        liveRoom.setZegoLivePlayerCallback(null)
+        liveRoom.setZegoRoomCallback(null)
+    }
+
+    private inner class ZegoLgoinCompleteCallback : IZegoLoginCompletionCallback {
+        override fun onLoginCompletion(errorCode: Int, streamList: Array<ZegoStreamInfo>) {
+            mIsLoginRoom = false
+            if (isFinishing) return
+            if (errorCode != 0) {
+                return
+            }
+
+            mHasLoginRoom = true
+            startPublishStream()
+            startPlayStreams(streamList)
+        }
+    }
+
+    private inner class ZegoRoomCallback : IZegoRoomCallback {
+        override fun onKickOut(reason: Int, roomId: String) {}
+
+        override fun onDisconnect(errorCode: Int, roomId: String) {}
+
+        override fun onReconnect(errorCode: Int, roomId: String) {}
+
+        override fun onTempBroken(errorCode: Int, roomId: String) {}
+
+        override fun onStreamUpdated(type: Int, streamList: Array<ZegoStreamInfo>, roomId: String) {
+            if (type == ZegoConstants.StreamUpdateType.Added) {
+                startPlayStreams(streamList)
+            } else if (type == ZegoConstants.StreamUpdateType.Deleted) {
+                stopPlayStreams(streamList)
+            } else {
+                Toast.makeText(this@ZegoActivity, "Unknown stream update type $type", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        override fun onStreamExtraInfoUpdated(streamList: Array<ZegoStreamInfo>, roomId: String) {}
+
+        override fun onRecvCustomCommand(fromUserId: String, fromUserName: String, content: String, roomId: String) {}
     }
 }

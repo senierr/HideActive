@@ -50,7 +50,7 @@ class ChannelService : IChannelService {
                             "{\"\$gte\":" +
                                 "{" +
                                     "\"__type\":\"Date\", " +
-                                    "\"iso\":\"${DateUtil.format(currentData.timestamp * 1000 - 1000 * 15)}\"" +
+                                    "\"iso\":\"${DateUtil.format(currentData.timestamp * 1000 - 1000 * 10)}\"" +
                                 "}" +
                             "}" +
                         "}," +

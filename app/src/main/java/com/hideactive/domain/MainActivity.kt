@@ -1,5 +1,6 @@
 package com.hideactive.domain
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
@@ -11,6 +12,7 @@ import com.hideactive.base.BaseActivity
 import com.hideactive.comm.ErrorHandler
 import com.hideactive.dialog.InviteeDialog
 import com.hideactive.ext.bindToLifecycle
+import com.hideactive.util.JustalkHelper
 import com.module.library.util.OnThrottleClickListener
 import com.senierr.adapter.internal.MultiTypeAdapter
 import com.senierr.adapter.internal.RVHolder
@@ -20,6 +22,7 @@ import com.senierr.repository.bean.Channel
 import com.senierr.repository.bean.User
 import com.senierr.repository.service.api.IChannelService
 import com.senierr.repository.service.api.IUserService
+import com.zego.zegoliveroom.ZegoLiveRoom
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -46,10 +49,7 @@ class MainActivity : BaseActivity() {
 
         initView()
         checkChannel()
-    }
 
-    override fun onStart() {
-        super.onStart()
         // 自动刷新
         srl_refresh.postDelayed({
             srl_refresh.isRefreshing = true
@@ -128,6 +128,11 @@ class MainActivity : BaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap {
                     currentUser = it
+
+                    // 设置账户信息
+                    ZegoLiveRoom.setUser(it.objectId, it.account!!)
+                    JustalkHelper.setUser(it.objectId)
+
                     btn_portrait.visibility = View.VISIBLE
                     return@flatMap userService.getFriends(it.objectId)
                             .subscribeOn(Schedulers.io())
@@ -150,7 +155,7 @@ class MainActivity : BaseActivity() {
      * 检查是否有邀请
      */
     private fun checkChannel() {
-        Observable.interval(0, 15, TimeUnit.SECONDS)
+        Observable.interval(0, 10, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .flatMap {
                     return@flatMap channelService.getServerData()
@@ -176,10 +181,15 @@ class MainActivity : BaseActivity() {
                                         AgoraActivity.startChat(this@MainActivity, channel.objectId)
                                     }
                                     "2" -> {
-                                        ZegoActivity.startChat(this@MainActivity,
+                                        val intent = Intent(this@MainActivity, ZegoActivity::class.java)
+                                        intent.putExtra("channelId", channel.objectId)
+                                        intent.putExtra("userId", channel.invitee.objectId)
+                                        startActivity(intent)
+                                    }
+                                    "3" -> {
+                                        JustTalkActivity.startChat(this@MainActivity,
                                                 channel.objectId,
-                                                channel.invitee.objectId,
-                                                it.invitee.account!!)
+                                                channel.owner.objectId)
                                     }
                                 }
                             }

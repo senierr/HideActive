@@ -46,8 +46,8 @@
     <string name="reject">拒绝</string>
     <string name="accept">接受</string>
 
-    <string name="line_1">线路1(Agora)</string>
-    <string name="line_2">线路2(Zego)</string>
+    <string name="line_1">线路1</string>
+    <string name="line_2">线路2</string>
     <string name="line_3">线路3</string>
 
 </resources>

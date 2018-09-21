@@ -84,6 +84,12 @@
             android:theme="@style/AppTheme.FullScreenTheme.Black"
             android:screenOrientation="portrait">
         </activity>
+        <!-- Justalk -->
+        <activity
+            android:name=".domain.JustTalkActivity"
+            android:theme="@style/AppTheme.FullScreenTheme.Black"
+            android:screenOrientation="portrait">
+        </activity>
 
     </application>
 </manifest>

@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.support.design.widget.BottomSheetDialog
 import android.view.View
 import android.widget.Button
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.hideactive.R
 import com.hideactive.base.BaseActivity
 import com.hideactive.comm.ErrorHandler
@@ -150,12 +148,6 @@ class UserInfoActivity : BaseActivity() {
      */
     private fun refreshUserInfo(user: User) {
         // 头像
-        Glide.with(this)
-                .load(user.portrait)
-                .apply(RequestOptions()
-                        .error(R.drawable.ic_default_portrait)
-                        .override(160, 160))
-                .into(iv_portrait)
         // 账号
         tv_account.text = user.account
         // 昵称
@@ -283,10 +275,15 @@ class UserInfoActivity : BaseActivity() {
                                 AgoraActivity.startChat(this, it.objectId)
                             }
                             "2" -> {
-                                ZegoActivity.startChat(this,
+                                val intent = Intent(this, ZegoActivity::class.java)
+                                intent.putExtra("channelId", it.objectId)
+                                intent.putExtra("userId", it.owner.objectId)
+                                startActivity(intent)
+                            }
+                            "3" -> {
+                                JustTalkActivity.startChat(this,
                                         it.objectId,
-                                        it.owner.objectId,
-                                        it.owner.account!!)
+                                        it.invitee.objectId)
                             }
                         }
                     }, {

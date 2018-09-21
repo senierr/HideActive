@@ -2,9 +2,11 @@ package com.hideactive.app
 
 import android.app.Application
 import com.hideactive.R
+import com.hideactive.util.JustalkHelper
 import com.hideactive.util.LogUtil
-import com.hideactive.util.ZegoHelper
+import com.hideactive.util.ZegoAppHelper
 import com.senierr.repository.Repository
+
 
 /**
  * 应用入口
@@ -28,6 +30,8 @@ class SessionApplication : Application() {
         LogUtil.isDebug = true
         LogUtil.tag = getString(R.string.app_name)
 
-        ZegoHelper.init()
+        JustalkHelper.init(this)
+        ZegoAppHelper.init(this)
     }
+
 }
