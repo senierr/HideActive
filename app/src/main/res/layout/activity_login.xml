@@ -21,43 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48" />
 
-    <View
-        android:background="@color/bg_divider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/px_1"/>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:background="@color/bg_content_white"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_48">
-
-        <com.hideactive.widget.ClearEditText
-            android:id="@+id/et_password"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:textSize="@dimen/sp_15"
-            android:textColor="@color/text_normal"
-            android:maxLength="15"
-            android:singleLine="true"
-            android:background="@color/transparent"
-            android:paddingStart="@dimen/dp_16"
-            android:paddingEnd="@dimen/dp_8"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent" />
-
-        <ImageButton
-            android:id="@+id/btn_eye"
-            android:src="@drawable/selector_eye"
-            android:tint="@color/colorPrimaryDark"
-            android:background="@color/transparent"
-            android:paddingStart="@dimen/dp_8"
-            android:paddingEnd="@dimen/dp_16"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-    </LinearLayout>
-
     <Button
         android:id="@+id/btn_login"
         android:text="@string/login"
@@ -71,20 +34,4 @@
         android:layout_marginTop="@dimen/dp_16"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48" />
-
-    <Button
-        android:id="@+id/btn_register"
-        android:text="@string/register_account"
-        android:textColor="@color/text_sub"
-        android:textSize="@dimen/sp_14"
-        android:background="@color/transparent"
-        style="@style/BaseButton"
-        android:layout_gravity="end"
-        android:paddingStart="@dimen/dp_16"
-        android:paddingEnd="@dimen/dp_16"
-        android:paddingTop="@dimen/dp_8"
-        android:paddingBottom="@dimen/dp_8"
-        android:layout_marginTop="@dimen/dp_8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 </LinearLayout>

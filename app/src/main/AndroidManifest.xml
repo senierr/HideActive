@@ -37,33 +37,15 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
 
-        <!-- 引导页 -->
-        <activity
-            android:name=".domain.SplashActivity"
-            android:theme="@style/AppTheme.SplashTheme"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <!-- 注册 -->
-        <activity
-            android:name=".domain.RegisterActivity"
-            android:theme="@style/AppTheme.Grey"
-            android:screenOrientation="portrait">
-        </activity>
         <!-- 登录 -->
         <activity
             android:name=".domain.LoginActivity"
             android:theme="@style/AppTheme.Grey"
             android:screenOrientation="portrait">
-        </activity>
-        <!-- 用户信息 -->
-        <activity
-            android:name=".domain.UserInfoActivity"
-            android:theme="@style/AppTheme.Grey"
-            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <!-- 首页 -->
         <activity

@@ -23,6 +23,7 @@ object JustalkHelper : JCClientCallback, JCMediaDeviceCallback, JCMediaChannelCa
     interface ChannelCallback {
         fun onJoin(p0: Boolean, p1: Int, p2: String?)
         fun onParticipantJoin(p0: JCMediaChannelParticipant?)
+        fun onParticipantLeft(p0: JCMediaChannelParticipant?)
     }
 
     /**
@@ -66,6 +67,7 @@ object JustalkHelper : JCClientCallback, JCMediaDeviceCallback, JCMediaChannelCa
     }
 
     override fun onParticipantLeft(p0: JCMediaChannelParticipant?) {
+        channelCallback?.onParticipantLeft(p0)
     }
 
     override fun onParticipantUpdate(p0: JCMediaChannelParticipant?) {

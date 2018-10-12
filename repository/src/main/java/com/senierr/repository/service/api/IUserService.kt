@@ -14,14 +14,9 @@ import io.reactivex.Observable
 interface IUserService {
 
     /**
-     * 检查账号是否重复
+     * 检查账号是否存在
      */
-    fun checkAccountIfRepeat(account: String): Observable<Boolean>
-
-    /**
-     * 检查昵称是否重复
-     */
-    fun checkNicknameIfRepeat(nickname: String): Observable<Boolean>
+    fun checkAccountExist(account: String): Observable<Boolean>
 
     /**
      * 注册
@@ -39,21 +34,11 @@ interface IUserService {
     fun logout(userId: String): Observable<BmobUpdate>
 
     /**
-     * 更新用户头像
-     */
-    fun updateUserPortrait(objectId: String, portrait: String): Observable<BmobUpdate>
-
-    /**
-     * 更新用户昵称
-     */
-    fun updateUserNickname(objectId: String, nickname: String): Observable<BmobUpdate>
-
-    /**
-     * 获取本地用户
+     * 获取本地缓存用户
      *
      * 注：用户登录状态校验，实际项目会存储Token
      */
-    fun getCurrentUser(): Observable<User>
+    fun getCacheUser(): Observable<User>
 
     /**
      * 获取远程用户信息
@@ -66,9 +51,9 @@ interface IUserService {
     fun isLoggedIn(): Observable<Boolean>
 
     /**
-     * 获取好友
+     * 获取所有用户
      */
-    fun getFriends(userId: String): Observable<MutableList<User>>
+    fun getOtherUsers(userId: String): Observable<MutableList<User>>
 
     /**
      * 获取备注

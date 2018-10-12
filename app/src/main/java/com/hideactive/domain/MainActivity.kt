@@ -2,18 +2,20 @@ package com.hideactive.domain
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.BottomSheetDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import com.hideactive.R
 import com.hideactive.base.BaseActivity
 import com.hideactive.comm.ErrorHandler
+import com.hideactive.dialog.EditDialog
 import com.hideactive.dialog.InviteeDialog
 import com.hideactive.ext.bindToLifecycle
 import com.hideactive.util.JustalkHelper
-import com.module.library.util.OnThrottleClickListener
 import com.senierr.adapter.internal.MultiTypeAdapter
 import com.senierr.adapter.internal.RVHolder
 import com.senierr.adapter.internal.ViewHolderWrapper
@@ -58,21 +60,16 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initView() {
-        btn_portrait.visibility = View.GONE
-        btn_portrait.setOnClickListener(onThrottleClickListener)
-        btn_setting.setOnClickListener(onThrottleClickListener)
-
         val userWrapper = object : ViewHolderWrapper<User>() {
             override fun onCreateViewHolder(p0: ViewGroup): RVHolder {
                 return RVHolder.create(p0, R.layout.item_user)
             }
 
             override fun onBindViewHolder(p0: RVHolder, p1: User) {
-                val tvPortrait = p0.getView<TextView>(R.id.tv_portrait)
                 val tvName = p0.getView<TextView>(R.id.tv_name)
 
                 val remark = userService.getRemark(p1.objectId)
-                val name = if (!TextUtils.isEmpty(remark)) {
+                var name = if (!TextUtils.isEmpty(remark)) {
                     remark
                 } else if (!TextUtils.isEmpty(p1.nickname)) {
                     p1.nickname
@@ -80,14 +77,30 @@ class MainActivity : BaseActivity() {
                     p1.account
                 }
 
-                tvPortrait.text = name?.get(0).toString()
+                currentUser?.let {
+                    if (p1.objectId == it.objectId) {
+                        name = "$name(当前用户)"
+                    }
+                }
+
                 tvName.text = name
             }
         }
         userWrapper.onItemClickListener = object : ViewHolderWrapper.OnItemClickListener() {
             override fun onClick(viewHolder: RVHolder?, position: Int) {
+                if (position == 0) {
+                    return
+                }
                 val user = multiTypeAdapter.dataList[position] as User
-                UserInfoActivity.openUserInfo(this@MainActivity, user.objectId, false)
+                createChannel(user)
+            }
+
+            override fun onLongClick(viewHolder: RVHolder?, position: Int): Boolean {
+                if (position == 0) {
+                    return false
+                }
+                updateRemark(position)
+                return true
             }
         }
         multiTypeAdapter.bind(User::class.java, userWrapper)
@@ -102,39 +115,19 @@ class MainActivity : BaseActivity() {
     }
 
     /**
-     * 防抖动点击事件
-     */
-    private val onThrottleClickListener = object : OnThrottleClickListener() {
-        override fun onThrottleClick(view: View?) {
-            when(view?.id) {
-                R.id.btn_portrait -> {
-                    currentUser?.let {
-                        UserInfoActivity.openUserInfo(this@MainActivity, it.objectId, true)
-                    }
-                }
-                R.id.btn_setting -> {
-
-                }
-            }
-        }
-    }
-
-    /**
      * 加载数据
      */
     private fun loadData() {
-        userService.getCurrentUser()
+        userService.getCacheUser()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap {
                     currentUser = it
-
                     // 设置账户信息
                     ZegoLiveRoom.setUser(it.objectId, it.account!!)
                     JustalkHelper.setUser(it.objectId)
 
-                    btn_portrait.visibility = View.VISIBLE
-                    return@flatMap userService.getFriends(it.objectId)
+                    return@flatMap userService.getOtherUsers(it.objectId)
                             .subscribeOn(Schedulers.io())
                 }
                 .observeOn(AndroidSchedulers.mainThread())
@@ -143,6 +136,9 @@ class MainActivity : BaseActivity() {
                 }
                 .subscribe({
                     multiTypeAdapter.dataList.clear()
+
+                    multiTypeAdapter.dataList.add(currentUser)
+
                     multiTypeAdapter.dataList.addAll(it)
                     multiTypeAdapter.notifyDataSetChanged()
                 }, {
@@ -167,7 +163,7 @@ class MainActivity : BaseActivity() {
                 .subscribe({ list->
                     var channel: Channel? = null
                     list.forEach {
-                        if (it.invitee.objectId == currentUser?.objectId) {
+                        if (it.inviteeId == currentUser?.objectId) {
                             channel = it
                         }
                     }
@@ -175,30 +171,97 @@ class MainActivity : BaseActivity() {
                         val inviteeDialog = InviteeDialog(this, it)
                         inviteeDialog.setOnAcceptListener(object : InviteeDialog.OnAcceptListener {
                             override fun onAccept(channel: Channel) {
-                                // 接受邀请
-                                when (channel.line) {
-                                    "1" -> {
-                                        AgoraActivity.startChat(this@MainActivity, channel.objectId)
-                                    }
-                                    "2" -> {
-                                        val intent = Intent(this@MainActivity, ZegoActivity::class.java)
-                                        intent.putExtra("channelId", channel.objectId)
-                                        intent.putExtra("userId", channel.invitee.objectId)
-                                        startActivity(intent)
-                                    }
-                                    "3" -> {
-                                        JustTalkActivity.startChat(this@MainActivity,
-                                                channel.objectId,
-                                                channel.owner.objectId)
-                                    }
-                                }
+                                openChannel(channel)
                             }
                         })
+                        inviteeDialog.setOnCancelListener { _ ->
+                            channelService.deleteChannel(it.objectId)
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe()
+                                    .bindToLifecycle(this)
+                        }
                         inviteeDialog.show()
                     }
                 }, {
                     ErrorHandler.showNetworkError(this, it)
                 })
                 .bindToLifecycle(this)
+    }
+
+    /**
+     * 更新备注
+     */
+    private fun updateRemark(position: Int) {
+        val user = multiTypeAdapter.dataList[position] as User
+        val editDialog = EditDialog(this, defaultText = userService.getRemark(user.objectId))
+        editDialog.setOnEditListener(object : EditDialog.OnEditListener {
+            override fun onConfirm(text: String) {
+                userService.setRemark(user.objectId, text)
+                multiTypeAdapter.notifyItemChanged(position)
+            }
+        })
+        editDialog.show()
+    }
+
+    /**
+     * 创建视频通话
+     */
+    private fun createChannel(user: User) {
+        val bottomSheetDialog = BottomSheetDialog(this@MainActivity)
+        bottomSheetDialog.setContentView(R.layout.layout_lines)
+        val btnLine1 = bottomSheetDialog.findViewById<Button>(R.id.btn_line_1)
+        val btnLine2 = bottomSheetDialog.findViewById<Button>(R.id.btn_line_2)
+        val btnLine3 = bottomSheetDialog.findViewById<Button>(R.id.btn_line_3)
+
+        val onLineSwitchListener = View.OnClickListener { view ->
+            val line = when (view.id) {
+                R.id.btn_line_1 -> 1
+                R.id.btn_line_2 -> 2
+                R.id.btn_line_3 -> 3
+                else -> 1
+            }
+            userService.getCacheUser()
+                    .subscribeOn(Schedulers.io())
+                    .flatMap {
+                        return@flatMap channelService.create(it, user, line)
+                    }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally {
+                        bottomSheetDialog.cancel()
+                    }
+                    .subscribe({
+                        openChannel(it)
+                    }, {
+                        ErrorHandler.showNetworkError(this, it)
+                    })
+                    .bindToLifecycle(this)
+        }
+        btnLine1?.setOnClickListener(onLineSwitchListener)
+        btnLine2?.setOnClickListener(onLineSwitchListener)
+        btnLine3?.setOnClickListener(onLineSwitchListener)
+
+        bottomSheetDialog.show()
+    }
+
+    /**
+     * 打开频道
+     */
+    private fun openChannel(channel: Channel) {
+        when (channel.line) {
+            1 -> {
+                AgoraActivity.startChat(this, channel.objectId)
+            }
+            2 -> {
+                val intent = Intent(this, ZegoActivity::class.java)
+                intent.putExtra("channelId", channel.objectId)
+                intent.putExtra("userId", channel.owner.objectId)
+                startActivity(intent)
+            }
+            3 -> {
+                JustTalkActivity.startChat(this,
+                        channel.objectId,
+                        channel.inviteeId)
+            }
+        }
     }
 }

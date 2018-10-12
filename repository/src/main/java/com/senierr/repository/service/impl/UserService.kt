@@ -15,17 +15,8 @@ import io.reactivex.Observable
  */
 class UserService : IUserService {
 
-    override fun checkAccountIfRepeat(account: String): Observable<Boolean> {
+    override fun checkAccountExist(account: String): Observable<Boolean> {
         val param = mapOf(Pair("account", account))
-        return Repository.dataHttp.get(API_USER)
-                .addUrlParam("where", Gson().toJson(param))
-                .addUrlParam("count", "0")
-                .execute(BmobArrayConverter(User::class.java))
-                .map(BmobExistFunction())
-    }
-
-    override fun checkNicknameIfRepeat(nickname: String): Observable<Boolean> {
-        val param = mapOf(Pair("nickname", nickname))
         return Repository.dataHttp.get(API_USER)
                 .addUrlParam("where", Gson().toJson(param))
                 .addUrlParam("count", "0")
@@ -90,23 +81,7 @@ class UserService : IUserService {
                 }
     }
 
-    override fun updateUserPortrait(objectId: String, portrait: String): Observable<BmobUpdate> {
-        val param = mapOf(Pair("portrait", portrait))
-        return Repository.dataHttp.put("$API_USER/$objectId")
-                .setRequestBody4JSon(Gson().toJson(param))
-                .execute(BmobObjectConverter(BmobUpdate::class.java))
-                .map(ObjectFunction())
-    }
-
-    override fun updateUserNickname(objectId: String, nickname: String): Observable<BmobUpdate> {
-        val param = mapOf(Pair("nickname", nickname))
-        return Repository.dataHttp.put("$API_USER/$objectId")
-                .setRequestBody4JSon(Gson().toJson(param))
-                .execute(BmobObjectConverter(BmobUpdate::class.java))
-                .map(ObjectFunction())
-    }
-
-    override fun getCurrentUser(): Observable<User> {
+    override fun getCacheUser(): Observable<User> {
         return Observable.create {
             val user = Repository.database.getUserDao().getList()?.firstOrNull()
             if (user != null) {
@@ -129,7 +104,7 @@ class UserService : IUserService {
         }
     }
 
-    override fun getFriends(userId: String): Observable<MutableList<User>> {
+    override fun getOtherUsers(userId: String): Observable<MutableList<User>> {
         val param = "{\"\$and\":[{\"objectId\":{\"\$ne\":\"$userId\"}},{\"isOnline\":true}]}"
         return Repository.dataHttp.get(API_USER)
                 .addUrlParam("where", param)

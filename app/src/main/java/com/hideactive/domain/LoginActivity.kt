@@ -1,50 +1,29 @@
 package com.hideactive.domain
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import com.hideactive.R
 import com.hideactive.base.BaseActivity
 import com.hideactive.comm.ErrorHandler
-import com.hideactive.comm.REGEX_ACCOUNT
-import com.hideactive.comm.REGEX_PASSWORD
 import com.hideactive.ext.bindToLifecycle
 import com.hideactive.ext.hideSoftInput
 import com.hideactive.widget.CircularAnim
-import com.module.library.util.OnThrottleClickListener
 import com.module.library.util.ToastUtil
 import com.senierr.repository.Repository
 import com.senierr.repository.service.api.IUserService
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.layout_top_bar_normal.*
-import java.util.regex.Pattern
 
 /**
  * 登录
- *
- * 感知登录状态跳转
- * startActivityForResult
- * 返回：LOGIN_SUCCESS/LOGIN_FAILURE
- *
- * 不感知登录状态跳转
- * startActivity
- * 传入：EXTRA_TARGET_INTENT
  *
  * @author zhouchunjie
  * @date 2018/5/2
  */
 class LoginActivity : BaseActivity() {
-
-    companion object {
-        const val EXTRA_KEY_ACCOUNT = "login_account"
-        const val EXTRA_KEY_PASSWORD = "login_password"
-        const val EXTRA_TARGET_INTENT = "target_intent"
-        const val LOGIN_SUCCESS = 65534
-        const val LOGIN_FAILURE = 65535
-    }
 
     private val userService = Repository.getService<IUserService>()
 
@@ -52,6 +31,20 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         initView()
+
+        userService.isLoggedIn()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    if (it) {
+                        // 已登录，跳转
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finish()
+                    }
+                }, {
+                    ErrorHandler.showNetworkError(this, it)
+                })
+                .bindToLifecycle(this)
     }
 
     /**
@@ -60,75 +53,37 @@ class LoginActivity : BaseActivity() {
     private fun initView() {
         tv_title.setText(R.string.login)
         btn_left.setImageResource(R.drawable.ic_close_black_24dp)
-        btn_left.setOnClickListener(onThrottleClickListener)
-
-        btn_eye.isSelected = false
-        btn_eye.setOnClickListener(onThrottleClickListener)
-        btn_login.setOnClickListener(onThrottleClickListener)
-        btn_register.setOnClickListener(onThrottleClickListener)
-    }
-
-    /**
-     * 防抖动点击事件
-     */
-    private val onThrottleClickListener = object : OnThrottleClickListener() {
-        override fun onThrottleClick(view: View?) {
-            when(view?.id) {
-                // 退出
-                R.id.btn_left -> {
-                    doFinish(false)
-                }
-                // 密码可见
-                R.id.btn_eye -> {
-                    btn_eye.isSelected = !btn_eye.isSelected
-                    et_password.setPasswordVisible(btn_eye.isSelected)
-                }
-                // 登录
-                R.id.btn_login ->
-                    login()
-                // 注册
-                R.id.btn_register ->
-                    startActivityForResult(Intent(this@LoginActivity, RegisterActivity::class.java), 0)
-            }
+        btn_left.setOnClickListener {
+            finish()
         }
-    }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK) return
-        data?.let {
-            // 注册信息自动填入
-            val account = it.getStringExtra(EXTRA_KEY_ACCOUNT)
-            val password = it.getStringExtra(EXTRA_KEY_PASSWORD)
-            et_account.setText(account)
-            et_password.setText(password)
+        btn_login.setOnClickListener {
+            login()
         }
     }
 
     private fun login() {
         val account = et_account.text.toString().trim()
-        val password = et_password.text.toString().trim()
         // 检查账号
         if (account.isEmpty()) {
             ToastUtil.showShort(this@LoginActivity, R.string.account_empty)
             return
         }
-        if (!Pattern.matches(REGEX_ACCOUNT, account)) {
-            ToastUtil.showShort(this@LoginActivity, R.string.account_not_match_regex)
-            return
-        }
-        // 检查密码
-        if (password.isEmpty()) {
-            ToastUtil.showShort(this@LoginActivity, R.string.password_empty)
-            return
-        }
-        if (!Pattern.matches(REGEX_PASSWORD, password)) {
-            ToastUtil.showShort(this@LoginActivity, R.string.password_not_match_regex)
-            return
-        }
 
-        // 登录
-        userService.login(account, password)
+        // 检测账号是否存在
+        userService.checkAccountExist(account)
+                .flatMap {
+                    if (it) {
+                        return@flatMap Observable.just(it)
+                    } else {
+                        // 注册
+                        return@flatMap userService.register(account, "123456")
+                    }
+                }
+                .flatMap {
+                    // 登录
+                    return@flatMap userService.login(account, "123456")
+                }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
@@ -145,29 +100,13 @@ class LoginActivity : BaseActivity() {
                             .colorOrImageRes(R.color.colorPrimary)
                             .go(object : CircularAnim.OnAnimationEndListener {
                                 override fun onAnimationEnd() {
-                                    doFinish(true)
+                                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                    finish()
                                 }
                             })
                 }, {
                     ErrorHandler.showNetworkError(this, it)
                 })
                 .bindToLifecycle(this)
-    }
-
-    /**
-     * 页面关闭处理
-     */
-    private fun doFinish(isSuccess: Boolean) {
-        if (isSuccess) {
-            val targetIntent = intent.getParcelableExtra<Intent>(EXTRA_TARGET_INTENT)
-            if (targetIntent != null) {
-                startActivity(targetIntent)
-            } else {
-                setResult(LOGIN_SUCCESS, intent)
-            }
-        } else {
-            setResult(LOGIN_FAILURE, intent)
-        }
-        finish()
     }
 }

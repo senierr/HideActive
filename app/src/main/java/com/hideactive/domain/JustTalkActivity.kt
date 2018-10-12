@@ -4,21 +4,29 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.WindowManager
 import android.widget.ImageView
 import com.hideactive.R
+import com.hideactive.base.BaseActivity
+import com.hideactive.ext.bindToLifecycle
 import com.hideactive.util.JustalkHelper
 import com.juphoon.cloud.JCMediaChannel
 import com.juphoon.cloud.JCMediaChannelParticipant
 import com.juphoon.cloud.JCMediaDevice
+import com.module.library.util.ToastUtil
 import com.senierr.permission.CheckCallback
 import com.senierr.permission.PermissionManager
+import com.senierr.repository.Repository
+import com.senierr.repository.bean.BmobError
+import com.senierr.repository.service.api.IChannelService
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_agora.*
+import java.util.concurrent.TimeUnit
 
 
-
-class JustTalkActivity : AppCompatActivity() {
+class JustTalkActivity : BaseActivity() {
 
     private lateinit var channelId: String
     private lateinit var userId: String
@@ -49,12 +57,19 @@ class JustTalkActivity : AppCompatActivity() {
                 .request(object : CheckCallback() {
                     override fun onAllGranted() {
                         initJustalk()
+                        checkUser()
                     }
                 })
     }
 
     override fun onDestroy() {
         leaveChannel()
+
+        Repository.getService<IChannelService>().deleteChannel(channelId)
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+                .bindToLifecycle(this)
+
         super.onDestroy()
     }
 
@@ -69,6 +84,11 @@ class JustTalkActivity : AppCompatActivity() {
 
             override fun onParticipantJoin(p0: JCMediaChannelParticipant?) {
                 startRemotePreview()
+            }
+
+            override fun onParticipantLeft(p0: JCMediaChannelParticipant?) {
+                ToastUtil.showShort(this@JustTalkActivity, R.string.user_offline)
+                finish()
             }
         }
 
@@ -131,5 +151,24 @@ class JustTalkActivity : AppCompatActivity() {
     private fun leaveChannel() {
         JustalkHelper.mediaChannel.leave()
         JustalkHelper.channelCallback = null
+    }
+
+    private fun checkUser() {
+        Observable.interval(0, 3, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .flatMap {
+                    return@flatMap Repository.getService<IChannelService>()
+                            .get(channelId)
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+
+                }, {
+                    if (it is BmobError) {
+                        ToastUtil.showShort(this@JustTalkActivity, R.string.user_offline)
+                        finish()
+                    }
+                })
+                .bindToLifecycle(this)
     }
 }

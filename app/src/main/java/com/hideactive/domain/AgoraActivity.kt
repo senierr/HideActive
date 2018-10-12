@@ -4,21 +4,30 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.SurfaceView
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
 import com.hideactive.R
+import com.hideactive.base.BaseActivity
+import com.hideactive.ext.bindToLifecycle
+import com.module.library.util.ToastUtil
 import com.senierr.permission.CheckCallback
 import com.senierr.permission.PermissionManager
+import com.senierr.repository.Repository
+import com.senierr.repository.bean.BmobError
+import com.senierr.repository.service.api.IChannelService
 import io.agora.rtc.Constants
 import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.video.VideoCanvas
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_agora.*
+import java.util.concurrent.TimeUnit
 
-class AgoraActivity : AppCompatActivity() {
+class AgoraActivity : BaseActivity() {
 
     private var rtcEngine: RtcEngine? = null
 
@@ -48,6 +57,7 @@ class AgoraActivity : AppCompatActivity() {
                 .request(object : CheckCallback() {
                     override fun onAllGranted() {
                         initAgora(channelId)
+                        checkUser()
                     }
                 })
     }
@@ -56,6 +66,12 @@ class AgoraActivity : AppCompatActivity() {
         leaveChannel()
         RtcEngine.destroy()
         rtcEngine = null
+
+        Repository.getService<IChannelService>().deleteChannel(channelId)
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+                .bindToLifecycle(this)
+
         super.onDestroy()
     }
 
@@ -112,6 +128,8 @@ class AgoraActivity : AppCompatActivity() {
      */
     private fun onUserOffline() {
         fl_remote.removeAllViews()
+        ToastUtil.showShort(this, R.string.user_offline)
+        finish()
     }
 
     /**
@@ -151,5 +169,24 @@ class AgoraActivity : AppCompatActivity() {
      */
     private fun leaveChannel() {
         rtcEngine?.leaveChannel()
+    }
+
+    private fun checkUser() {
+        Observable.interval(0, 3, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .flatMap {
+                    return@flatMap Repository.getService<IChannelService>()
+                            .get(channelId)
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+
+                }, {
+                    if (it is BmobError) {
+                        ToastUtil.showShort(this@AgoraActivity, R.string.user_offline)
+                        finish()
+                    }
+                })
+                .bindToLifecycle(this)
     }
 }

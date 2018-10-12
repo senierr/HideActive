@@ -8,15 +8,24 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.hideactive.R
 import com.hideactive.base.BaseActivity
+import com.hideactive.ext.bindToLifecycle
 import com.hideactive.util.ZegoAppHelper
+import com.module.library.util.ToastUtil
 import com.senierr.permission.CheckCallback
 import com.senierr.permission.PermissionManager
+import com.senierr.repository.Repository
+import com.senierr.repository.bean.BmobError
+import com.senierr.repository.service.api.IChannelService
 import com.zego.zegoliveroom.callback.IZegoLoginCompletionCallback
 import com.zego.zegoliveroom.callback.IZegoRoomCallback
 import com.zego.zegoliveroom.constants.ZegoConstants
 import com.zego.zegoliveroom.constants.ZegoVideoViewMode
 import com.zego.zegoliveroom.entity.ZegoStreamInfo
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_zego.*
+import java.util.concurrent.TimeUnit
 
 class ZegoActivity : BaseActivity() {
 
@@ -38,12 +47,20 @@ class ZegoActivity : BaseActivity() {
                         initView()
                         setupCallback()
                         loginRoom()
+                        checkUser()
                     }
                 })
     }
 
     override fun onDestroy() {
         logoutRoom()
+
+        val sessionId = intent.getStringExtra("channelId")
+        Repository.getService<IChannelService>().deleteChannel(sessionId)
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+                .bindToLifecycle(this)
+
         super.onDestroy()
     }
 
@@ -207,6 +224,8 @@ class ZegoActivity : BaseActivity() {
                 startPlayStreams(streamList)
             } else if (type == ZegoConstants.StreamUpdateType.Deleted) {
                 stopPlayStreams(streamList)
+                ToastUtil.showShort(this@ZegoActivity, R.string.user_offline)
+                finish()
             } else {
                 Toast.makeText(this@ZegoActivity, "Unknown stream update type $type", Toast.LENGTH_LONG).show()
             }
@@ -215,5 +234,25 @@ class ZegoActivity : BaseActivity() {
         override fun onStreamExtraInfoUpdated(streamList: Array<ZegoStreamInfo>, roomId: String) {}
 
         override fun onRecvCustomCommand(fromUserId: String, fromUserName: String, content: String, roomId: String) {}
+    }
+
+    private fun checkUser() {
+        val sessionId = intent.getStringExtra("channelId")
+        Observable.interval(0, 3, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .flatMap {
+                    return@flatMap Repository.getService<IChannelService>()
+                            .get(sessionId)
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+
+                }, {
+                    if (it is BmobError) {
+                        ToastUtil.showShort(this@ZegoActivity, R.string.user_offline)
+                        finish()
+                    }
+                })
+                .bindToLifecycle(this)
     }
 }

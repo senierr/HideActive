@@ -16,18 +16,18 @@ import io.reactivex.Observable
  */
 class ChannelService : IChannelService {
 
-    override fun create(owner: User, invitee: User, line: String): Observable<Channel> {
+    override fun create(owner: User, invitee: User, line: Int): Observable<Channel> {
         val param = mapOf(
                 Pair("line", line),
                 Pair("owner", owner),
-                Pair("invitee", invitee)
+                Pair("inviteeId", invitee.objectId)
         )
         return Repository.dataHttp.post(API_CHANNEL)
                 .setRequestBody4JSon(Gson().toJson(param))
                 .execute(BmobObjectConverter(BmobInsert::class.java))
                 .map(ObjectFunction())
                 .flatMap {
-                    val channel = Channel(it.objectId, line, owner, invitee, it.createdAt, it.createdAt)
+                    val channel = Channel(it.objectId, line, owner, invitee.objectId, it.createdAt, it.createdAt)
                     return@flatMap Observable.just(channel)
                 }
     }

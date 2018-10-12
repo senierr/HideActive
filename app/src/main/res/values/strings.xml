@@ -50,4 +50,6 @@
     <string name="line_2">线路2</string>
     <string name="line_3">线路3</string>
 
+    <string name="user_offline">对方已挂断</string>
+
 </resources>

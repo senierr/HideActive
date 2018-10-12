@@ -17,7 +17,7 @@ interface IChannelService {
     /**
      * 创建频道
      */
-    fun create(owner: User, invitee: User, line: String): Observable<Channel>
+    fun create(owner: User, invitee: User, line: Int): Observable<Channel>
 
     /**
      * 获取频道
