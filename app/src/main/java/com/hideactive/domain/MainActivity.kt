@@ -169,17 +169,18 @@ class MainActivity : BaseActivity() {
                     }
                     channel?.let {
                         val inviteeDialog = InviteeDialog(this, it)
-                        inviteeDialog.setOnAcceptListener(object : InviteeDialog.OnAcceptListener {
+                        inviteeDialog.setOnAcceptListener(object : InviteeDialog.OnActionListener {
                             override fun onAccept(channel: Channel) {
                                 openChannel(channel)
                             }
+
+                            override fun onReject(channel: Channel) {
+                                channelService.deleteChannel(it.objectId)
+                                        .subscribeOn(Schedulers.io())
+                                        .subscribe()
+                                        .bindToLifecycle(this@MainActivity)
+                            }
                         })
-                        inviteeDialog.setOnCancelListener { _ ->
-                            channelService.deleteChannel(it.objectId)
-                                    .subscribeOn(Schedulers.io())
-                                    .subscribe()
-                                    .bindToLifecycle(this)
-                        }
                         inviteeDialog.show()
                     }
                 }, {

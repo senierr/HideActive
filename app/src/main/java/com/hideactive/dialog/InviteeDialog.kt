@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.text.TextUtils
-import android.view.View
 import com.hideactive.R
 import com.senierr.repository.bean.Channel
 import kotlinx.android.synthetic.main.dialog_invitee.*
@@ -17,8 +16,7 @@ import kotlinx.android.synthetic.main.dialog_invitee.*
  */
 class InviteeDialog(context: Context, val channel: Channel) : AlertDialog(context, R.style.BaseDialog) {
 
-    private var onCancelListener: View.OnClickListener? = null
-    private var onAcceptListener: OnAcceptListener? = null
+    private var onActionListener: OnActionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,24 +33,21 @@ class InviteeDialog(context: Context, val channel: Channel) : AlertDialog(contex
         tv_message.text = String.format(context.getString(R.string.hint_invitee), name)
 
         btn_reject.setOnClickListener {
-            onCancelListener?.onClick(it)
+            onActionListener?.onReject(channel)
             cancel()
         }
         btn_accept.setOnClickListener {
-            onAcceptListener?.onAccept(channel)
+            onActionListener?.onAccept(channel)
             cancel()
         }
     }
 
-    fun setOnCancelListener(onCancelListener: View.OnClickListener?) {
-        this.onCancelListener = onCancelListener
+    fun setOnAcceptListener(onActionListener: OnActionListener?) {
+        this.onActionListener = onActionListener
     }
 
-    fun setOnAcceptListener(onEditListener: OnAcceptListener?) {
-        this.onAcceptListener = onEditListener
-    }
-
-    interface OnAcceptListener {
+    interface OnActionListener {
+        fun onReject(channel: Channel)
         fun onAccept(channel: Channel)
     }
 }

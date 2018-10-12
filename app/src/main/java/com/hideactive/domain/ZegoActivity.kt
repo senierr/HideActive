@@ -58,8 +58,7 @@ class ZegoActivity : BaseActivity() {
         val sessionId = intent.getStringExtra("channelId")
         Repository.getService<IChannelService>().deleteChannel(sessionId)
                 .subscribeOn(Schedulers.io())
-                .subscribe()
-                .bindToLifecycle(this)
+                .subscribe({}, {})
 
         super.onDestroy()
     }
@@ -249,7 +248,7 @@ class ZegoActivity : BaseActivity() {
 
                 }, {
                     if (it is BmobError) {
-                        ToastUtil.showShort(this@ZegoActivity, R.string.user_offline)
+                        ToastUtil.showShort(this@ZegoActivity, R.string.user_reject)
                         finish()
                     }
                 })

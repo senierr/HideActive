@@ -51,5 +51,6 @@
     <string name="line_3">线路3</string>
 
     <string name="user_offline">对方已挂断</string>
+    <string name="user_reject">对方已拒绝</string>
 
 </resources>

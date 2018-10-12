@@ -67,8 +67,7 @@ class JustTalkActivity : BaseActivity() {
 
         Repository.getService<IChannelService>().deleteChannel(channelId)
                 .subscribeOn(Schedulers.io())
-                .subscribe()
-                .bindToLifecycle(this)
+                .subscribe({}, {})
 
         super.onDestroy()
     }
@@ -165,7 +164,7 @@ class JustTalkActivity : BaseActivity() {
 
                 }, {
                     if (it is BmobError) {
-                        ToastUtil.showShort(this@JustTalkActivity, R.string.user_offline)
+                        ToastUtil.showShort(this@JustTalkActivity, R.string.user_reject)
                         finish()
                     }
                 })

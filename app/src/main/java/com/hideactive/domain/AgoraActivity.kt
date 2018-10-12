@@ -69,8 +69,7 @@ class AgoraActivity : BaseActivity() {
 
         Repository.getService<IChannelService>().deleteChannel(channelId)
                 .subscribeOn(Schedulers.io())
-                .subscribe()
-                .bindToLifecycle(this)
+                .subscribe({}, {})
 
         super.onDestroy()
     }
@@ -183,7 +182,7 @@ class AgoraActivity : BaseActivity() {
 
                 }, {
                     if (it is BmobError) {
-                        ToastUtil.showShort(this@AgoraActivity, R.string.user_offline)
+                        ToastUtil.showShort(this@AgoraActivity, R.string.user_reject)
                         finish()
                     }
                 })
